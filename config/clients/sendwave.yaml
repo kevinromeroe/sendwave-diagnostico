@@ -58,11 +58,11 @@ channels:
     apify:
       actor_id: shu8hvrXbJbY3Eb9W         # apify/instagram-scraper
       actor_name: apify/instagram-scraper
-      cap_usd: 0.60
+      cap_usd: 1.20                     # LATAM publica ~80 piezas/mes: el diagnóstico de 5 meses supera 200
       input:
         directUrls: ["https://www.instagram.com/sendwaveapp_latam/"]
         resultsType: posts
-        resultsLimit: 200
+        resultsLimit: 400
         addParentData: true
 
   - key: ig_brasil
