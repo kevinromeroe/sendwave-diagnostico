@@ -133,7 +133,7 @@ def generate(data: dict, ch: dict, cfg: dict, api_key) -> dict | None:
     user_prompt = "Datos del período:\n" + json.dumps(_build_digest(data, ch), ensure_ascii=False, indent=1)
 
     raw, attempts = None, 0
-    for attempt in range(1, 3):  # hasta 2 intentos
+    for attempt in range(1, 2):  # los reintentos ya los hace gemini.call
         attempts = attempt
         try:
             raw = gemini.call(system, user_prompt, max_tokens=6000, temperature=0.3)

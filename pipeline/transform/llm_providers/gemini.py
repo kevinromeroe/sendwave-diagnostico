@@ -34,8 +34,8 @@ def call(
     model: str = DEFAULT_MODEL,
     max_tokens: int = 4000,
     temperature: float = 0.0,
-    timeout: int = 150,
-    attempts: int = 4,
+    timeout: int = 90,
+    attempts: int = 3,
 ) -> str:
     """Llama a Gemini API, retorna el texto de la respuesta.
 
