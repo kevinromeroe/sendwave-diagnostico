@@ -756,10 +756,10 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
       if (m.k !== "seguidores") { frases.push(`<strong>${m.label.toLowerCase()}</strong> de ${m.f(s[i0])} a ${m.f(s[i1])} ${d >= 0 ? "▲" : "▼"}`); rango = `${T.labels[i0]} y ${T.labels[i1]}`; }
     }
     let note = "";
-    if (m.k === "seguidores" && idx.length < 2)
-      note = `<div class="t-note">Instagram no publica el histórico de seguidores: la serie arranca con la captura de ${idx.length ? T.labels[idx[0]] : "este período"} y suma un punto con cada reporte mensual.</div>`;
+    if (m.k === "seguidores" && idx.length < 2 && (B.account || {}).snapshot_fecha)
+      note = `<div class="t-note">Medición al ${isoDay(B.account.snapshot_fecha)}.</div>`;
     if (m.k === "tasa" && T.tasa_aprox.some(Boolean))
-      note = `<div class="t-note">En los meses sin captura de seguidores, la tasa usa los seguidores de la captura más cercana.</div>`;
+      note = `<div class="t-note">Calculada con los seguidores de la medición más cercana a cada mes.</div>`;
     const card = document.createElement("div");
     card.className = "trend-card";
     card.innerHTML = `<div class="t-label">${m.label}</div><div class="t-val">${last === null ? "—" : m.f(last)}</div>${delta}` +

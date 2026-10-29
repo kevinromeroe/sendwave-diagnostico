@@ -214,10 +214,17 @@ def load_accounts(sb: Supabase, client_id: str, period: str, fallback: str) -> d
 def followers_by_month(sb: Supabase, client_id: str) -> dict[str, dict[str, int]]:
     """{canal: {YYYY-MM: seguidores}} con todas las capturas de perfil guardadas.
 
-    Instagram no expone el histórico de seguidores: la serie existe desde la
-    primera ingesta y suma un punto por cada reporte mensual.
+    Instagram no expone el histórico de seguidores: la serie se arma con las
+    capturas de cada ingesta más las mediciones históricas de
+    config/clients/<cliente>_seguidores_extra.json (Insights del cliente,
+    archive.org, etc.). Las capturas propias tienen prioridad.
     """
     out: dict[str, dict[str, int]] = defaultdict(dict)
+    extra = ROOT / "config" / "clients" / f"{client_id}_seguidores_extra.json"
+    if extra.exists():
+        for pt in json.loads(extra.read_text(encoding="utf-8")).get("puntos", []):
+            # El último punto de cada mes representa ese mes
+            out[pt["cuenta"]][pt["fecha"][:7]] = int(pt["seguidores"])
     rows = sb.select("accounts", filter=f"client_id=eq.{client_id}&order=snapshot_at.asc",
                      columns="platform,period_id,followers,snapshot_at")
     for a in rows:
@@ -580,7 +587,15 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
         "channels": channels,
     }
 
+    # Hallazgos: los escritos por el analista (hallazgos/<cliente>/<período>.json)
+    # tienen prioridad; si no hay, se generan con Gemini.
+    manual_path = ROOT / "hallazgos" / client_id / f"{period}.json"
+    manual = json.loads(manual_path.read_text(encoding="utf-8")) if manual_path.exists() else {}
     for ch in cfg["channels"]:
+        if manual.get(ch["key"]):
+            channels[ch["key"]]["hallazgos_llm"] = {**manual[ch["key"]], "_meta": {"model": "analista"}}
+            print(f"  ✓ hallazgos {ch['key']}: del archivo {manual_path.relative_to(ROOT)}")
+            continue
         try:
             channels[ch["key"]]["hallazgos_llm"] = hallazgos_llm.generate(
                 data, ch, cfg, os.environ.get("GEMINI_API_KEY"))

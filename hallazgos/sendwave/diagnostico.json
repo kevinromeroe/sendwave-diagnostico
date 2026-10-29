@@ -1,0 +1,110 @@
+{
+  "ig_latam": {
+    "resumen_ejecutivo": "Entre junio y octubre, @sendwaveapp_latam publicó 236 piezas típicas con 172.839 interacciones (732 por publicación) y una tasa de engagement de 0,64 % sobre 114.757 seguidores. La cuenta funciona sobre todo como vitrina de creadores: dos de cada tres publicaciones son colaboraciones, y son las que sostienen el engagement. Las piezas propias de la marca, en especial los carruseles, rinden muy por debajo.",
+    "hallazgos_top": [
+      {
+        "categoria": "patron",
+        "dato": "El 66 % de las publicaciones típicas (156 de 236) son colaboraciones con creadores, con 949 interacciones promedio por pieza.",
+        "comparativo": "Las publicaciones propias de la marca promedian entre 41 (interacción) y 286 (comunidad) interacciones.",
+        "interpretacion": "La audiencia responde a caras y voces de creadores, no al contenido institucional.",
+        "implicacion": "El desempeño de la cuenta depende del programa de creadores: si baja el volumen de colaboraciones, cae el engagement total.",
+        "recomendacion": {"accion": "Mantener las colaboraciones como eje y medir por creador cuáles traen más interacción por pieza para renovar a los mejores.", "prioridad": "alta", "esfuerzo": "medio"}
+      },
+      {
+        "categoria": "brecha",
+        "dato": "Los reels promedian 842 interacciones; los carruseles, 61.",
+        "comparativo": "Un reel rinde casi 14 veces más que un carrusel (200 reels frente a 25 carruseles en el período).",
+        "interpretacion": "En esta cuenta el formato carrusel prácticamente no genera conversación.",
+        "implicacion": "Cada carrusel ocupa un espacio del calendario que un reel aprovecharía mucho mejor.",
+        "recomendacion": {"accion": "Convertir los mensajes de producto y comunidad que hoy salen en carrusel a reels cortos con una persona en cámara.", "prioridad": "alta", "esfuerzo": "medio"}
+      },
+      {
+        "categoria": "tendencia",
+        "dato": "Agosto tuvo el mejor engagement por publicación (1.126) con 38 piezas; septiembre duplicó el volumen (76 piezas) y bajó a 711.",
+        "comparativo": "Junio y julio rondaron 535 y 678 interacciones por pieza con 44 y 48 publicaciones.",
+        "interpretacion": "Publicar más no se tradujo en más interacción por pieza: el volumen de septiembre diluyó el rendimiento.",
+        "implicacion": "Hay un punto en el que sumar publicaciones deja de aportar y satura el feed.",
+        "recomendacion": {"accion": "Fijar una cadencia de 9 a 10 publicaciones por semana y priorizar calidad de creador sobre cantidad.", "prioridad": "media", "esfuerzo": "bajo"}
+      },
+      {
+        "categoria": "correlacion",
+        "dato": "Los martes (977) y miércoles (946) son los días con mejor engagement promedio; los viernes caen a 474.",
+        "comparativo": "La hora más usada es las 19:00 (26 publicaciones), pero las franjas de 10:00 a 16:00 superan las 1.000 interacciones promedio.",
+        "interpretacion": "Las mejores ventanas son a media semana y a media jornada, no en la noche.",
+        "implicacion": "Mover piezas clave a esas franjas puede subir el rendimiento sin producir más contenido.",
+        "recomendacion": {"accion": "Programar los lanzamientos y las colaboraciones principales martes y miércoles entre 10:00 y 16:00 (hora Bogotá).", "prioridad": "media", "esfuerzo": "bajo"}
+      },
+      {
+        "categoria": "anomalia",
+        "dato": "35 publicaciones superan las 6.698 interacciones y se tratan como atípicas; la mayor llegó a 485.152 (colaboración del 2 de octubre).",
+        "comparativo": "La mediana de una publicación típica es de 179 interacciones.",
+        "interpretacion": "Unos pocos virales de creadores generan picos enormes, probablemente apoyados con pauta.",
+        "implicacion": "Esos picos inflan cualquier promedio; por eso los KPIs del dashboard los excluyen y se analizan aparte.",
+        "recomendacion": {"accion": "Identificar qué tienen en común los virales (creador, humor, formato) y replicar ese brief en las próximas colaboraciones.", "prioridad": "media", "esfuerzo": "bajo"}
+      },
+      {
+        "categoria": "punto_ciego",
+        "dato": "Las publicaciones con menor engagement (1 a 6 interacciones) son colaboraciones cuyo texto solo contiene el aviso legal, sin mensaje propio.",
+        "comparativo": "Las colaboraciones con un texto que cuenta una historia o hace una pregunta están entre las de mejor desempeño.",
+        "interpretacion": "Cuando el copy se reduce al disclaimer, la pieza pierde contexto y no invita a interactuar.",
+        "implicacion": "Parte del presupuesto de creadores se pierde por un detalle de ejecución fácil de corregir.",
+        "recomendacion": {"accion": "Exigir a cada creador un copy con gancho y llamado a la acción antes del aviso legal.", "prioridad": "alta", "esfuerzo": "bajo"}
+      }
+    ],
+    "recomendaciones": [
+      {"title": "Gestionar las colaboraciones como el motor de la cuenta", "body": "Son el 66 % del contenido y el formato que más rinde. Llevar un ranking mensual por creador (interacciones por pieza) y renovar a los cinco mejores.", "tags": ["Esfuerzo medio", "Impacto alto", "30 días"]},
+      {"title": "Reels en lugar de carruseles", "body": "Los reels rinden 14 veces más que los carruseles. Pasar a video los mensajes de producto, tutoriales y comunidad.", "tags": ["Esfuerzo medio", "Impacto alto", "30-60 días"]},
+      {"title": "Ordenar el calendario", "body": "Mantener 9 a 10 publicaciones por semana, concentrar las piezas clave martes y miércoles de 10:00 a 16:00 y exigir copy propio en cada colaboración.", "tags": ["Esfuerzo bajo", "Impacto medio", "30 días"]}
+    ]
+  },
+  "ig_brasil": {
+    "resumen_ejecutivo": "Entre junio y octubre, @sendwaveappbrasil publicó 70 piezas típicas con 15.649 interacciones (224 por publicación) y una tasa de engagement de 0,57 % sobre 39.022 seguidores. La cuenta se reactivó desde agosto (de 3 piezas en junio a 27 en septiembre) y su rendimiento depende de las colaboraciones con creadores; el contenido propio, sobre todo en carrusel, casi no genera interacción.",
+    "hallazgos_top": [
+      {
+        "categoria": "tendencia",
+        "dato": "La cuenta pasó de 3 publicaciones en junio y 6 en julio a 14 en agosto, 27 en septiembre y 20 en octubre.",
+        "comparativo": "El engagement total subió de 163 en junio a 8.234 en agosto y 5.082 en septiembre.",
+        "interpretacion": "La reactivación de la cuenta desde agosto multiplicó la presencia y la interacción.",
+        "implicacion": "La base para crecer ya existe; el reto ahora es sostener el ritmo sin perder rendimiento por pieza.",
+        "recomendacion": {"accion": "Sostener entre 5 y 6 publicaciones por semana, el ritmo de septiembre y octubre.", "prioridad": "alta", "esfuerzo": "medio"}
+      },
+      {
+        "categoria": "patron",
+        "dato": "Las colaboraciones con creadores promedian 459 interacciones por pieza (26 publicaciones).",
+        "comparativo": "El contenido propio de producto (20), educación (16), comunidad (22) e interacción (32) queda muy por debajo.",
+        "interpretacion": "En Brasil, igual que en LATAM, la audiencia responde a creadores y no a mensajes institucionales.",
+        "implicacion": "Las piezas propias ocupan espacio del calendario sin aportar interacción.",
+        "recomendacion": {"accion": "Llevar los mensajes de producto (Pix, câmbio, segurança) al formato de creador o de persona real en cámara.", "prioridad": "alta", "esfuerzo": "medio"}
+      },
+      {
+        "categoria": "brecha",
+        "dato": "Los reels promedian 305 interacciones; los carruseles, 100.",
+        "comparativo": "Las cinco publicaciones con menor engagement (4 a 8 interacciones) son todas carruseles propios.",
+        "interpretacion": "El carrusel institucional es el formato más débil de la cuenta.",
+        "implicacion": "Hoy 25 de las 70 piezas son carruseles: un tercio del calendario rinde un tercio de lo que podría.",
+        "recomendacion": {"accion": "Reducir los carruseles a casos puntuales (paso a paso de códigos, listas guardables) y llevar el resto a reels.", "prioridad": "media", "esfuerzo": "bajo"}
+      },
+      {
+        "categoria": "correlacion",
+        "dato": "Los lunes son el mejor día (436 interacciones promedio), seguidos de domingo (292) y viernes (255).",
+        "comparativo": "Martes, miércoles y jueves se quedan entre 104 y 123.",
+        "interpretacion": "La audiencia brasileña responde mejor al inicio y al cierre de la semana.",
+        "implicacion": "Hoy se publica con frecuencia los jueves (12 piezas), uno de los días más flojos.",
+        "recomendacion": {"accion": "Concentrar las colaboraciones principales los lunes y domingos, y probar las 10:00 (hora Bogotá), la franja con mejor respuesta.", "prioridad": "media", "esfuerzo": "bajo"}
+      },
+      {
+        "categoria": "anomalia",
+        "dato": "7 publicaciones superan las 2.016 interacciones y se tratan como atípicas; la mayor llegó a 22.028 (colaboración del 25 de agosto sobre vivir en Estados Unidos).",
+        "comparativo": "La mediana de una publicación típica es de 45 interacciones.",
+        "interpretacion": "Los temas de vida del inmigrante, contados por creadores, son los que pueden volverse virales.",
+        "implicacion": "Hay un territorio de contenido probado que todavía se usa poco.",
+        "recomendacion": {"accion": "Armar una serie fija con creadores sobre la vida del brasileño en el exterior (costos, trámites, curiosidades).", "prioridad": "media", "esfuerzo": "medio"}
+      }
+    ],
+    "recomendaciones": [
+      {"title": "Sostener la reactivación", "body": "Mantener 5 a 6 publicaciones por semana, como en septiembre y octubre, priorizando lunes, viernes y domingo.", "tags": ["Esfuerzo medio", "Impacto alto", "30 días"]},
+      {"title": "Más creadores, menos carrusel institucional", "body": "Las colaboraciones rinden varias veces más que el contenido propio (459 interacciones por pieza frente a 16-99). Llevar producto y educación al formato de creador en reel.", "tags": ["Esfuerzo medio", "Impacto alto", "30-60 días"]},
+      {"title": "Serie de vida en el exterior", "body": "Los virales de la cuenta hablan de la experiencia del inmigrante. Convertirlo en una serie recurrente con creadores.", "tags": ["Esfuerzo medio", "Impacto medio", "60-90 días"]}
+    ]
+  }
+}

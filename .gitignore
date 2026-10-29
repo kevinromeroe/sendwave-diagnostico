@@ -55,6 +55,8 @@
 !/templates/**
 !/supabase/
 !/supabase/**
+!/hallazgos/
+!/hallazgos/**
 
 # -------------------------------------------------------------
 # Configuración no sensible

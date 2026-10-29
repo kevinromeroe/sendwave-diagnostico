@@ -1,0 +1,4 @@
+{
+  "descripcion": "Mediciones históricas de seguidores para meses sin captura propia (Instagram no expone el histórico). Fuente preferida: exporte de Insights de Meta Business Suite entregado por el cliente. Formato de cada punto: cuenta (ig_latam | ig_brasil), fecha (YYYY-MM-DD, idealmente fin de mes), seguidores, fuente.",
+  "puntos": []
+}
