@@ -33,12 +33,14 @@ periods:
 # Todos los colores del dashboard salen de aquí.
 # =============================================================
 branding:
-  primary: "#2B7DB9"        # azul Datalítica (provisional)
-  primary_soft: "#E3EEF7"
-  accent: "#F2B33D"
-  ink: "#1F2D3D"
-  bg_soft: "#F3F6FA"
-  bg_soft_2: "#F8FAFC"
+  # Extraído de sendwave.com (oct-2026). Ver "Cliente SendWave App/MARCA_SENDWAVE.md".
+  primary: "#3C0F19"        # vino oscuro: logo, titulares, texto
+  accent: "#FFEC00"         # amarillo SendWave: barra de cuentas, botón PDF
+  ink: "#3C0F19"
+  bg_soft: "#FAF6EC"        # crema
+  bg_soft_2: "#FDFBF5"
+  font_display: "Anton"     # sustituto de "Sendwavy" (propia de la marca)
+  font_body: "Inter"
 
 # =============================================================
 # Canales: una entrada por CUENTA analizada.
@@ -54,7 +56,7 @@ channels:
     idioma: es
     handle: sendwaveapp_latam
     url: https://www.instagram.com/sendwaveapp_latam/
-    color: "#7B3FE4"
+    color: "#3C0F19"          # vino SendWave
     apify:
       actor_id: shu8hvrXbJbY3Eb9W         # apify/instagram-scraper
       actor_name: apify/instagram-scraper
@@ -72,7 +74,7 @@ channels:
     idioma: pt
     handle: sendwaveappbrasil
     url: https://www.instagram.com/sendwaveappbrasil/
-    color: "#0E9F6E"
+    color: "#16889B"          # turquesa SendWave
     apify:
       actor_id: shu8hvrXbJbY3Eb9W         # apify/instagram-scraper
       actor_name: apify/instagram-scraper

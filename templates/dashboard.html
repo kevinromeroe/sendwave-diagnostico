@@ -11,29 +11,30 @@
 <meta name="theme-color" content="{{BRAND_PRIMARY}}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
   :root {
     --brand: {{BRAND_PRIMARY}};
-    --brand-soft: #E3EEF7;
-    --accent: #F2B33D;
-    --ink: #1F2D3D;
-    --ink-soft: #4a5563;
-    --muted: #8a93a0;
-    --line: #e6e9ee;
+    --accent: #FFEC00;
+    --ink: #3C0F19;
+    --ink-soft: #5E4A4E;
+    --muted: #8C7F80;
+    --line: #ECE6DA;
     --bg: #ffffff;
-    --bg-soft: #F3F6FA;
-    --bg-soft-2: #F8FAFC;
+    --bg-soft: #FAF6EC;
+    --bg-soft-2: #FDFBF5;
+    --font-display: 'Anton', Impact, 'Arial Narrow', sans-serif;
+    --font-body: 'Inter', -apple-system, Arial, sans-serif;
   }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; max-width: 100vw; overflow-x: clip; }
   body {
-    font-family: 'Roboto', -apple-system, sans-serif;
+    font-family: var(--font-body);
     background: var(--bg); color: var(--ink);
     line-height: 1.55; font-size: 15px; -webkit-font-smoothing: antialiased;
   }
-  h1, h2, h3, h4 { font-family: 'Roboto Slab', serif; font-weight: 700; }
+  h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; }
   .chart-wrap, .chart-card { min-width: 0; max-width: 100%; }
 
   /* Info icon + tooltip */
@@ -70,7 +71,7 @@
     box-shadow: -4px 0 24px rgba(0,0,0,.12); flex-direction: column; overflow-y: auto; }
   .menu-drawer.open { transform: translateX(0); }
   .menu-drawer-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px;
-    border-bottom: 1px solid var(--line); font-family: 'Roboto Slab', serif; font-weight: 700; font-size: 15px;
+    border-bottom: 1px solid var(--line); font-family: var(--font-display); font-weight: 700; font-size: 15px;
     text-transform: uppercase; letter-spacing: 1.2px; color: var(--brand); }
   .menu-close { background: transparent; border: 0; font-size: 28px; line-height: 1; cursor: pointer; color: var(--ink-soft); padding: 0 8px; }
   .menu-drawer button[data-tab] { background: transparent; border: 0; text-align: left; padding: 16px 24px; font-size: 15px;
@@ -81,15 +82,15 @@
   .topbar { display: flex; align-items: center; justify-content: space-between; padding: 18px 56px;
     border-bottom: 1px solid var(--line); background: var(--bg); position: sticky; top: 0; z-index: 50; gap: 32px; }
   .topbar .brand { display: flex; align-items: center; gap: 24px; flex: 1; min-width: 0; }
-  .wordmark { font-family: 'Roboto Slab', serif; font-weight: 800; font-size: 26px; color: var(--brand); letter-spacing: -.5px; white-space: nowrap; }
+  .wordmark { font-family: var(--font-display); font-weight: 800; font-size: 26px; color: var(--brand); letter-spacing: -.5px; white-space: nowrap; }
   .topbar .title-block { display: flex; flex-direction: column; gap: 2px; }
   .topbar .title-block .eyebrow { font-size: 10px; color: var(--brand); text-transform: uppercase; letter-spacing: 1.6px; font-weight: 700; }
-  .topbar .title-block .title { font-family: 'Roboto Slab', serif; font-size: 22px; font-weight: 700; line-height: 1.1; }
+  .topbar .title-block .title { font-family: var(--font-display); font-size: 22px; font-weight: 700; line-height: 1.1; }
   .topbar .title-block .title em { color: var(--brand); font-style: normal; }
   .topbar .divider { width: 1px; height: 36px; background: var(--line); }
   .logo-dtl { height: 30px; display: block; }
   .topbar .meta { text-align: right; font-size: 12px; color: var(--muted); white-space: nowrap; }
-  .topbar .meta strong { color: var(--brand); display: block; font-size: 13px; font-family: 'Roboto Slab', serif; font-weight: 700; }
+  .topbar .meta strong { color: var(--brand); display: block; font-size: 13px; font-family: var(--font-display); font-weight: 700; }
   .period-selector { display: inline-block; margin-left: 14px; padding: 6px 28px 6px 12px; border: 1px solid var(--line);
     border-radius: 6px; background: #fff; font-family: inherit; font-size: 12px; font-weight: 500; color: var(--ink);
     cursor: pointer; appearance: none; -webkit-appearance: none;
@@ -105,7 +106,7 @@
   nav.tabs { display: flex; padding: 0 56px; border-bottom: 1px solid var(--line); background: var(--bg);
     overflow-x: auto; position: sticky; top: 81px; z-index: 49; }
   nav.tabs button { background: transparent; border: 0; color: var(--muted); cursor: pointer; padding: 14px 22px;
-    font-size: 13px; font-weight: 500; border-bottom: 3px solid transparent; white-space: nowrap; font-family: 'Roboto', sans-serif; }
+    font-size: 13px; font-weight: 500; border-bottom: 3px solid transparent; white-space: nowrap; font-family: var(--font-body); }
   nav.tabs button.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 700; }
   nav.tabs button:hover { color: var(--ink); }
   nav.tabs button .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
@@ -130,7 +131,7 @@
   .kpi { padding: 26px 22px; border-right: 1px solid var(--line); }
   .kpi:last-child { border-right: 0; }
   .kpi .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 12px; }
-  .kpi .value { font-family: 'Roboto Slab', serif; font-size: 34px; font-weight: 800; line-height: 1; }
+  .kpi .value { font-family: var(--font-display); font-size: 34px; font-weight: 800; line-height: 1; }
   .kpi .sub { font-size: 12px; color: var(--muted); margin-top: 8px; }
   .kpi.accent { background: var(--brand); color: #fff; }
   .kpi.accent .label, .kpi.accent .sub { color: rgba(255,255,255,.75); }
@@ -138,17 +139,17 @@
 
   /* Section heads */
   .section-head { margin: 64px 0 28px; }
-  .section-head .num { font-family: 'Roboto Slab', serif; font-weight: 300; font-size: 14px; color: var(--brand); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .section-head .num { font-family: var(--font-display); font-weight: 300; font-size: 14px; color: var(--brand); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
   .section-head h2 { font-size: 34px; margin: 0 0 12px; letter-spacing: -.5px; }
   .section-head .desc { color: var(--ink-soft); font-size: 16px; max-width: 760px; }
 
   /* Ranking */
   .ranking { display: grid; grid-template-columns: repeat(var(--n, 2), 1fr); gap: 16px; margin: 24px 0; }
   .net-card { padding: 24px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); position: relative; }
-  .net-card .rank { position: absolute; top: 16px; right: 20px; font-family: 'Roboto Slab', serif; font-size: 36px; font-weight: 800; color: var(--line); line-height: 1; }
+  .net-card .rank { position: absolute; top: 16px; right: 20px; font-family: var(--font-display); font-size: 36px; font-weight: 800; color: var(--line); line-height: 1; }
   .net-card .net-name { font-weight: 700; font-size: 16px; margin-bottom: 12px; }
   .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
-  .net-card .stat { font-family: 'Roboto Slab', serif; font-size: 28px; font-weight: 700; line-height: 1; margin: 8px 0; }
+  .net-card .stat { font-family: var(--font-display); font-size: 28px; font-weight: 700; line-height: 1; margin: 8px 0; }
   .net-card .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
   .net-card .row { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--line); font-size: 13px; }
   .net-card .row .k { color: var(--muted); }
@@ -158,7 +159,7 @@
   .chart-grid { display: grid; gap: 20px; }
   .chart-grid.cols-2 { grid-template-columns: 1fr 1fr; }
   .chart-card { padding: 24px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); }
-  .chart-card h3 { margin: 0 0 16px; font-size: 13px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 1px; font-family: 'Roboto', sans-serif; font-weight: 600; }
+  .chart-card h3 { margin: 0 0 16px; font-size: 13px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 1px; font-family: var(--font-body); font-weight: 600; }
   .chart-wrap { position: relative; height: 280px; }
   .learn { margin-top: 16px; padding: 14px 18px; background: var(--bg-soft-2); border-left: 3px solid var(--brand); border-radius: 0 4px 4px 0; font-size: 13px; line-height: 1.55; }
   .learn p { margin: 0; }
@@ -201,7 +202,7 @@
   /* Hallazgos */
   .finding { display: flex; gap: 24px; padding: 28px 0; border-bottom: 1px solid var(--line); }
   .finding:last-child { border-bottom: 0; }
-  .finding .num { font-family: 'Roboto Slab', serif; font-size: 44px; font-weight: 300; color: var(--brand); line-height: 1; min-width: 60px; }
+  .finding .num { font-family: var(--font-display); font-size: 44px; font-weight: 300; color: var(--brand); line-height: 1; min-width: 60px; }
   .finding h4 { margin: 0 0 8px; font-size: 18px; }
   .finding p { margin: 0 0 6px; color: var(--ink-soft); font-size: 15px; }
   .finding .action { margin-top: 10px; padding: 10px 14px; background: var(--bg-soft-2); border-radius: 4px; font-size: 14px; }
@@ -209,7 +210,7 @@
   .badge.alta { background: var(--brand); color: #fff; }
   .badge.media { background: var(--accent); color: var(--ink); }
   .reco { display: grid; grid-template-columns: 60px 1fr; gap: 24px; padding: 24px; background: var(--bg-soft); border-radius: 6px; margin: 16px 0; border-left: 4px solid var(--brand); }
-  .reco .num { font-family: 'Roboto Slab', serif; font-size: 34px; font-weight: 700; color: var(--brand); }
+  .reco .num { font-family: var(--font-display); font-size: 34px; font-weight: 700; color: var(--brand); }
   .reco h4 { margin: 0 0 8px; font-size: 18px; }
   .reco p { margin: 0; color: var(--ink-soft); }
   .reco .tags { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
@@ -240,10 +241,35 @@
     text-decoration: none; border-bottom: 1px solid var(--line); background: var(--bg-soft-2); }
   .menu-drawer a.drawer-acc.active { font-weight: 700; }
   .delta { display: inline-block; margin-left: 8px; padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 700;
-    font-family: 'Roboto', sans-serif; vertical-align: middle; }
+    font-family: var(--font-body); vertical-align: middle; }
   .delta-abs { font-weight: 600; margin-left: 4px; }
   .kpi.accent { background: var(--acc, var(--brand)); }
   .hero h1 em { color: var(--acc, var(--brand)); }
+
+
+  /* ===== Look & feel SendWave ===== */
+  h1, h2, .wordmark, .kpi .value, .finding .num, .reco .num, .net-card .stat {
+    font-family: var(--font-display); font-weight: 400; letter-spacing: .2px; }
+  h1, h2, .wordmark { text-transform: uppercase; }
+  h3, h4 { font-family: var(--font-body); font-weight: 700; }
+  .hero h1 { letter-spacing: 0; line-height: 1.02; }
+  .wordmark { font-size: 30px; color: var(--brand); letter-spacing: .5px; }
+  .topbar .title-block .title { font-family: var(--font-body); font-weight: 800; font-size: 20px; }
+  .topbar .title-block .title em, .hero h1 em { color: var(--acc); }
+  .topbar .title-block .eyebrow, .eyebrow, .section-head .num { color: var(--ink-soft); }
+  .topbar .meta strong { font-family: var(--font-body); font-weight: 800; }
+  .section-head .num { font-family: var(--font-body); font-weight: 700; font-size: 12px; }
+  .account-bar { background: var(--accent); border-bottom: 0; }
+  .account-bar .lbl { color: var(--ink); }
+  .acc-btn { border-color: transparent; }
+  .acc-btn.active { box-shadow: 0 2px 0 rgba(0,0,0,.15); }
+  nav.tabs button.active { color: var(--ink); border-bottom-color: var(--ink); }
+  .learn { border-left-color: var(--acc); }
+  .kpi .label { color: var(--ink-soft); }
+  .pdf-btn { background: var(--accent); border-color: var(--accent); font-weight: 700; }
+  .pdf-btn:hover, .pdf-btn:focus { border-color: var(--ink); color: var(--ink); }
+  .badge.media { background: var(--accent); color: var(--ink); }
+  footer { background: var(--bg-soft); }
 
   @media (max-width: 1000px) {
     .kpi-grid, .kpi-grid.cols-5, .chart-grid.cols-2 { grid-template-columns: 1fr 1fr; }
@@ -472,13 +498,15 @@ const rgba = (h, a) => `rgba(${hexRgb(h).join(",")},${a})`;
   r.setProperty("--acc", COLOR);
   if (b.accent) r.setProperty("--accent", b.accent);
   if (b.ink) r.setProperty("--ink", b.ink);
+  if (b.font_display) r.setProperty("--font-display", `'${b.font_display}', Impact, 'Arial Narrow', sans-serif`);
+  if (b.font_body) r.setProperty("--font-body", `'${b.font_body}', -apple-system, Arial, sans-serif`);
   if (b.bg_soft) r.setProperty("--bg-soft", b.bg_soft);
   if (b.bg_soft_2) r.setProperty("--bg-soft-2", b.bg_soft_2);
 })();
 
-Chart.defaults.color = "#4a5563";
-Chart.defaults.borderColor = "#e6e9ee";
-Chart.defaults.font.family = "Roboto, -apple-system, sans-serif";
+Chart.defaults.color = "#5E4A4E";
+Chart.defaults.borderColor = "#ECE6DA";
+Chart.defaults.font.family = "Inter, -apple-system, Arial, sans-serif";
 Chart.defaults.font.size = 12;
 
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -704,8 +732,8 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
   new Chart(document.getElementById("c-hour"), {
     type: "bar",
     data: { labels: hr.labels, datasets: [
-      { type: "bar", label: "Publicaciones", data: hr.counts, backgroundColor: rgba(COLOR, .67), borderRadius: 2, yAxisID: "y" },
-      { type: "line", label: "Engagement promedio", data: hr.engagement_promedio, borderColor: "#1F2D3D", borderWidth: 2, tension: .3, pointRadius: 3, pointBackgroundColor: "#1F2D3D", yAxisID: "y1" },
+      { type: "bar", label: "Publicaciones", data: hr.counts, backgroundColor: rgba(COLOR, .35), borderRadius: 2, yAxisID: "y" },
+      { type: "line", label: "Engagement promedio", data: hr.engagement_promedio, borderColor: "#0D0B01", borderWidth: 2, tension: .3, pointRadius: 3, pointBackgroundColor: "#0D0B01", yAxisID: "y1" },
     ] },
     options: { maintainAspectRatio: false, plugins: { legend: { display: true, position: "bottom", labels: { font: { size: 10 } } } },
       scales: { y: { beginAtZero: true, position: "left", ticks: { precision: 0 }, grid: { color: "#f0f2f5" } },
@@ -783,7 +811,7 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
     type: "bar",
     data: { labels: perf.map(x => catLabel(x.category)), datasets: [
       { label: "Promedio", data: perf.map(x => x.mean), backgroundColor: rgba(COLOR, .8), borderRadius: 3 },
-      { label: "Mediana", data: perf.map(x => x.median), backgroundColor: "rgba(31,45,61,.55)", borderRadius: 3 } ] },
+      { label: "Mediana", data: perf.map(x => x.median), backgroundColor: "#C9BFB8", borderRadius: 3 } ] },
     options: { ...barOpts(true), plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { afterBody: it => [pub(perf[it[0].dataIndex].n)] } } } },
   });
   learn("l-cat-perf", `<strong>${catLabel(perf[0].category)}</strong> tiene el mejor engagement promedio (${fmt(perf[0].mean)}, ${pub(perf[0].n)}). Promedio de la cuenta: ${fmt(ca.global_mean)} por publicación.`);
