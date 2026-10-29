@@ -24,6 +24,7 @@ Uso:
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import statistics
@@ -602,6 +603,12 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
     manual = json.loads(manual_path.read_text(encoding="utf-8")) if manual_path.exists() else {}
     for ch in cfg["channels"]:
         if manual.get(ch["key"]):
+            insights = manual[ch["key"]].get("insights")
+            if insights:
+                # Los insights aprobados reemplazan el resumen automático de métricas
+                channels[ch["key"]]["resumen_html"] = "<ol class=\"insights\">" + "".join(
+                    f"<li><strong>{html.escape(i['titulo'])}.</strong> {html.escape(i['texto'])}</li>"
+                    for i in insights) + "</ol>"
             channels[ch["key"]]["hallazgos_llm"] = {**manual[ch["key"]], "_meta": {"model": "analista"}}
             print(f"  ✓ hallazgos {ch['key']}: del archivo {manual_path.relative_to(ROOT)}")
             continue
