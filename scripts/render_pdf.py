@@ -87,6 +87,14 @@ def render(periods):
                         });
                     }"""
                 )
+                # Esperar a que carguen las miniaturas de las publicaciones (máx. 20 s)
+                page.evaluate(
+                    """() => Promise.race([
+                        Promise.all([...document.images].map(i => i.complete ? null
+                            : new Promise(r => { i.onload = i.onerror = r; }))),
+                        new Promise(r => setTimeout(r, 20000)),
+                    ])"""
+                )
                 page.wait_for_timeout(2500)
                 out = Path(per) / f"reporte-{acc}.pdf"
                 page.pdf(

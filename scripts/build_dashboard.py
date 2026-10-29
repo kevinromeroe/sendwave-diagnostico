@@ -211,6 +211,60 @@ def load_accounts(sb: Supabase, client_id: str, period: str, fallback: str) -> d
     }
 
 
+def followers_by_month(sb: Supabase, client_id: str) -> dict[str, dict[str, int]]:
+    """{canal: {YYYY-MM: seguidores}} con todas las capturas de perfil guardadas.
+
+    Instagram no expone el histórico de seguidores: la serie existe desde la
+    primera ingesta y suma un punto por cada reporte mensual.
+    """
+    out: dict[str, dict[str, int]] = defaultdict(dict)
+    rows = sb.select("accounts", filter=f"client_id=eq.{client_id}&order=snapshot_at.asc",
+                     columns="platform,period_id,followers,snapshot_at")
+    for a in rows:
+        if a.get("followers") is None:
+            continue
+        month = a["period_id"] if P.is_month(a["period_id"]) else (a.get("snapshot_at") or "")[:7]
+        if month:
+            out[a["platform"]][month] = a["followers"]
+    return out
+
+
+def monthly_trend(cfg: dict, key: str, all_posts: list[dict], followers: dict[str, int],
+                  until: datetime, an: dict, max_months: int = 12) -> dict:
+    """Serie mensual de una cuenta desde el inicio del diagnóstico hasta el fin del período."""
+    d0 = datetime.fromisoformat(cfg["periods"]["diagnostico"]["starts_on"])
+    months, y, m = [], d0.year, d0.month
+    while (y, m) <= (until.year, until.month):
+        months.append(f"{y:04d}-{m:02d}")
+        y, m = (y + 1, 1) if m == 12 else (y, m + 1)
+    months = months[-max_months:]
+
+    now = datetime.now(P.BOGOTA)
+    serie = {"labels": [], "parcial": [], "n_posts": [], "engagement_total": [],
+             "engagement_promedio": [], "seguidores": [], "tasa": [], "tasa_aprox": []}
+    known = sorted(followers.items())
+    for month in months:
+        ms, me = P.window(cfg, month)
+        b = channel_block([p for p in in_window(all_posts, ms, me) if p["platform"] == key], an, ms, me)
+        seg = followers.get(month)
+        # Tasa del mes: con los seguidores de ese mes o, si no hay captura, con la más cercana
+        ref = seg if seg is not None else (min(known, key=lambda kv: abs(_month_diff(kv[0], month)))[1]
+                                           if known else None)
+        serie["labels"].append(f"{MES_CORTO[int(month[5:])]} {month[2:4]}")
+        serie["parcial"].append(ms <= now < me)
+        serie["n_posts"].append(b["n_posts"])
+        serie["engagement_total"].append(b["engagement_total"])
+        serie["engagement_promedio"].append(b["engagement_promedio"])
+        serie["seguidores"].append(seg)
+        serie["tasa"].append(round(b["engagement_promedio"] / ref * 100, 3) if ref and b["n_posts"] else None)
+        serie["tasa_aprox"].append(seg is None and ref is not None)
+    return serie
+
+
+def _month_diff(a: str, b: str) -> int:
+    return (int(a[:4]) - int(b[:4])) * 12 + int(a[5:]) - int(b[5:])
+
+
 # ─────────────────────────────────────────────────────────────
 # Métricas por canal
 # ─────────────────────────────────────────────────────────────
@@ -302,8 +356,8 @@ def channel_block(ps: list[dict], an: dict, start, end) -> dict:
             "counts": [hour_c[h] for h in hours],
             "engagement_promedio": [round(hour_e[h] / hour_c[h], 1) for h in hours],
         },
-        "by_week": {"labels": [w.strftime("%d/%m") for w in weeks], "counts": [week_c[w] for w in weeks],
-                    "engagement": [week_e[w] for w in weeks]},
+        "by_week": {"labels": week_labels(weeks, start.date()), "desde": [w.strftime("%d/%m") for w in weeks],
+                    "counts": [week_c[w] for w in weeks], "engagement": [week_e[w] for w in weeks]},
         "by_day_hour": {
             "labels_dow": DOW,
             "matrix": [[round(hm_e[d][h] / hm_c[d][h], 1) if hm_c[d][h] else 0 for h in range(24)]
@@ -316,9 +370,23 @@ def channel_block(ps: list[dict], an: dict, start, end) -> dict:
         "captions_avg_len": round(sum(len(p["caption"]) for p in typical) / n, 1) if n else 0,
         "top5": [_post_dict(p) for p in top],
         "worst5": [_post_dict(p) for p in worst],
-        "atipicos": [_post_dict(p) for p in atip],
+        # Solo las 5 atípicas con más engagement; el total va en n_atipicos
+        "atipicos": [_post_dict(p) for p in atip[:top_n]],
         "outlier_threshold": threshold,
     }
+
+
+MES_CORTO = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
+
+
+def week_labels(mondays: list, period_start) -> list[str]:
+    """'Jun S1', 'Jun S2', …: mes y número de semana dentro del mes (lunes a domingo)."""
+    out, seen = [], Counter()
+    for w in mondays:
+        ref = max(w, period_start)
+        seen[(ref.year, ref.month)] += 1
+        out.append(f"{MES_CORTO[ref.month]} S{seen[(ref.year, ref.month)]}")
+    return out
 
 
 def category_analysis(ps: list[dict], an: dict) -> dict:
@@ -476,12 +544,15 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
         prev_posts = in_window(all_posts, ps, pe)
         prev_acc = load_accounts(sb, client_id, prev, diag_id)
 
+    followers_hist = followers_by_month(sb, client_id)
+
     # Cada cuenta es un reporte independiente: nada se suma ni se mezcla entre cuentas
     channels = {}
     for ch in cfg["channels"]:
         key = ch["key"]
         b = channel_block(by_ch[key], an, start, end)
         b["account"] = accounts.get(key) or {}
+        b["tendencia"] = monthly_trend(cfg, key, all_posts, followers_hist.get(key, {}), end, an)
         b["category_analysis"] = category_analysis(by_ch[key], an)
         b["deltas"] = None
         if prev:

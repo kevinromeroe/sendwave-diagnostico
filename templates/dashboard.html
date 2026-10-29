@@ -247,6 +247,22 @@
   .hero h1 em { color: var(--acc, var(--brand)); }
 
 
+
+  /* Tendencia mensual */
+  .trend-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px; }
+  .trend-card { border: 1px solid var(--line); border-radius: 6px; padding: 14px 14px 10px; background: var(--bg); }
+  .trend-card .t-label { font-size: 11px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+  .trend-card .t-val { font-family: var(--font-display); font-size: 26px; margin-top: 6px; }
+  .trend-card .t-delta { font-size: 12px; font-weight: 600; min-height: 18px; }
+  .trend-card .t-delta.up { color: #2f7d32; } .trend-card .t-delta.down { color: #c33; }
+  .trend-card .t-delta span { color: var(--muted); font-weight: 400; }
+  .trend-card .t-chart { position: relative; height: 90px; margin-top: 8px; }
+  .trend-card .t-note { font-size: 11px; color: var(--muted); margin-top: 8px; line-height: 1.45; }
+  .perf-points { margin: 0; padding-left: 18px; font-size: 14.5px; line-height: 1.7; }
+  @media (max-width: 1000px) { .trend-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 520px) { .trend-grid { grid-template-columns: 1fr; } }
+  @media print { .trend-card .t-chart { height: 70px; } .trend-grid { break-inside: avoid; } }
+
   /* ===== Look & feel SendWave ===== */
   h1, h2, .wordmark, .kpi .value, .finding .num, .reco .num, .net-card .stat {
     font-family: var(--font-display); font-weight: 400; letter-spacing: .2px; }
@@ -396,6 +412,14 @@
     <p class="lead" id="hero-lead"></p>
     <div class="kpi-grid cols-5" id="kpi-main"></div>
   </div>
+
+  <div class="section-head">
+    <div class="num">Tendencia</div>
+    <h2>Cómo evolucionan los indicadores mes a mes</h2>
+    <div class="desc" id="trend-desc"></div>
+  </div>
+  <div class="trend-grid" id="trend-grid"></div>
+  <div class="learn" id="l-trend"></div>
   <div class="note"><strong>Sobre estas métricas</strong> · Los KPIs y las gráficas se calculan solo sobre las <strong>publicaciones típicas</strong>. Se excluyen las atípicas (engagement mayor a 5 veces la mediana del período, normalmente pauta o un viral aislado) para que no distorsionen las tendencias; se listan aparte en Publicaciones. Engagement = likes + comentarios. Tasa de engagement = engagement promedio por publicación ÷ seguidores.</div>
 </section>
 
@@ -405,6 +429,10 @@
     <div class="num">Desempeño</div>
     <h2>Ritmo, formatos y momentos de publicación</h2>
     <div class="desc">Cuándo y cómo publica la cuenta, y qué combinaciones obtienen más interacción. Horas en zona Bogotá.</div>
+  </div>
+  <div class="resumen-corp" id="perf-resumen-box" hidden>
+    <div class="lbl">Resumen ejecutivo de desempeño</div>
+    <ul class="perf-points" id="perf-resumen"></ul>
   </div>
   <div class="chart-grid cols-2" id="perf-grid">
     <div class="chart-card"><h3>Volumen semanal de publicación<i class="info-icon" data-tip="Cantidad de publicaciones por semana: el ritmo del calendario editorial.">i</i></h3><div class="chart-wrap"><canvas id="c-week"></canvas></div><div class="learn" id="l-week"></div></div>
@@ -420,14 +448,15 @@
   <div class="section-head">
     <div class="num">Publicaciones</div>
     <h2>Las piezas que más y menos conectaron</h2>
-    <div class="desc">Las atípicas se muestran primero y aparte. El Top 5 y las de menor engagement se eligen entre las publicaciones típicas.</div>
+    <div class="desc">Las 5 publicaciones con mejor y con menor engagement entre las típicas, y las 5 atípicas con más interacciones.</div>
   </div>
-  <h3 id="h-atipicos" style="font-size:16px" hidden>Publicaciones atípicas</h3>
-  <div class="chart-card" id="card-atipicos" style="padding:0" hidden><table id="t-atipicos"></table></div>
-  <h3 style="margin-top:28px;font-size:16px">Top 5 publicaciones (sin atípicas)</h3>
+  <h3 style="font-size:16px">Top 5 publicaciones con mejor engagement (sin atípicas)</h3>
   <div class="chart-card" style="padding:0"><table id="t-top"></table><div class="learn" id="l-top" style="margin:0;border-radius:0 0 6px 6px"></div></div>
-  <h3 id="h-worst" style="margin-top:28px;font-size:16px">5 publicaciones de menor engagement</h3>
+  <h3 id="h-worst" style="margin-top:28px;font-size:16px">Top 5 publicaciones con menor engagement</h3>
   <div class="chart-card" id="card-worst" style="padding:0"><table id="t-worst"></table></div>
+  <h3 id="h-atipicos" style="margin-top:28px;font-size:16px" hidden>Top 5 publicaciones atípicas</h3>
+  <p class="note" id="atip-note" hidden></p>
+  <div class="chart-card" id="card-atipicos" style="padding:0" hidden><table id="t-atipicos"></table></div>
   <h2 style="margin-top:48px">Hashtags más usados</h2>
   <div class="hashtags" id="hashtags"></div>
 </section>
@@ -522,6 +551,8 @@ const CAT_LABEL = { promocion: "Promoción", producto: "Producto", tutorial: "Tu
   testimonio: "Testimonio", comunidad: "Comunidad", estacional: "Estacional", tendencia: "Tendencia",
   concurso: "Concurso", interaccion: "Interacción", marca: "Marca", alianza: "Alianza" };
 const catLabel = c => CAT_LABEL[c] || ((c || "").charAt(0).toUpperCase() + (c || "").slice(1));
+const DIA = { Lun: "lunes", Mar: "martes", Mié: "miércoles", Jue: "jueves", Vie: "viernes", Sáb: "sábados", Dom: "domingos" };
+const dia = d => DIA[d] || d;
 const pub = n => `${fmt(n)} ${Number(n) === 1 ? "publicación" : "publicaciones"}`;
 const TYPE_LABEL = { Image: "Foto", Sidecar: "Carrusel", Video: "Reel", Photo: "Foto", Album: "Carrusel", Text: "Solo texto", post: "Publicación" };
 const prettyType = t => TYPE_LABEL[t] || t;
@@ -688,6 +719,99 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
 })();
 
 // ════════════════════════════════════════════════════════════
+// Tendencia mensual (Resumen)
+// ════════════════════════════════════════════════════════════
+(function tendencia() {
+  const T = B.tendencia;
+  if (!T || !T.labels.length) return;
+  const labels = T.labels.map((l, i) => T.parcial[i] ? l + "*" : l);
+  const nMeses = T.labels.length;
+  document.getElementById("trend-desc").textContent =
+    `${nMeses} ${nMeses === 1 ? "mes" : "meses"} de ${ACC.label}, de ${T.labels[0]} a ${T.labels[nMeses - 1]}. Publicaciones y engagement se calculan sin atípicas.` +
+    (T.parcial.includes(true) ? " * Mes en curso." : "");
+  const M = [
+    { k: "seguidores", label: "Seguidores", f: v => fmt(v) },
+    { k: "n_posts", label: "Publicaciones", f: v => fmt(v) },
+    { k: "engagement_total", label: "Engagement total", f: v => fmt(v) },
+    { k: "engagement_promedio", label: "Eng. por publicación", f: v => fmt(v) },
+    { k: "tasa", label: "Tasa de engagement", f: v => pctFmt(v) },
+  ];
+  const grid = document.getElementById("trend-grid");
+  const frases = [];
+  let rango = "";
+  M.forEach(m => {
+    const s = T[m.k];
+    const idx = s.map((v, i) => (v === null || v === undefined) ? -1 : i).filter(i => i >= 0);
+    // Se compara el primer y el último mes completos con dato
+    const cmp = idx.filter(i => !T.parcial[i]);
+    const i0 = cmp[0], i1 = cmp[cmp.length - 1];
+    const last = idx.length ? s[idx[idx.length - 1]] : null;
+    let delta = `<div class="t-delta"></div>`;
+    if (cmp.length >= 2 && s[i0]) {
+      const d = s[i1] - s[i0], p = d / s[i0] * 100;
+      const dTxt = m.k === "tasa"
+        ? `${d >= 0 ? "+" : "−"}${Math.abs(d).toFixed(2).replace(".", ",")} pp`
+        : `${d >= 0 ? "+" : "−"}${fmt(Math.abs(Math.round(d * 10) / 10))}`;
+      delta = `<div class="t-delta ${d >= 0 ? "up" : "down"}">${d >= 0 ? "▲" : "▼"} ${dTxt} (${p > 0 ? "+" : ""}${p.toFixed(0)}%) <span>${T.labels[i0]} → ${T.labels[i1]}</span></div>`;
+      if (m.k !== "seguidores") { frases.push(`<strong>${m.label.toLowerCase()}</strong> de ${m.f(s[i0])} a ${m.f(s[i1])} ${d >= 0 ? "▲" : "▼"}`); rango = `${T.labels[i0]} y ${T.labels[i1]}`; }
+    }
+    let note = "";
+    if (m.k === "seguidores" && idx.length < 2)
+      note = `<div class="t-note">Instagram no publica el histórico de seguidores: la serie arranca con la captura de ${idx.length ? T.labels[idx[0]] : "este período"} y suma un punto con cada reporte mensual.</div>`;
+    if (m.k === "tasa" && T.tasa_aprox.some(Boolean))
+      note = `<div class="t-note">En los meses sin captura de seguidores, la tasa usa los seguidores de la captura más cercana.</div>`;
+    const card = document.createElement("div");
+    card.className = "trend-card";
+    card.innerHTML = `<div class="t-label">${m.label}</div><div class="t-val">${last === null ? "—" : m.f(last)}</div>${delta}` +
+      (idx.length >= 2 ? `<div class="t-chart"><canvas aria-label="${m.label} por mes"></canvas></div>` : "") + note;
+    grid.appendChild(card);
+    if (idx.length >= 2) {
+      new Chart(card.querySelector("canvas"), {
+        type: "line",
+        data: { labels, datasets: [{ data: s, borderColor: COLOR, backgroundColor: rgba(COLOR, .12), fill: true, borderWidth: 2,
+          tension: .3, spanGaps: true, pointRadius: s.map((v, i) => i === idx[idx.length - 1] ? 4 : 2.5), pointBackgroundColor: COLOR,
+          segment: { borderDash: c => T.parcial[c.p1DataIndex] ? [4, 3] : undefined } }] },
+        options: { responsive: true, maintainAspectRatio: false, animation: false,
+          plugins: { legend: { display: false }, tooltip: { displayColors: false, callbacks: { label: c => m.f(c.raw) } } },
+          scales: { x: { grid: { display: false }, border: { display: false }, ticks: { font: { size: 9 }, maxRotation: 0 } },
+                    y: { display: false, grace: "15%" } } },
+      });
+    }
+  });
+  if (frases.length) learn("l-trend", `Entre ${rango} (meses completos): ${frases.join(", ")}.`);
+})();
+
+// ════════════════════════════════════════════════════════════
+// Resumen ejecutivo de desempeño
+// ════════════════════════════════════════════════════════════
+(function resumenDesempeno() {
+  if (!B.n_posts) return;
+  const pts = [];
+  const wk = B.by_week, wkAvg = wk.counts.reduce((a, b) => a + b, 0) / wk.counts.length;
+  const wkZero = wk.counts.filter(x => x === 0).length;
+  pts.push(`<strong>Ritmo:</strong> ${dec1(wkAvg)} publicaciones por semana en promedio${wkZero ? `, con ${wkZero} semana${wkZero !== 1 ? "s" : ""} sin publicar` : ""}.`);
+  const tp = B.by_type;
+  if (tp.labels.length) {
+    const hi = maxIdx(tp.engagement_promedio), mas = maxIdx(tp.counts);
+    pts.push(`<strong>Formato:</strong> el que más conecta es el <strong>${prettyType(tp.labels[hi]).toLowerCase()}</strong> (${fmt(tp.engagement_promedio[hi])} de engagement promedio)` +
+      (mas !== hi ? `, pero el más publicado es el ${prettyType(tp.labels[mas]).toLowerCase()} (${pub(tp.counts[mas])}).` : `, y también es el más publicado.`));
+  }
+  const dw = B.by_day, dMax = maxIdx(dw.engagement_promedio);
+  pts.push(`<strong>Día:</strong> los ${dia(dw.labels[dMax])} rinden más (${fmt(dw.engagement_promedio[dMax])} de engagement promedio).`);
+  const hr = B.by_hour;
+  if (hr.labels.length) {
+    const hBest = maxIdx(hr.engagement_promedio), hPeak = maxIdx(hr.counts);
+    pts.push(`<strong>Hora:</strong> la mejor respuesta llega a las ${hr.labels[hBest]}:00` +
+      (hBest !== hPeak ? `, aunque la mayoría se publica a las ${hr.labels[hPeak]}:00.` : `, que también es la hora más usada.`));
+  }
+  let bd = 0, bh = 0, bv = 0;
+  B.by_day_hour.matrix.forEach((r, i) => r.forEach((v, j) => { if (v > bv) { bv = v; bd = i; bh = j; } }));
+  if (bv > 0) pts.push(`<strong>Mejor ventana:</strong> ${B.by_day_hour.labels_dow[bd]} a las ${bh}:00 (${fmt(Math.round(bv))} interacciones promedio, ${pub(B.by_day_hour.counts[bd][bh])}).`);
+  document.getElementById("perf-resumen").innerHTML = pts.map(p => `<li>${p}</li>`).join("");
+  document.getElementById("perf-resumen-box").hidden = false;
+})();
+
+// ════════════════════════════════════════════════════════════
 // Desempeño
 // ════════════════════════════════════════════════════════════
 (function desempeno() {
@@ -698,14 +822,15 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
   const wk = B.by_week;
   const wkOpts = barOpts(false);
   wkOpts.scales.y.ticks = { precision: 0 };
-  wkOpts.plugins.tooltip = { callbacks: { title: it => `Semana del ${it[0].label}` } };
+  wkOpts.plugins.tooltip = { callbacks: { title: it => `${it[0].label} · semana del ${wk.desde[it[0].dataIndex]}` } };
+  wkOpts.scales.x.ticks = { autoSkip: true, maxRotation: 0, font: { size: 10 } };
   new Chart(document.getElementById("c-week"), {
     type: "bar", data: { labels: wk.labels, datasets: [{ label: "Publicaciones", data: wk.counts, backgroundColor: COLOR, borderRadius: 3 }] },
     options: wkOpts,
   });
   const wkAvg = wk.counts.reduce((a, b) => a + b, 0) / wk.counts.length;
   const wkMax = Math.max(...wk.counts), wkZero = wk.counts.filter(x => x === 0).length;
-  learn("l-week", `Cadencia promedio de <strong>${dec1(wkAvg)} ${wkAvg === 1 ? "publicación" : "publicaciones"} por semana</strong>, con un pico de ${wkMax} en la semana del ${wk.labels[wk.counts.indexOf(wkMax)]}` +
+  learn("l-week", `Cadencia promedio de <strong>${dec1(wkAvg)} ${wkAvg === 1 ? "publicación" : "publicaciones"} por semana</strong>, con un pico de ${wkMax} en ${wk.labels[wk.counts.indexOf(wkMax)]} (semana del ${wk.desde[wk.counts.indexOf(wkMax)]})` +
     (wkZero ? `. ${wkZero} semana${wkZero !== 1 ? "s" : ""} sin publicaciones.` : "."));
 
   const tp = B.by_type;
@@ -726,7 +851,7 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
     options: barOpts(false),
   });
   const dMax = maxIdx(dw.engagement_promedio), dMin = minIdx(dw.engagement_promedio);
-  learn("l-dow", `Los <strong>${dw.labels[dMax]}</strong> son el mejor día (${fmt(dw.engagement_promedio[dMax])} de engagement promedio, ${pub(dw.counts[dMax])}); los ${dw.labels[dMin]} caen a ${fmt(dw.engagement_promedio[dMin])}.`);
+  learn("l-dow", `Los <strong>${dia(dw.labels[dMax])}</strong> son el mejor día (${fmt(dw.engagement_promedio[dMax])} de engagement promedio, ${pub(dw.counts[dMax])}); los ${dia(dw.labels[dMin])} caen a ${fmt(dw.engagement_promedio[dMin])}.`);
 
   const hr = B.by_hour;
   new Chart(document.getElementById("c-hour"), {
@@ -762,7 +887,7 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
     document.getElementById(id).innerHTML = head + "<tbody>" + posts.map(x => {
       const cap = x.caption.length > 220 ? x.caption.slice(0, 220) + "…" : x.caption;
       const thumb = x.media_url
-        ? `<img class="post-thumb" src="${esc(x.media_url)}" loading="lazy" referrerpolicy="no-referrer" alt="" onerror="this.outerHTML='<div class=&quot;post-thumb-placeholder&quot;>▣</div>'">`
+        ? `<img class="post-thumb" src="${esc(x.media_url)}" referrerpolicy="no-referrer" alt=""" onerror="this.outerHTML='<div class=&quot;post-thumb-placeholder&quot;>▣</div>'">`
         : `<div class="post-thumb-placeholder">▣</div>`;
       return `<tr><td style="width:120px">${thumb}</td><td style="white-space:nowrap">${x.fecha}</td>
         <td><span class="pill">${esc(prettyType(x.tipo))}</span></td><td class="caption">${esc(cap)}</td><td>${tagPills(x.tags)}</td>
@@ -773,6 +898,9 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
   if ((B.atipicos || []).length) {
     document.getElementById("h-atipicos").hidden = false;
     document.getElementById("card-atipicos").hidden = false;
+    const na = document.getElementById("atip-note");
+    na.hidden = false;
+    na.innerHTML = `La cuenta tuvo <strong>${pub(B.n_atipicos)} atípica${B.n_atipicos !== 1 ? "s" : ""}</strong> en el período (engagement mayor a ${fmt(B.outlier_threshold)}, es decir 5 veces la mediana). Se muestran las ${Math.min(5, B.n_atipicos)} con más interacciones; no cuentan en los KPIs ni en las gráficas.`;
     fill("t-atipicos", B.atipicos);
   }
   fill("t-top", B.top5 || []);
