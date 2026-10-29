@@ -11,7 +11,7 @@ Cada cuenta (canal del YAML) es un reporte independiente: el dashboard tiene
 un selector de cuenta y nada se suma ni se compara entre cuentas.
 
 Reglas de negocio (iguales al dashboard de Comapan):
-  - Atípico = engagement > 5× la mediana del período en esa cuenta (piso 5).
+  - Atípico = engagement > Q3 + 3×IQR de la cuenta en el período (ver split_outliers).
     Las métricas de cabecera, gráficas, ranking y tabla comparada usan SOLO
     publicaciones típicas (orgánico); las atípicas se listan aparte.
   - Deltas vs mes anterior: % en los KPIs, cambio absoluto en el ranking.
@@ -278,11 +278,18 @@ def _post_dict(p: dict) -> dict:
 
 
 def split_outliers(ps: list[dict], an: dict) -> tuple[list[dict], list[dict], float]:
-    """(típicas, atípicas, umbral). Atípica = engagement > mult × mediana (con piso)."""
-    if not ps:
-        return [], [], 0
-    med = sorted(p["engagement"] for p in ps)[len(ps) // 2]
-    threshold = max(med, an.get("outlier_floor", 5)) * an.get("outlier_multiplier", 5)
+    """(típicas, atípicas, umbral). Atípica = engagement > Q3 + k × IQR (k = 3 por defecto).
+
+    Se usa el rango intercuartílico y no un múltiplo de la mediana porque el
+    engagement de estas cuentas es muy disperso: con "5× mediana" LATAM marcaba
+    el 25 % de sus piezas como atípicas. Con menos de 4 publicaciones no hay
+    cuartiles fiables y no se marca ninguna.
+    """
+    if len(ps) < 4:
+        return list(ps), [], 0
+    e = sorted(p["engagement"] for p in ps)
+    q1, q3 = e[int(0.25 * (len(e) - 1))], e[int(0.75 * (len(e) - 1))]
+    threshold = max(q3 + an.get("outlier_iqr_k", 3) * (q3 - q1), an.get("outlier_floor", 5))
     atip = sorted([p for p in ps if p["engagement"] > threshold], key=lambda p: -p["engagement"])
     ids = {p["id"] for p in atip}
     return [p for p in ps if p["id"] not in ids], atip, threshold

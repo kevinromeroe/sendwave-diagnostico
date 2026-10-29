@@ -420,7 +420,7 @@
   </div>
   <div class="trend-grid" id="trend-grid"></div>
   <div class="learn" id="l-trend"></div>
-  <div class="note"><strong>Sobre estas métricas</strong> · Los KPIs y las gráficas se calculan solo sobre las <strong>publicaciones típicas</strong>. Se excluyen las atípicas (engagement mayor a 5 veces la mediana del período, normalmente pauta o un viral aislado) para que no distorsionen las tendencias; se listan aparte en Publicaciones. Engagement = likes + comentarios. Tasa de engagement = engagement promedio por publicación ÷ seguidores.</div>
+  <div class="note"><strong>Sobre estas métricas</strong> · Los KPIs y las gráficas se calculan solo sobre las <strong>publicaciones típicas</strong>. Se excluyen las atípicas (engagement muy por encima del resto: más que el tercer cuartil + 3 veces el rango intercuartílico; suele ser pauta o un viral aislado) para que no distorsionen las tendencias; se listan aparte en Publicaciones. Engagement = likes + comentarios. Tasa de engagement = engagement promedio por publicación ÷ seguidores.</div>
 </section>
 
 <!-- ============ DESEMPEÑO ============ -->
@@ -900,7 +900,7 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
     document.getElementById("card-atipicos").hidden = false;
     const na = document.getElementById("atip-note");
     na.hidden = false;
-    na.innerHTML = `La cuenta tuvo <strong>${pub(B.n_atipicos)} atípica${B.n_atipicos !== 1 ? "s" : ""}</strong> en el período (engagement mayor a ${fmt(B.outlier_threshold)}, es decir 5 veces la mediana). Se muestran las ${Math.min(5, B.n_atipicos)} con más interacciones; no cuentan en los KPIs ni en las gráficas.`;
+    na.innerHTML = `La cuenta tuvo <strong>${pub(B.n_atipicos)} atípica${B.n_atipicos !== 1 ? "s" : ""}</strong> en el período (engagement mayor a ${fmt(B.outlier_threshold)} interacciones). Se muestran las ${Math.min(5, B.n_atipicos)} con más interacciones; no cuentan en los KPIs ni en las gráficas.`;
     fill("t-atipicos", B.atipicos);
   }
   fill("t-top", B.top5 || []);

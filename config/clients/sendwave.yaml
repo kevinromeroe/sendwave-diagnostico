@@ -89,8 +89,8 @@ channels:
 # Reglas analíticas
 # =============================================================
 analytics:
-  outlier_multiplier: 5           # atípico = engagement > 5× mediana del período (piso 5)
-  outlier_floor: 5
+  outlier_iqr_k: 3                # atípico = engagement > Q3 + 3 × IQR de la cuenta en el período
+  outlier_floor: 5                # umbral mínimo de engagement para ser atípica
   top_posts_n: 5
   top_hashtags_n: 10
 

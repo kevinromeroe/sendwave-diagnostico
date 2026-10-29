@@ -48,7 +48,7 @@ docs/RUNBOOK.md                operación paso a paso
 ## Reglas de negocio (iguales a Comapan)
 
 - **Engagement** = likes + comentarios (Instagram no expone los compartidos ni los guardados públicamente).
-- **Atípico** = engagement > 5× la mediana de la cuenta en el período (piso 5). Las cifras de cabecera, las gráficas, el ranking y la tabla comparada usan solo publicaciones típicas. Las atípicas se listan aparte.
+- **Atípico** = engagement > Q3 + 3 × IQR (tercer cuartil más tres veces el rango intercuartílico) de la cuenta en el período. Se eligió en lugar del "5× mediana" de Comapan porque el engagement de SendWave es muy disperso. Los KPIs, las gráficas y la tendencia usan solo publicaciones típicas; las 5 atípicas con más interacciones se listan aparte.
 - **Tasa de engagement** = engagement promedio por publicación ÷ seguidores. Permite comparar LATAM y Brasil, que tienen audiencias de distinto tamaño.
 - **Deltas**: en % en los KPIs y en valor absoluto en el ranking, siempre contra el mes anterior. El diagnóstico no tiene deltas.
 - Todas las fechas y horas se expresan en **America/Bogota**.
