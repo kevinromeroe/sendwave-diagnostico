@@ -257,6 +257,8 @@ def monthly_trend(cfg: dict, key: str, all_posts: list[dict], followers: dict[st
     serie = {"labels": [], "parcial": [], "n_posts": [], "engagement_total": [],
              "engagement_promedio": [], "seguidores": [], "tasa": [], "tasa_aprox": []}
     known = sorted(followers.items())
+    # El año solo se muestra cuando la serie cruza de un año a otro (Dic 26 → Ene 27)
+    con_anio = len({m[:4] for m in months}) > 1
     for month in months:
         ms, me = P.window(cfg, month)
         b = channel_block([p for p in in_window(all_posts, ms, me) if p["platform"] == key], an, ms, me)
@@ -264,7 +266,7 @@ def monthly_trend(cfg: dict, key: str, all_posts: list[dict], followers: dict[st
         # Tasa del mes: con los seguidores de ese mes o, si no hay captura, con la más cercana
         ref = seg if seg is not None else (min(known, key=lambda kv: abs(_month_diff(kv[0], month)))[1]
                                            if known else None)
-        serie["labels"].append(f"{MES_CORTO[int(month[5:])]} {month[2:4]}")
+        serie["labels"].append(MES_CORTO[int(month[5:])] + (f" {month[2:4]}" if con_anio else ""))
         serie["parcial"].append(ms <= now < me)
         serie["n_posts"].append(b["n_posts"])
         serie["engagement_total"].append(b["engagement_total"])
