@@ -212,27 +212,34 @@ def load_accounts(sb: Supabase, client_id: str, period: str, fallback: str) -> d
 
 
 def followers_by_month(sb: Supabase, client_id: str) -> dict[str, dict[str, int]]:
-    """{canal: {YYYY-MM: seguidores}} con todas las capturas de perfil guardadas.
+    """{canal: {YYYY-MM: seguidores}}: la última medición disponible de cada mes.
 
-    Instagram no expone el histórico de seguidores: la serie se arma con las
-    capturas de cada ingesta más las mediciones históricas de
-    config/clients/<cliente>_seguidores_extra.json (Insights del cliente,
-    archive.org, etc.). Las capturas propias tienen prioridad.
+    Instagram no expone el histórico de seguidores; la serie se arma con
+      - followers_history: captura semanal + un punto por cada ingesta,
+      - accounts: la captura de perfil de cada período,
+      - config/clients/<cliente>_seguidores_extra.json: mediciones recuperadas
+        de fuentes públicas (p. ej. archive.org) para meses sin captura propia.
     """
-    out: dict[str, dict[str, int]] = defaultdict(dict)
+    points: list[tuple[str, str, int]] = []   # (canal, fecha ISO, seguidores)
     extra = ROOT / "config" / "clients" / f"{client_id}_seguidores_extra.json"
     if extra.exists():
         for pt in json.loads(extra.read_text(encoding="utf-8")).get("puntos", []):
-            # El último punto de cada mes representa ese mes
-            out[pt["cuenta"]][pt["fecha"][:7]] = int(pt["seguidores"])
-    rows = sb.select("accounts", filter=f"client_id=eq.{client_id}&order=snapshot_at.asc",
-                     columns="platform,period_id,followers,snapshot_at")
-    for a in rows:
-        if a.get("followers") is None:
-            continue
-        month = a["period_id"] if P.is_month(a["period_id"]) else (a.get("snapshot_at") or "")[:7]
-        if month:
-            out[a["platform"]][month] = a["followers"]
+            points.append((pt["cuenta"], pt["fecha"], int(pt["seguidores"])))
+    for a in sb.select("accounts", filter=f"client_id=eq.{client_id}",
+                       columns="platform,followers,snapshot_at"):
+        if a.get("followers") is not None and a.get("snapshot_at"):
+            ts = P.to_bogota(a["snapshot_at"])
+            points.append((a["platform"], ts.date().isoformat(), a["followers"]))
+    try:
+        for h in sb.select("followers_history", filter=f"client_id=eq.{client_id}",
+                           columns="platform,captured_on,followers", limit=10000):
+            points.append((h["platform"], h["captured_on"], h["followers"]))
+    except Exception as exc:  # la tabla se agregó después del esquema inicial
+        print(f"  ⚠ followers_history no disponible: {str(exc)[:80]}")
+
+    out: dict[str, dict[str, int]] = defaultdict(dict)
+    for key, day, value in sorted(points, key=lambda p: p[1]):
+        out[key][day[:7]] = value   # en orden de fecha: queda la última del mes
     return out
 
 

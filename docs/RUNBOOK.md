@@ -30,19 +30,30 @@ Para correrla a mano:
 Para regenerar un PDF puntual, usar Actions → **Render PDF (manual)** → `diagnostico 2026-11`.
 Si se reingesta el diagnóstico, su PDF no se rehace solo: hay que correr Build con período `diagnostico` o este render manual.
 
-## 3. Agregar una cuenta o una red
+## 3. Seguidores (captura semanal)
+
+Instagram no publica el histórico de seguidores, así que la serie la construimos nosotros:
+
+- Workflow **Seguidores (captura semanal)**: todos los lunes 07:00 Bogotá guarda una medición por cuenta en la tabla `followers_history`. Cuesta centavos (solo pide el perfil).
+- Cada **ingesta** también suma un punto.
+- El build toma la **última medición de cada mes** para la tarjeta de tendencia de seguidores.
+- Para meses sin captura propia se pueden cargar mediciones de fuentes públicas (archive.org) en `config/clients/sendwave_seguidores_extra.json`.
+
+**Regla para clientes nuevos:** activar la captura de seguidores el mismo día del onboarding. Lo que no se captura no se puede recuperar después.
+
+## 4. Agregar una cuenta o una red
 
 1. En `config/clients/sendwave.yaml`, agregar un elemento a `channels` con `key` única, `platform`, `label`, `short`, `handle`, `url`, `color` y su bloque `apify`.
    - Para TikTok, Facebook o LinkedIn hay que copiar los actores y los inputs de `comapan.yaml` en el repo de Comapan.
 2. Correr la ingesta del período. La pestaña nueva aparece sola.
 
-## 4. Verificación tras la ingesta
+## 5. Verificación tras la ingesta
 
 En el log del workflow, cada cuenta reporta `✓ N publicaciones en el período / M traídas`.
 - Si `M` llega al tope (`resultsLimit: 200`) y el período es largo, subir el tope en el YAML.
 - Si falla una cuenta, **no se escribe nada** en Supabase y el build no corre. El dashboard conserva los datos anteriores.
 
-## 5. Problemas conocidos (heredados de Comapan)
+## 6. Problemas conocidos (heredados de Comapan)
 
 | Síntoma | Causa | Qué hacer |
 |---|---|---|
@@ -51,7 +62,7 @@ En el log del workflow, cada cuenta reporta `✓ N publicaciones en el período 
 | Categorías raras | Sin `GEMINI_API_KEY` se usa el clasificador por palabras clave | Revisar el secret. Para reetiquetar, poner `tag_primary = null` en Supabase y correr el build |
 | Seguidores "—" en un mes | No hay snapshot de cuentas en ese período | El build usa el snapshot del diagnóstico. Correr la ingesta del mes |
 
-## 6. Datos de entorno
+## 7. Datos de entorno
 
 | Item | Valor |
 |---|---|

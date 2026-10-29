@@ -85,6 +85,20 @@ alter table periods  enable row level security;
 alter table accounts enable row level security;
 alter table posts    enable row level security;
 
+-- Historial de seguidores: una medición por cuenta y día (captura semanal +
+-- cada ingesta). Instagram no expone el histórico, así que la serie se arma aquí.
+create table if not exists followers_history (
+  client_id    text not null references clients(id) on delete cascade,
+  platform     text not null,                -- clave del canal (ig_latam, ig_brasil, …)
+  captured_on  date not null,                -- día de la medición (hora Bogotá)
+  followers    integer not null,
+  following_n  integer,
+  posts_total  integer,
+  captured_at  timestamptz not null default now(),
+  primary key (client_id, platform, captured_on)
+);
+alter table followers_history enable row level security;
+
 -- Semilla del cliente (la ingesta también la crea si falta)
 insert into clients (id, name) values ('sendwave', 'SendWave')
 on conflict (id) do nothing;

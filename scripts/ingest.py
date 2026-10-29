@@ -28,6 +28,7 @@ from pipeline.transform import normalize
 from pipeline.util import periods as P
 from pipeline.util.config import load_client, require_env
 from pipeline.util.log import get_logger
+from scripts.snapshot_followers import history_row
 
 try:
     from PIL import Image
@@ -253,8 +254,16 @@ def ingest_period(cfg: dict, apify: ApifyClient, sb: Supabase, period: str) -> i
     for ch in cfg["channels"]:
         key, block = ch["key"], results[ch["key"]]
         if block.get("account"):
-            sb.upsert("accounts", [account_row(client_id, period, key, block["account"])],
-                      on_conflict="client_id,period_id,platform")
+            row = account_row(client_id, period, key, block["account"])
+            sb.upsert("accounts", [row], on_conflict="client_id,period_id,platform")
+            if row["followers"] is not None:
+                # Cada ingesta también suma un punto a la serie de seguidores
+                try:
+                    sb.upsert("followers_history", [history_row(client_id, key, row["followers"],
+                                                                row["following_n"], row["posts_total"])],
+                              on_conflict="client_id,platform,captured_on")
+                except Exception as exc:
+                    print(f"  ⚠ no se guardó el historial de seguidores: {exc}")
         posts = block["posts"]
         if posts:
             sb.upsert("posts", post_rows(client_id, key, posts), on_conflict="id")

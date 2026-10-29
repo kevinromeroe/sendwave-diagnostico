@@ -1,0 +1,32 @@
+name: Seguidores (captura semanal)
+
+# Instagram no expone el histórico de seguidores: esta captura arma la serie que
+# usa la tendencia del dashboard. Corre todos los lunes 07:00 Bogotá (12:00 UTC).
+
+on:
+  schedule:
+    - cron: "0 12 * * 1"
+  workflow_dispatch:
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      APIFY_TOKEN:          ${{ secrets.APIFY_TOKEN }}
+      SUPABASE_URL:         ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip }
+      - run: pip install -r requirements.txt
+      - name: Capturar seguidores
+        run: |
+          for i in 1 2 3; do
+            python scripts/snapshot_followers.py && exit 0
+            echo "Falló el intento $i; reintento en 60 s"
+            sleep 60
+          done
+          echo "::error::La captura de seguidores falló tras 3 intentos"
+          exit 1
