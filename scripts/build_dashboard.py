@@ -88,9 +88,12 @@ def _guess_tag(caption: str) -> str:
     return "marca"
 
 
-def tag_posts(posts: list[dict], cfg: dict, sb: Supabase | None, batch_size: int = 25) -> None:
+def tag_posts(posts: list[dict], cfg: dict, sb: Supabase | None, batch_size: int = 15) -> None:
     """Etiqueta con Gemini las publicaciones que aún no tienen categoría y la
-    persiste en Supabase (cada publicación se clasifica una sola vez)."""
+    persiste en Supabase (cada publicación se clasifica una sola vez).
+
+    Si Gemini falla, el lote usa el clasificador por palabras clave SOLO para este
+    build (no se persiste), así el siguiente build vuelve a intentar con Gemini."""
     pending = [p for p in posts if not p.get("tag_primary")]
     print(f"  Categorías: {len(posts) - len(pending)} ya etiquetadas, {len(pending)} por etiquetar")
     if not pending:
@@ -117,34 +120,42 @@ def tag_posts(posts: list[dict], cfg: dict, sb: Supabase | None, batch_size: int
     )
 
     now_iso = datetime.now(timezone.utc).isoformat()
+    fallos_seguidos = 0
     for start in range(0, len(pending), batch_size):
         batch = pending[start:start + batch_size]
         parsed = None
+        if call and fallos_seguidos >= 2:
+            print("  ⚠ Gemini no responde: el resto de lotes usa palabras clave en este build")
+            call = None
         if call:
             lines = [f"#{i} [{labels.get(p['platform'], p['platform'])} · {p['type']}] "
                      f"{(p.get('caption') or '')[:400]}" for i, p in enumerate(batch)]
             try:
                 parsed = json.loads(call(system, "Publicaciones:\n" + "\n".join(lines),
                                          max_tokens=8000, temperature=0.1))
+                fallos_seguidos = 0
             except Exception as exc:
-                print(f"  ⚠ Lote {start // batch_size + 1}: Gemini falló ({exc}); uso palabras clave")
+                fallos_seguidos += 1
+                print(f"  ⚠ Lote {start // batch_size + 1}: Gemini falló ({str(exc)[:120]}); uso palabras clave")
         answers = {it.get("i"): it for it in (parsed or {}).get("items", []) if isinstance(it, dict)}
 
         rows = []
         for i, p in enumerate(batch):
             it = answers.get(i) or {}
             primary = str(it.get("primary") or "").lower().strip()
-            if primary not in TAG_TAXONOMY:
+            de_gemini = primary in TAG_TAXONOMY
+            if not de_gemini:
                 primary = _guess_tag(p.get("caption"))
             secondary = [str(t).lower().strip() for t in (it.get("secondary") or [])]
             secondary = [t for t in secondary if t in TAG_TAXONOMY and t != primary][:2]
             p["tags"], p["tag_primary"] = [primary] + secondary, primary
-            rows.append({"id": p["id"], "tags": p["tags"], "tag_primary": primary, "tagged_at": now_iso})
+            if de_gemini:
+                rows.append({"id": p["id"], "tags": p["tags"], "tag_primary": primary, "tagged_at": now_iso})
         if sb is not None and rows:
             for r in rows:
                 sb.update("posts", f"id=eq.{r['id']}",
                           {"tags": r["tags"], "tag_primary": r["tag_primary"], "tagged_at": r["tagged_at"]})
-        print(f"  ✓ Lote {start // batch_size + 1}: {len(rows)} publicaciones etiquetadas")
+        print(f"  ✓ Lote {start // batch_size + 1}: {len(rows)}/{len(batch)} con Gemini (guardadas)")
 
 
 # ─────────────────────────────────────────────────────────────

@@ -21,7 +21,7 @@ jobs:
     # Si viene en cadena, solo construye cuando la ingesta terminó bien
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 45
     permissions:
       contents: write
     env:

@@ -34,12 +34,35 @@ def call(
     model: str = DEFAULT_MODEL,
     max_tokens: int = 4000,
     temperature: float = 0.0,
-    timeout: int = 60,
+    timeout: int = 150,
+    attempts: int = 4,
 ) -> str:
     """Llama a Gemini API, retorna el texto de la respuesta.
 
-    Lanza RuntimeError si falla auth o API.
+    Reintenta con espera creciente ante saturación del modelo (429/500/503) o
+    timeout, que en gemini-3.x son frecuentes en horas pico.
+    Lanza RuntimeError si falla auth o API tras los reintentos.
     """
+    import time
+
+    for attempt in range(1, attempts + 1):
+        try:
+            return _call_once(system, user, model=model, max_tokens=max_tokens,
+                              temperature=temperature, timeout=timeout)
+        except _Retryable as exc:
+            if attempt == attempts:
+                raise RuntimeError(str(exc))
+            wait = 15 * attempt
+            log.warning("gemini_retry", extra={"attempt": attempt, "wait_s": wait, "err": str(exc)[:120]})
+            time.sleep(wait)
+
+
+class _Retryable(Exception):
+    pass
+
+
+def _call_once(system: str, user: str, *, model: str, max_tokens: int,
+               temperature: float, timeout: int) -> str:
     api_key = os.environ.get("GEMINI_API_KEY")
     if not api_key:
         raise RuntimeError("GEMINI_API_KEY no definido en env vars.")
@@ -71,9 +94,11 @@ def call(
             raw = resp.read().decode("utf-8")
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace") if hasattr(exc, "read") else ""
+        if exc.code in (429, 500, 503):
+            raise _Retryable(f"Gemini HTTP {exc.code}: {detail[:300]}")
         raise RuntimeError(f"Gemini HTTP {exc.code}: {detail[:300]}")
     except (urllib.error.URLError, TimeoutError) as exc:
-        raise RuntimeError(f"Gemini network error: {exc}")
+        raise _Retryable(f"Gemini network error: {exc}")
 
     try:
         data = json.loads(raw)
