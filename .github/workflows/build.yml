@@ -68,7 +68,7 @@ jobs:
           git config user.name "Datalitica Bot"
           # Cada ruta por separado: si una no existe (p. ej. aún no hay meses), las demás igual se agregan
           for path in index.html diagnostico 20??-??; do
-            [ -e "$path" ] && git add -A -- "$path"
+            if [ -e "$path" ]; then git add -A -- "$path"; fi
           done
           git diff --quiet --cached && echo "Sin cambios" && exit 0
           git commit -m "Build automático: dashboard y PDF ($(date -u +%Y-%m-%d))"
