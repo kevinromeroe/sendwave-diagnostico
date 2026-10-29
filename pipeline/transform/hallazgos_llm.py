@@ -185,7 +185,7 @@ def generate(data: dict, ch: dict, cfg: dict, api_key) -> dict | None:
 
     print(f"  ✓ hallazgos_llm {ch['key']}: {len(clean)} hallazgos + {len(recos)} recomendaciones")
     return {
-        "_meta": {"model": "gemini-2.5-flash", "attempts": attempts,
+        "_meta": {"model": gemini.DEFAULT_MODEL, "attempts": attempts,
                   "generated_at": datetime.now(timezone.utc).isoformat()},
         "resumen_ejecutivo": str(parsed.get("resumen_ejecutivo", "")),
         "hallazgos_top": clean,

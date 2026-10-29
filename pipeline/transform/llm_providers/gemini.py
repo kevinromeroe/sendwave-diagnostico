@@ -8,7 +8,7 @@ Razones de no usar el SDK oficial `google-generativeai`:
 Plan free de Gemini cubre nuestro uso con sobra:
 - 15 req/min, 1500 req/día (necesitamos 1 req/mes)
 - Gratis sin tarjeta de crédito
-- Modelos disponibles: gemini-2.5-flash (default), gemini-2.5-pro, gemini-3.1-*
+- Modelo por defecto: gemini-3.8-flash (variable GEMINI_MODEL para cambiarlo)
 """
 from __future__ import annotations
 
@@ -21,7 +21,9 @@ from pipeline.util.log import get_logger
 
 log = get_logger(__name__)
 
-DEFAULT_MODEL = "gemini-2.5-flash"
+# Las claves nuevas ya no tienen acceso a gemini-2.5-flash (oct-2026). Se puede
+# cambiar con la variable de entorno GEMINI_MODEL sin tocar el código.
+DEFAULT_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.8-flash")
 BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models"
 
 
@@ -50,9 +52,10 @@ def call(
             "temperature": temperature,
             "maxOutputTokens": max_tokens,
             "responseMimeType": "application/json",
-            # FIX thinkingBudget: gemini-2.5-flash gasta el presupuesto de tokens
-            # "pensando" y devuelve vacio. Con budget 0 responde directo.
-            "thinkingConfig": {"thinkingBudget": 0},
+            # Sin "pensar" de más: con razonamiento largo el modelo gasta el presupuesto
+            # de tokens y devuelve vacío. 2.5 usa thinkingBudget; 3.x usa thinkingLevel.
+            "thinkingConfig": ({"thinkingBudget": 0} if model.startswith("gemini-2.5")
+                               else {"thinkingLevel": "low"}),
         },
     }
 

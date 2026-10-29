@@ -76,8 +76,9 @@ jobs:
 
       - name: Smoke test — el sitio publicado responde
         run: |
+          # http + -L: funciona antes y después de que GitHub emita el certificado HTTPS
           DOMAIN="$(tr -d '[:space:]' < CNAME)"
-          URL="https://$DOMAIN/"
+          URL="http://$DOMAIN/diagnostico/"
           for i in $(seq 1 8); do
             sleep 45
             code=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL")
