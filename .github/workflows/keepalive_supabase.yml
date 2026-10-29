@@ -1,0 +1,36 @@
+name: Keepalive Supabase (semanal, cron)
+
+# Previene que Supabase pause el proyecto por inactividad (free tier).
+# Hace un SELECT trivial cada lunes 6 AM Bogotá (11:00 UTC).
+# Costo: $0.
+
+on:
+  schedule:
+    - cron: "0 11 * * 1"  # lunes 06:00 Bogotá
+  workflow_dispatch:      # también manual
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    env:
+      SUPABASE_URL:          ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY:  ${{ secrets.SUPABASE_SERVICE_KEY }}
+    steps:
+      - name: Ping Supabase
+        run: |
+          if [ -z "$SUPABASE_URL" ] || [ -z "$SUPABASE_SERVICE_KEY" ]; then
+            echo "✗ Secrets ausentes"
+            exit 1
+          fi
+          resp=$(curl -sS -o /tmp/body.json -w "%{http_code}" \
+            -H "apikey: $SUPABASE_SERVICE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_SERVICE_KEY" \
+            "$SUPABASE_URL/rest/v1/clients?select=id&limit=1")
+          echo "HTTP $resp"
+          cat /tmp/body.json
+          if [ "$resp" != "200" ]; then
+            echo "✗ Supabase no respondió con 200"
+            exit 1
+          fi
+          echo "✓ Supabase activo"

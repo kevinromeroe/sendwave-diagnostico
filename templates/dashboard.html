@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>{{CLIENT_NAME}} · Dashboard de Redes Sociales</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<meta name="theme-color" content="{{BRAND_PRIMARY}}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --brand: {{BRAND_PRIMARY}};
+    --brand-soft: #E3EEF7;
+    --accent: #F2B33D;
+    --ink: #1F2D3D;
+    --ink-soft: #4a5563;
+    --muted: #8a93a0;
+    --line: #e6e9ee;
+    --bg: #ffffff;
+    --bg-soft: #F3F6FA;
+    --bg-soft-2: #F8FAFC;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; max-width: 100vw; overflow-x: clip; }
+  body {
+    font-family: 'Roboto', -apple-system, sans-serif;
+    background: var(--bg); color: var(--ink);
+    line-height: 1.55; font-size: 15px; -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4 { font-family: 'Roboto Slab', serif; font-weight: 700; }
+  .chart-wrap, .chart-card { min-width: 0; max-width: 100%; }
+
+  /* Info icon + tooltip */
+  .info-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 16px; height: 16px; border-radius: 50%; background: var(--line);
+    color: var(--ink-soft); font-size: 10px; font-weight: 700; font-style: normal;
+    cursor: help; margin-left: 6px; user-select: none; vertical-align: middle;
+    font-family: -apple-system, sans-serif; transition: background .15s, color .15s;
+  }
+  .info-icon:hover, .info-icon.active { background: var(--brand); color: #fff; }
+  .global-tooltip {
+    position: fixed; background: var(--ink); color: #fff; padding: 10px 14px; border-radius: 6px;
+    font-size: 12px; line-height: 1.5; max-width: 280px; text-align: left; text-transform: none;
+    letter-spacing: normal; font-weight: 400; box-shadow: 0 6px 24px rgba(0,0,0,.22);
+    opacity: 0; pointer-events: none; transition: opacity .15s; z-index: 1000; top: 0; left: 0;
+  }
+  .global-tooltip.visible { opacity: 1; }
+  .global-tooltip::after { content: ""; position: absolute; left: var(--arrow-x, 50%); transform: translateX(-50%); border: 6px solid transparent; }
+  .global-tooltip:not(.below)::after { top: 100%; border-top-color: var(--ink); }
+  .global-tooltip.below::after { bottom: 100%; border-bottom-color: var(--ink); }
+
+  /* Hamburger + drawer (solo mobile) */
+  .menu-toggle { display: none; background: transparent; border: 0; cursor: pointer; width: 40px; height: 40px;
+    padding: 8px; flex-direction: column; gap: 5px; justify-content: center; align-items: center; }
+  .menu-toggle span { display: block; width: 22px; height: 2px; background: var(--ink); border-radius: 1px; transition: transform .2s, opacity .2s; }
+  .menu-toggle.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .menu-toggle.active span:nth-child(2) { opacity: 0; }
+  .menu-toggle.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .menu-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 99; }
+  .menu-backdrop.open { display: block; }
+  .menu-drawer { display: none; position: fixed; top: 0; right: 0; height: 100vh; width: 300px; max-width: 88vw;
+    background: var(--bg); z-index: 100; transform: translateX(100%); transition: transform .28s cubic-bezier(.2,.8,.2,1);
+    box-shadow: -4px 0 24px rgba(0,0,0,.12); flex-direction: column; overflow-y: auto; }
+  .menu-drawer.open { transform: translateX(0); }
+  .menu-drawer-head { display: flex; align-items: center; justify-content: space-between; padding: 20px 24px;
+    border-bottom: 1px solid var(--line); font-family: 'Roboto Slab', serif; font-weight: 700; font-size: 15px;
+    text-transform: uppercase; letter-spacing: 1.2px; color: var(--brand); }
+  .menu-close { background: transparent; border: 0; font-size: 28px; line-height: 1; cursor: pointer; color: var(--ink-soft); padding: 0 8px; }
+  .menu-drawer button[data-tab] { background: transparent; border: 0; text-align: left; padding: 16px 24px; font-size: 15px;
+    color: var(--ink); cursor: pointer; font-family: inherit; border-bottom: 1px solid var(--line); display: block; width: 100%; }
+  .menu-drawer button[data-tab].active { color: var(--brand); font-weight: 700; border-left: 3px solid var(--brand); padding-left: 21px; }
+
+  /* Top bar */
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 18px 56px;
+    border-bottom: 1px solid var(--line); background: var(--bg); position: sticky; top: 0; z-index: 50; gap: 32px; }
+  .topbar .brand { display: flex; align-items: center; gap: 24px; flex: 1; min-width: 0; }
+  .wordmark { font-family: 'Roboto Slab', serif; font-weight: 800; font-size: 26px; color: var(--brand); letter-spacing: -.5px; white-space: nowrap; }
+  .topbar .title-block { display: flex; flex-direction: column; gap: 2px; }
+  .topbar .title-block .eyebrow { font-size: 10px; color: var(--brand); text-transform: uppercase; letter-spacing: 1.6px; font-weight: 700; }
+  .topbar .title-block .title { font-family: 'Roboto Slab', serif; font-size: 22px; font-weight: 700; line-height: 1.1; }
+  .topbar .title-block .title em { color: var(--brand); font-style: normal; }
+  .topbar .divider { width: 1px; height: 36px; background: var(--line); }
+  .logo-dtl { height: 30px; display: block; }
+  .topbar .meta { text-align: right; font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .topbar .meta strong { color: var(--brand); display: block; font-size: 13px; font-family: 'Roboto Slab', serif; font-weight: 700; }
+  .period-selector { display: inline-block; margin-left: 14px; padding: 6px 28px 6px 12px; border: 1px solid var(--line);
+    border-radius: 6px; background: #fff; font-family: inherit; font-size: 12px; font-weight: 500; color: var(--ink);
+    cursor: pointer; appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3e%3cpath fill='%231a1a1a' d='M0 0l5 6 5-6z'/%3e%3c/svg%3e");
+    background-repeat: no-repeat; background-position: right 10px center; }
+  .period-selector:hover, .period-selector:focus { border-color: var(--brand); outline: none; }
+  .pdf-btn { display: inline-flex; align-items: center; gap: 6px; margin-left: 8px; padding: 6px 12px;
+    border: 1px solid var(--line); border-radius: 6px; background: #fff; font-family: inherit; font-size: 12px;
+    font-weight: 500; color: var(--ink); cursor: pointer; }
+  .pdf-btn:hover, .pdf-btn:focus { border-color: var(--brand); color: var(--brand); outline: none; }
+
+  /* Nav */
+  nav.tabs { display: flex; padding: 0 56px; border-bottom: 1px solid var(--line); background: var(--bg);
+    overflow-x: auto; position: sticky; top: 81px; z-index: 49; }
+  nav.tabs button { background: transparent; border: 0; color: var(--muted); cursor: pointer; padding: 14px 22px;
+    font-size: 13px; font-weight: 500; border-bottom: 3px solid transparent; white-space: nowrap; font-family: 'Roboto', sans-serif; }
+  nav.tabs button.active { color: var(--brand); border-bottom-color: var(--brand); font-weight: 700; }
+  nav.tabs button:hover { color: var(--ink); }
+  nav.tabs button .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+
+  main { max-width: 1280px; margin: 0 auto; padding: 0 56px; }
+  .tab { display: none; padding: 48px 0; }
+  .tab.active { display: block; }
+
+  /* Hero */
+  .resumen-corp { margin: 0 0 18px; padding: 22px 26px; background: var(--bg-soft-2); border: 1px solid var(--line); border-radius: 4px; }
+  .resumen-corp .lbl { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.4px; font-weight: 600; margin-bottom: 10px; }
+  .resumen-corp p { margin: 0; font-size: 15px; line-height: 1.7; }
+  .hero { padding: 56px 0 56px; border-bottom: 1px solid var(--line); }
+  .eyebrow { font-size: 12px; color: var(--brand); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px; }
+  .hero h1 { font-size: 52px; line-height: 1.05; margin: 0 0 24px; max-width: 900px; letter-spacing: -1px; }
+  .hero h1 em { color: var(--brand); font-style: normal; }
+  .hero .lead { font-size: 19px; color: var(--ink-soft); max-width: 760px; margin: 0 0 40px; line-height: 1.5; }
+
+  /* KPI grid */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+  .kpi-grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+  .kpi { padding: 26px 22px; border-right: 1px solid var(--line); }
+  .kpi:last-child { border-right: 0; }
+  .kpi .label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; margin-bottom: 12px; }
+  .kpi .value { font-family: 'Roboto Slab', serif; font-size: 34px; font-weight: 800; line-height: 1; }
+  .kpi .sub { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .kpi.accent { background: var(--brand); color: #fff; }
+  .kpi.accent .label, .kpi.accent .sub { color: rgba(255,255,255,.75); }
+  .kpi.accent .value { color: #fff; }
+
+  /* Section heads */
+  .section-head { margin: 64px 0 28px; }
+  .section-head .num { font-family: 'Roboto Slab', serif; font-weight: 300; font-size: 14px; color: var(--brand); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .section-head h2 { font-size: 34px; margin: 0 0 12px; letter-spacing: -.5px; }
+  .section-head .desc { color: var(--ink-soft); font-size: 16px; max-width: 760px; }
+
+  /* Ranking */
+  .ranking { display: grid; grid-template-columns: repeat(var(--n, 2), 1fr); gap: 16px; margin: 24px 0; }
+  .net-card { padding: 24px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); position: relative; }
+  .net-card .rank { position: absolute; top: 16px; right: 20px; font-family: 'Roboto Slab', serif; font-size: 36px; font-weight: 800; color: var(--line); line-height: 1; }
+  .net-card .net-name { font-weight: 700; font-size: 16px; margin-bottom: 12px; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: middle; }
+  .net-card .stat { font-family: 'Roboto Slab', serif; font-size: 28px; font-weight: 700; line-height: 1; margin: 8px 0; }
+  .net-card .stat-label { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+  .net-card .row { display: flex; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--line); font-size: 13px; }
+  .net-card .row .k { color: var(--muted); }
+  .net-card .row .v { font-weight: 600; }
+
+  /* Charts */
+  .chart-grid { display: grid; gap: 20px; }
+  .chart-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .chart-card { padding: 24px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); }
+  .chart-card h3 { margin: 0 0 16px; font-size: 13px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 1px; font-family: 'Roboto', sans-serif; font-weight: 600; }
+  .chart-wrap { position: relative; height: 280px; }
+  .learn { margin-top: 16px; padding: 14px 18px; background: var(--bg-soft-2); border-left: 3px solid var(--brand); border-radius: 0 4px 4px 0; font-size: 13px; line-height: 1.55; }
+  .learn p { margin: 0; }
+  .learn:empty { display: none; }
+  .note { margin-top: 20px; padding: 12px 16px; background: var(--bg-soft-2); border: 1px solid var(--line); border-radius: 4px; font-size: 11.5px; color: #6a6a6a; line-height: 1.55; }
+  .note strong { color: var(--ink-soft); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  table th { text-align: left; padding: 12px 14px; font-size: 11px; text-transform: uppercase; letter-spacing: .8px; color: var(--muted); font-weight: 600; border-bottom: 2px solid var(--line); }
+  table td { padding: 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table tr:hover td { background: var(--bg-soft-2); }
+  table a { color: var(--brand); text-decoration: none; font-weight: 500; }
+  table a:hover { text-decoration: underline; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .pill { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; background: var(--line); color: var(--ink-soft); white-space: nowrap; }
+  .tag-pill { display: inline-block; padding: 2px 8px; margin: 1px 4px 1px 0; border-radius: 12px; font-size: 10px; font-weight: 600; white-space: nowrap; }
+  .post-thumb { width: 110px; height: 110px; object-fit: cover; border-radius: 8px; background: var(--bg-soft); display: block; }
+  .post-thumb-placeholder { width: 110px; height: 110px; border-radius: 8px; background: var(--bg-soft); display: flex; align-items: center; justify-content: center; color: var(--brand); font-size: 28px; border: 1px solid var(--line); }
+  .caption { min-width: 220px; max-width: 420px; }
+
+  .platform-header { display: flex; align-items: center; gap: 16px; margin-bottom: 8px; padding-left: 14px; border-left: 6px solid var(--brand); }
+  .platform-header h2 { margin: 0; font-size: 30px; }
+  .platform-header .meta { color: var(--muted); font-size: 14px; }
+  .platform-header .meta a { color: inherit; }
+
+  /* Heatmaps */
+  .hm-grid { display: grid; grid-template-columns: 40px repeat(24, 1fr); gap: 1px; background: var(--line); padding: 1px; border-radius: 4px; }
+  .hm-cell { background: #fff; padding: 4px 0; text-align: center; font-size: 9px; min-height: 22px; display: flex; align-items: center; justify-content: center; }
+  .hm-corner { background: transparent; }
+  .hm-h { color: var(--muted); font-weight: 600; font-size: 8px; }
+  .hm-d { color: var(--ink-soft); font-weight: 700; font-size: 10px; background: var(--bg-soft-2); }
+  .hm-v { font-size: 8px; font-weight: 600; }
+
+  /* Hashtags */
+  .hashtags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .hashtags .ht { padding: 6px 14px; background: var(--bg-soft); border: 1px solid var(--line); border-radius: 20px; font-size: 13px; }
+  .hashtags .ht strong { color: var(--brand); margin-left: 6px; }
+
+  /* Hallazgos */
+  .finding { display: flex; gap: 24px; padding: 28px 0; border-bottom: 1px solid var(--line); }
+  .finding:last-child { border-bottom: 0; }
+  .finding .num { font-family: 'Roboto Slab', serif; font-size: 44px; font-weight: 300; color: var(--brand); line-height: 1; min-width: 60px; }
+  .finding h4 { margin: 0 0 8px; font-size: 18px; }
+  .finding p { margin: 0 0 6px; color: var(--ink-soft); font-size: 15px; }
+  .finding .action { margin-top: 10px; padding: 10px 14px; background: var(--bg-soft-2); border-radius: 4px; font-size: 14px; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .8px; margin: 8px 6px 0 0; background: var(--line); color: var(--ink-soft); }
+  .badge.alta { background: var(--brand); color: #fff; }
+  .badge.media { background: var(--accent); color: var(--ink); }
+  .reco { display: grid; grid-template-columns: 60px 1fr; gap: 24px; padding: 24px; background: var(--bg-soft); border-radius: 6px; margin: 16px 0; border-left: 4px solid var(--brand); }
+  .reco .num { font-family: 'Roboto Slab', serif; font-size: 34px; font-weight: 700; color: var(--brand); }
+  .reco h4 { margin: 0 0 8px; font-size: 18px; }
+  .reco p { margin: 0; color: var(--ink-soft); }
+  .reco .tags { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .reco .tag { padding: 4px 10px; background: #fff; border: 1px solid var(--line); border-radius: 20px; font-size: 11px; color: var(--ink-soft); }
+
+  /* Footer */
+  footer { margin-top: 80px; padding: 36px 56px; border-top: 1px solid var(--line); background: var(--bg-soft); }
+  footer .footer-grid { max-width: 1280px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; }
+  footer .powered { font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
+  footer details { margin-top: 4px; font-size: 11px; color: var(--muted); }
+  footer summary { cursor: pointer; color: var(--ink-soft); }
+  footer .logo-dtl { height: 26px; }
+
+
+  /* Selector de cuenta */
+  .account-bar { display: flex; align-items: center; gap: 14px; padding: 12px 56px; background: var(--bg-soft-2);
+    border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  .account-bar .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--muted); font-weight: 700; }
+  .acc-buttons { display: flex; gap: 10px; flex-wrap: wrap; }
+  .acc-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border: 1.5px solid var(--line);
+    border-radius: 999px; background: #fff; font-size: 14px; font-weight: 600; color: var(--ink); text-decoration: none; }
+  .acc-btn .h { color: var(--muted); font-size: 12px; font-weight: 400; }
+  .acc-btn .dot { margin-right: 0; }
+  .acc-btn:hover { border-color: var(--c); }
+  .acc-btn.active { border-color: var(--c); background: var(--c); color: #fff; }
+  .acc-btn.active .h { color: rgba(255,255,255,.8); }
+  .menu-drawer a.drawer-acc { display: flex; align-items: center; padding: 14px 24px; font-size: 14px; color: var(--ink);
+    text-decoration: none; border-bottom: 1px solid var(--line); background: var(--bg-soft-2); }
+  .menu-drawer a.drawer-acc.active { font-weight: 700; }
+  .delta { display: inline-block; margin-left: 8px; padding: 2px 7px; border-radius: 10px; font-size: 11px; font-weight: 700;
+    font-family: 'Roboto', sans-serif; vertical-align: middle; }
+  .delta-abs { font-weight: 600; margin-left: 4px; }
+  .kpi.accent { background: var(--acc, var(--brand)); }
+  .hero h1 em { color: var(--acc, var(--brand)); }
+
+  @media (max-width: 1000px) {
+    .kpi-grid, .kpi-grid.cols-5, .chart-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+    .hero h1 { font-size: 38px; }
+    main, .topbar, nav.tabs, footer, .account-bar { padding-left: 24px; padding-right: 24px; }
+  }
+  @media (max-width: 720px) {
+    .menu-toggle { display: flex; position: absolute; top: 14px; right: 16px; }
+    .menu-drawer { display: flex; }
+    nav.tabs { display: none; }
+    .account-bar { padding: 10px 16px; }
+    .acc-btn .h { display: none; }
+    .topbar { flex-direction: column; align-items: flex-start; gap: 10px; padding: 14px 56px 14px 16px; position: relative; }
+    .topbar .brand { gap: 12px; flex-wrap: wrap; }
+    .topbar .divider { display: none; }
+    .topbar .title-block .title { font-size: 18px; }
+    .topbar .meta { text-align: left; white-space: normal; }
+    .period-selector { margin-left: 0; margin-top: 6px; }
+    main { padding: 0 16px; }
+    .tab { padding: 24px 0; }
+    .hero { padding: 32px 0; }
+    .hero h1 { font-size: 26px; }
+    .hero .lead { font-size: 15px; margin-bottom: 24px; }
+    .section-head { margin: 36px 0 20px; }
+    .section-head h2 { font-size: 22px; }
+    .kpi-grid, .kpi-grid.cols-5, .ranking, .chart-grid.cols-2 { grid-template-columns: 1fr; }
+    .kpi { border-right: 0; border-bottom: 1px solid var(--line); padding: 18px 20px; }
+    .kpi .value { font-size: 28px; }
+    .chart-card { padding: 16px; }
+    .chart-wrap { height: 240px; }
+    .tab table { display: block; overflow-x: auto; white-space: nowrap; }
+    .caption { white-space: normal; min-width: 220px; }
+    .post-thumb, .post-thumb-placeholder { width: 80px; height: 80px; }
+    .finding { gap: 14px; }
+    .finding .num { font-size: 30px; min-width: 36px; }
+    .reco { grid-template-columns: 40px 1fr; gap: 14px; padding: 18px; }
+    .platform-header h2 { font-size: 22px; }
+    footer { padding: 24px 16px; }
+  }
+
+  /* ===== Impresión / PDF (A4 horizontal; lo usa scripts/render_pdf.py) ===== */
+  @media print {
+    @page { size: A4 landscape; margin: .8cm; }
+    html, body { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { font-size: 10.5px !important; }
+    .menu-toggle, .menu-drawer, .menu-backdrop, .period-selector, .pdf-btn, nav.tabs, .account-bar, .info-icon, .global-tooltip { display: none !important; }
+    .topbar { position: static; padding: 6px 0 10px !important; border-bottom: 2px solid var(--brand) !important; }
+    section.tab { display: block !important; break-before: page; padding-top: 4px !important; }
+    section.tab:first-of-type { break-before: avoid; }
+    .tab[hidden] { display: none !important; }
+    .resumen-corp { margin: 0 0 8px !important; padding: 14px 18px !important; }
+    .hero { padding: 4px 0 8px !important; }
+    .hero h1 { font-size: 20px !important; margin: 4px 0 6px !important; }
+    .hero .lead { font-size: 11px !important; margin: 0 0 6px !important; }
+    .section-head { margin: 0 0 8px !important; break-after: avoid; }
+    .section-head h2 { font-size: 15px !important; margin: 2px 0 !important; }
+    .section-head .desc { font-size: 10px !important; }
+    h1, h2, h3 { break-after: avoid; }
+    .platform-header { background: #F4F5F7 !important; padding: 10px 14px !important; margin: 0 0 10px !important; border-radius: 4px; }
+    .platform-header h2 { font-size: 20px !important; }
+    .kpi-grid, .ranking, .chart-card, table, .net-card, .finding, .reco { break-inside: avoid; }
+    .kpi { padding: 12px 14px !important; }
+    .kpi .value { font-size: 22px !important; }
+    .chart-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; margin-top: 12px !important; }
+    .chart-card { margin: 0 0 8px !important; padding: 10px !important; }
+    .chart-wrap { height: 165px !important; }
+    canvas { max-width: 100% !important; max-height: 165px !important; }
+    table { font-size: 9px !important; }
+    table th, table td { padding: 4px 6px !important; }
+    .post-thumb, .post-thumb-placeholder { width: 54px !important; height: 54px !important; }
+    .hm-cell { font-size: 7px !important; min-height: 15px !important; }
+    footer { display: none !important; }  /* evita una última página solo con el pie */
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <span class="wordmark" id="wordmark"></span>
+    <div class="divider"></div>
+    <div class="title-block">
+      <span class="eyebrow">Inteligencia de redes</span>
+      <span class="title">Dashboard de Redes Sociales · <em id="title-account"></em></span>
+    </div>
+  </div>
+  <div class="meta">
+    <strong id="meta-period"></strong>
+    <span id="meta-window"></span>
+    <select id="period-selector" class="period-selector" aria-label="Seleccionar período"
+            onchange="if(this.value)window.location.href=this.value"></select>
+    <button class="pdf-btn" type="button" id="pdf-btn" aria-label="Descargar el PDF de esta cuenta y período">
+      <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M5 1h6l4 4v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm6 1.5V5h2.5L11 2.5zM6 10h4v1H6v-1zm0-2h4v1H6V8z"/></svg>
+      <span>PDF</span>
+    </button>
+  </div>
+  <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+</div>
+
+<!-- Selector de cuenta: cada cuenta es un reporte independiente -->
+<div class="account-bar" role="tablist" aria-label="Cuenta analizada">
+  <span class="lbl">Cuenta</span>
+  <div id="account-buttons" class="acc-buttons"></div>
+</div>
+
+<div class="menu-backdrop" id="menu-backdrop"></div>
+<aside class="menu-drawer" id="menu-drawer" aria-label="Menú de secciones">
+  <div class="menu-drawer-head"><span>Secciones</span><button class="menu-close" id="menu-close" aria-label="Cerrar menú">×</button></div>
+</aside>
+
+<nav class="tabs" id="tabs"></nav>
+
+<main id="main">
+
+<!-- ============ RESUMEN ============ -->
+<section class="tab active" id="tab-resumen">
+  <div class="resumen-corp">
+    <div class="lbl">Resumen ejecutivo</div>
+    <p id="resumen-text"></p>
+  </div>
+  <div class="hero">
+    <div class="eyebrow" id="hero-eyebrow"></div>
+    <h1>Cómo se comporta <em id="hero-handle"></em> en Instagram.</h1>
+    <p class="lead" id="hero-lead"></p>
+    <div class="kpi-grid cols-5" id="kpi-main"></div>
+  </div>
+  <div class="note"><strong>Sobre estas métricas</strong> · Los KPIs y las gráficas se calculan solo sobre las <strong>publicaciones típicas</strong>. Se excluyen las atípicas (engagement mayor a 5 veces la mediana del período, normalmente pauta o un viral aislado) para que no distorsionen las tendencias; se listan aparte en Publicaciones. Engagement = likes + comentarios. Tasa de engagement = engagement promedio por publicación ÷ seguidores.</div>
+</section>
+
+<!-- ============ DESEMPEÑO ============ -->
+<section class="tab" id="tab-desempeno">
+  <div class="section-head">
+    <div class="num">Desempeño</div>
+    <h2>Ritmo, formatos y momentos de publicación</h2>
+    <div class="desc">Cuándo y cómo publica la cuenta, y qué combinaciones obtienen más interacción. Horas en zona Bogotá.</div>
+  </div>
+  <div class="chart-grid cols-2" id="perf-grid">
+    <div class="chart-card"><h3>Volumen semanal de publicación<i class="info-icon" data-tip="Cantidad de publicaciones por semana: el ritmo del calendario editorial.">i</i></h3><div class="chart-wrap"><canvas id="c-week"></canvas></div><div class="learn" id="l-week"></div></div>
+    <div class="chart-card"><h3>Engagement promedio por formato<i class="info-icon" data-tip="Promedio de likes + comentarios por formato (foto, carrusel, reel).">i</i></h3><div class="chart-wrap"><canvas id="c-type"></canvas></div><div class="learn" id="l-type"></div></div>
+    <div class="chart-card"><h3>Mejor día de la semana<i class="info-icon" data-tip="Engagement promedio de las publicaciones hechas cada día de la semana.">i</i></h3><div class="chart-wrap"><canvas id="c-dow"></canvas></div><div class="learn" id="l-dow"></div></div>
+    <div class="chart-card"><h3>Publicaciones y engagement por hora<i class="info-icon" data-tip="Barras: publicaciones por hora del día. Línea: engagement promedio por hora.">i</i></h3><div class="chart-wrap"><canvas id="c-hour"></canvas></div><div class="learn" id="l-hour"></div></div>
+  </div>
+  <div class="chart-card" style="margin-top:20px"><h3>Heatmap día × hora — engagement promedio<i class="info-icon" data-tip="Engagement promedio por día y hora de publicación. Más intenso = mejor desempeño.">i</i></h3><div id="h-heatmap" style="overflow-x:auto"></div><div class="learn" id="l-heatmap"></div></div>
+</section>
+
+<!-- ============ PUBLICACIONES ============ -->
+<section class="tab" id="tab-publicaciones">
+  <div class="section-head">
+    <div class="num">Publicaciones</div>
+    <h2>Las piezas que más y menos conectaron</h2>
+    <div class="desc">Las atípicas se muestran primero y aparte. El Top 5 y las de menor engagement se eligen entre las publicaciones típicas.</div>
+  </div>
+  <h3 id="h-atipicos" style="font-size:16px" hidden>Publicaciones atípicas</h3>
+  <div class="chart-card" id="card-atipicos" style="padding:0" hidden><table id="t-atipicos"></table></div>
+  <h3 style="margin-top:28px;font-size:16px">Top 5 publicaciones (sin atípicas)</h3>
+  <div class="chart-card" style="padding:0"><table id="t-top"></table><div class="learn" id="l-top" style="margin:0;border-radius:0 0 6px 6px"></div></div>
+  <h3 id="h-worst" style="margin-top:28px;font-size:16px">5 publicaciones de menor engagement</h3>
+  <div class="chart-card" id="card-worst" style="padding:0"><table id="t-worst"></table></div>
+  <h2 style="margin-top:48px">Hashtags más usados</h2>
+  <div class="hashtags" id="hashtags"></div>
+</section>
+
+<!-- ============ CATEGORÍAS ============ -->
+<section class="tab" id="tab-categorias">
+  <div class="section-head">
+    <div class="num">Categorías de contenido</div>
+    <h2>Qué tipo de contenido funciona en esta cuenta</h2>
+    <div class="desc">Cada publicación se clasifica automáticamente en una de 12 categorías editoriales a partir de su texto. Se analizan solo las publicaciones típicas.</div>
+  </div>
+  <div class="chart-grid cols-2">
+    <div class="chart-card"><h3>Mix de contenido<i class="info-icon" data-tip="Porcentaje de publicaciones de cada categoría.">i</i></h3><div class="chart-wrap" style="height:340px"><canvas id="c-cat-mix"></canvas></div><div class="learn" id="l-cat-mix"></div></div>
+    <div class="chart-card"><h3>Desempeño por categoría<i class="info-icon" data-tip="Engagement promedio y mediana por categoría. Una mediana muy por debajo del promedio indica pocos éxitos muy grandes.">i</i></h3><div class="chart-wrap" style="height:340px"><canvas id="c-cat-perf"></canvas></div><div class="learn" id="l-cat-perf"></div></div>
+  </div>
+  <div class="chart-card" style="margin-top:24px"><h3>Categoría × formato — engagement promedio<i class="info-icon" data-tip="Engagement promedio por categoría y formato (foto, carrusel, reel).">i</i></h3><div id="h-cat-type" style="overflow-x:auto"></div><div class="learn" id="l-cat-type"></div></div>
+  <div class="chart-card" style="margin-top:24px"><h3>Oportunidades: categorías poco usadas que rinden más<i class="info-icon" data-tip="Categorías con menos del 10% del mix y engagement promedio por encima del promedio de la cuenta.">i</i></h3><div id="tbl-cat-gaps"></div></div>
+</section>
+
+<!-- ============ HALLAZGOS ============ -->
+<section class="tab" id="tab-hallazgos">
+  <div class="section-head">
+    <div class="num">Hallazgos y recomendaciones</div>
+    <h2>Qué dicen los datos y qué hacer al respecto</h2>
+    <div class="desc">Lectura asistida por IA a partir de las métricas reales de esta cuenta en el período; ninguna cifra se calcula fuera de este dashboard.</div>
+  </div>
+  <div class="resumen-corp" id="hz-resumen-box" hidden><div class="lbl">Síntesis</div><p id="hz-resumen"></p></div>
+  <div id="findings"></div>
+  <div class="section-head" id="recos-head"><div class="num">Plan de acción</div><h2>Recomendaciones priorizadas</h2></div>
+  <div id="recos"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div style="flex:1; min-width:280px">
+      <div class="powered">© <span id="foot-year"></span> <strong>Datalítica Colombia S.A.S.</strong> · Entregable confidencial para <strong id="foot-client"></strong> · Datos de fuentes públicas</div>
+      <details><summary>Aviso legal y tratamiento de datos</summary>
+        <p>Reporte confidencial: acceso o distribución no autorizada prohibida. Tratamiento de datos conforme a la Ley 1581 de 2012 (Colombia). Las métricas se calculan sobre información pública de las cuentas analizadas.</p>
+      </details>
+    </div>
+    <img class="logo-dtl" src="/assets/logo-datalitica.png" alt="Datalítica">
+  </div>
+</footer>
+
+<script>
+const CLIENT = __CLIENT__;
+const REPORT_META = __REPORT_META__;
+const DATA = __DATA__;
+</script>
+<script>
+// ════════════════════════════════════════════════════════════
+// Cuenta seleccionada (?cuenta=<key>). Todo el reporte es de UNA cuenta.
+// ════════════════════════════════════════════════════════════
+const CH = CLIENT.channels;
+const params = new URLSearchParams(location.search);
+const ACC = CH.find(c => c.key === params.get("cuenta")) || CH[0];
+const B = DATA.channels[ACC.key];
+const COLOR = ACC.color;
+const BRAND = CLIENT.brand.primary;
+
+const hexRgb = h => { const n = parseInt(h.replace("#", ""), 16); return [n >> 16, (n >> 8) & 255, n & 255]; };
+const rgba = (h, a) => `rgba(${hexRgb(h).join(",")},${a})`;
+(function applyBrand() {
+  const r = document.documentElement.style, b = CLIENT.brand;
+  r.setProperty("--brand", b.primary);
+  r.setProperty("--acc", COLOR);
+  if (b.accent) r.setProperty("--accent", b.accent);
+  if (b.ink) r.setProperty("--ink", b.ink);
+  if (b.bg_soft) r.setProperty("--bg-soft", b.bg_soft);
+  if (b.bg_soft_2) r.setProperty("--bg-soft-2", b.bg_soft_2);
+})();
+
+Chart.defaults.color = "#4a5563";
+Chart.defaults.borderColor = "#e6e9ee";
+Chart.defaults.font.family = "Roboto, -apple-system, sans-serif";
+Chart.defaults.font.size = 12;
+
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = n => {
+  if (n === null || n === undefined || n === "") return "—";
+  const num = Number(n);
+  return isNaN(num) ? n : new Intl.NumberFormat("es-CO").format(num);
+};
+const pctFmt = (x, d = 2) => (x === null || x === undefined || isNaN(x)) ? "—"
+  : x.toLocaleString("es-CO", { minimumFractionDigits: d, maximumFractionDigits: d }) + " %";
+const dec1 = x => x.toLocaleString("es-CO", { maximumFractionDigits: 1 });
+const CAT_LABEL = { promocion: "Promoción", producto: "Producto", tutorial: "Tutorial", educacion: "Educación financiera",
+  testimonio: "Testimonio", comunidad: "Comunidad", estacional: "Estacional", tendencia: "Tendencia",
+  concurso: "Concurso", interaccion: "Interacción", marca: "Marca", alianza: "Alianza" };
+const catLabel = c => CAT_LABEL[c] || ((c || "").charAt(0).toUpperCase() + (c || "").slice(1));
+const pub = n => `${fmt(n)} ${Number(n) === 1 ? "publicación" : "publicaciones"}`;
+const TYPE_LABEL = { Image: "Foto", Sidecar: "Carrusel", Video: "Reel", Photo: "Foto", Album: "Carrusel", Text: "Solo texto", post: "Publicación" };
+const prettyType = t => TYPE_LABEL[t] || t;
+const maxIdx = arr => arr.indexOf(Math.max(...arr));
+const minIdx = arr => { const pos = arr.filter(x => x > 0); return pos.length ? arr.indexOf(Math.min(...pos)) : 0; };
+const learn = (id, html) => { const el = document.getElementById(id); if (el && html) el.innerHTML = `<p>${html}</p>`; };
+const followers = (() => { const v = (B.account || {}).seguidores; return (v === null || v === undefined) ? null : Number(v); })();
+const er = followers ? B.engagement_promedio / followers * 100 : null;
+const DL = B.deltas || {};
+
+function deltaBadge(pct) {
+  if (pct === null || pct === undefined || isNaN(parseFloat(pct))) return "";
+  const p = parseFloat(pct);
+  const arrow = p > .5 ? "▲" : (p < -.5 ? "▼" : "▬");
+  const color = p > .5 ? "#2f7d32" : (p < -.5 ? "#c33" : "#8a8a8a");
+  const bg = p > .5 ? "#e8f2e2" : (p < -.5 ? "#fbe6e6" : "#f0f0f0");
+  return `<span class="delta" style="background:${bg};color:${color}" title="vs ${esc(DATA.prev_label || "mes anterior")}">${arrow} ${p > 0 ? "+" : ""}${p.toFixed(1).replace(".", ",")}%</span>`;
+}
+function deltaAbs(v) {
+  if (v === null || v === undefined || isNaN(parseFloat(v)) || parseFloat(v) === 0) return "";
+  const p = parseFloat(v);
+  return `<span class="delta-abs" style="color:${p > 0 ? "#2f7d32" : "#c33"}">${p > 0 ? "+" : "−"}${fmt(Math.abs(p))} vs ${esc(DATA.prev_label || "mes anterior")}</span>`;
+}
+const kpi = (label, value, sub, accent, tip, deltaPct) => {
+  const tipHtml = tip ? `<i class="info-icon" data-tip="${esc(tip)}">i</i>` : "";
+  const badge = (typeof deltaPct === "number") ? deltaBadge(deltaPct) : "";
+  return `<div class="kpi ${accent ? "accent" : ""}"><div class="label">${label}${tipHtml}</div><div class="value">${value}${badge}</div>${sub ? `<div class="sub">${sub}</div>` : ""}</div>`;
+};
+
+// ════════════════════════════════════════════════════════════
+// Encabezado, selector de cuenta y de período, pestañas
+// ════════════════════════════════════════════════════════════
+document.title = `${ACC.label} · ${CLIENT.name} · Dashboard de Redes Sociales`;
+document.getElementById("wordmark").textContent = CLIENT.name;
+document.getElementById("title-account").textContent = ACC.label;
+document.getElementById("hero-handle").textContent = "@" + ACC.handle;
+document.getElementById("foot-client").textContent = CLIENT.name;
+document.getElementById("foot-year").textContent = (DATA.ventana.hasta || "").slice(0, 4);
+document.getElementById("meta-period").textContent = DATA.periodo_label;
+const MES = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+const isoDay = iso => { const [y, m, d] = iso.split("-"); return `${parseInt(d, 10)} ${MES[parseInt(m, 10)]} ${y}`; };
+document.getElementById("meta-window").textContent = `${isoDay(DATA.ventana.desde)} → ${isoDay(DATA.ventana.hasta)}`;
+document.getElementById("pdf-btn").addEventListener("click", () => window.open(`reporte-${ACC.key}.pdf`, "_blank", "noopener"));
+
+(function accountSelector() {
+  const host = document.getElementById("account-buttons");
+  CH.forEach(c => {
+    const on = c.key === ACC.key;
+    host.insertAdjacentHTML("beforeend",
+      `<a class="acc-btn ${on ? "active" : ""}" role="tab" aria-selected="${on}" style="--c:${c.color}" href="?cuenta=${encodeURIComponent(c.key)}">
+        <span class="dot" style="background:${on ? "#fff" : c.color}"></span>${esc(c.label)} <span class="h">@${esc(c.handle)}</span></a>`);
+  });
+})();
+(function periodSelector() {
+  const sel = document.getElementById("period-selector");
+  (REPORT_META.available || []).forEach(p => {
+    const o = document.createElement("option");
+    o.value = `${p.url}?cuenta=${encodeURIComponent(ACC.key)}`; o.textContent = p.label; o.selected = p.id === REPORT_META.current;
+    sel.appendChild(o);
+  });
+})();
+
+const TABS = [
+  { id: "resumen", label: "Resumen" }, { id: "desempeno", label: "Desempeño" },
+  { id: "publicaciones", label: "Publicaciones" }, { id: "categorias", label: "Categorías" },
+  { id: "hallazgos", label: "Hallazgos" },
+];
+(function mountTabs() {
+  const nav = document.getElementById("tabs"), drawer = document.getElementById("menu-drawer");
+  TABS.forEach((t, i) => {
+    nav.insertAdjacentHTML("beforeend", `<button data-tab="${t.id}" class="${i === 0 ? "active" : ""}">${t.label}</button>`);
+    drawer.insertAdjacentHTML("beforeend", `<button data-tab="${t.id}" class="${i === 0 ? "active" : ""}">${t.label}</button>`);
+  });
+  CH.forEach(c => drawer.insertAdjacentHTML("beforeend",
+    `<a class="drawer-acc ${c.key === ACC.key ? "active" : ""}" href="?cuenta=${encodeURIComponent(c.key)}"><span class="dot" style="background:${c.color}"></span>${esc(c.label)}</a>`));
+})();
+function activateTab(id) {
+  document.querySelectorAll("[data-tab]").forEach(x => x.classList.toggle("active", x.dataset.tab === id));
+  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("active", x.id === "tab-" + id));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+const drawer = document.getElementById("menu-drawer"), backdrop = document.getElementById("menu-backdrop"), toggle = document.getElementById("menu-toggle");
+const setDrawer = open => { drawer.classList.toggle("open", open); backdrop.classList.toggle("open", open); toggle.classList.toggle("active", open); document.body.style.overflow = open ? "hidden" : ""; };
+document.querySelectorAll("nav.tabs button").forEach(b => b.addEventListener("click", () => activateTab(b.dataset.tab)));
+document.querySelectorAll(".menu-drawer button[data-tab]").forEach(b => b.addEventListener("click", () => { activateTab(b.dataset.tab); setDrawer(false); }));
+toggle.addEventListener("click", () => setDrawer(!drawer.classList.contains("open")));
+backdrop.addEventListener("click", () => setDrawer(false));
+document.getElementById("menu-close").addEventListener("click", () => setDrawer(false));
+
+// Tooltips (position: fixed para escapar overflow)
+(function tooltips() {
+  const tip = document.createElement("div");
+  tip.className = "global-tooltip";
+  document.body.appendChild(tip);
+  let active = null;
+  function place(icon) {
+    tip.textContent = icon.dataset.tip;
+    tip.classList.add("visible");
+    const ir = icon.getBoundingClientRect(), tr = tip.getBoundingClientRect();
+    let left = Math.max(8, Math.min(ir.left + ir.width / 2 - tr.width / 2, window.innerWidth - tr.width - 8));
+    let top = ir.top - tr.height - 12, below = false;
+    if (top < 8) { top = ir.bottom + 12; below = true; }
+    tip.classList.toggle("below", below);
+    tip.style.setProperty("--arrow-x", `${Math.max(12, Math.min(ir.left + ir.width / 2 - left, tr.width - 12))}px`);
+    tip.style.left = `${left}px`; tip.style.top = `${top}px`;
+  }
+  const hide = () => { tip.classList.remove("visible"); if (active) { active.classList.remove("active"); active = null; } };
+  document.addEventListener("mouseover", e => { const i = e.target.closest(".info-icon"); if (i && !active) place(i); });
+  document.addEventListener("mouseout", e => { if (e.target.closest(".info-icon") && !active) tip.classList.remove("visible"); });
+  document.addEventListener("click", e => {
+    const i = e.target.closest(".info-icon");
+    if (!i) return hide();
+    e.preventDefault();
+    if (active === i) return hide();
+    if (active) active.classList.remove("active");
+    active = i; i.classList.add("active"); place(i);
+  });
+  window.addEventListener("scroll", () => { if (active) place(active); }, { passive: true });
+})();
+
+const barOpts = (horizontal) => ({
+  plugins: { legend: { display: false } }, maintainAspectRatio: false, indexAxis: horizontal ? "y" : "x",
+  scales: horizontal
+    ? { x: { beginAtZero: true, grid: { color: "#f0f2f5" } }, y: { grid: { display: false } } }
+    : { y: { beginAtZero: true, grid: { color: "#f0f2f5" } }, x: { grid: { display: false } } },
+});
+function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
+  let maxV = 0;
+  m.forEach(r => r.forEach(v => { if (v > maxV) maxV = v; }));
+  let html = `<div class="hm-grid" style="grid-template-columns:${gridCols}"><div class="hm-cell hm-corner"></div>`;
+  colLabels.forEach(c => { html += `<div class="hm-cell hm-h">${esc(c)}</div>`; });
+  rowLabels.forEach((r, i) => {
+    html += `<div class="hm-cell hm-d">${esc(r)}</div>`;
+    colLabels.forEach((c, j) => {
+      const v = m[i][j], a = v > 0 ? .15 + Math.min(1, v / maxV) * .85 : 0;
+      html += `<div class="hm-cell hm-v" style="background:${rgba(color, a)};color:${a > .6 ? "#fff" : "inherit"}" title="${esc(r)} · ${esc(c)} → ${v > 0 ? fmt(v) + " eng. prom." : "sin publicaciones"}">${v > 0 ? Math.round(v) : ""}</div>`;
+    });
+  });
+  return html + "</div>";
+}
+
+// ════════════════════════════════════════════════════════════
+// Resumen
+// ════════════════════════════════════════════════════════════
+(function resumen() {
+  document.getElementById("resumen-text").innerHTML = B.resumen_html || "";
+  document.getElementById("hero-eyebrow").textContent = `${ACC.label} · ${DATA.periodo_short}`;
+  document.getElementById("hero-lead").textContent =
+    `Actividad y desempeño orgánico de la cuenta, a partir de sus datos públicos` +
+    (DATA.is_baseline ? ". Este diagnóstico es la línea base para los reportes mensuales." : ".");
+  const acc = B.account || {};
+  const cadencia = B.n_posts ? dec1(B.n_posts / DATA.semanas) : "—";
+  document.getElementById("kpi-main").innerHTML =
+    kpi("Seguidores", fmt(followers), acc.snapshot_fecha ? `al ${isoDay(acc.snapshot_fecha)} ${deltaAbs(DL.audience_abs)}` : "", false,
+        "Personas que siguen la cuenta, según la última captura del período.", DL.audience_pct) +
+    kpi("Publicaciones", fmt(B.n_posts), `${cadencia} por semana` + (B.n_atipicos ? ` · + ${B.n_atipicos} atípica${B.n_atipicos !== 1 ? "s" : ""}` : ""), true,
+        "Publicaciones típicas del período (sin atípicas) y su promedio semanal.", DL.n_posts_pct) +
+    kpi("Engagement total", fmt(B.engagement_total), "likes + comentarios", false,
+        "Suma de likes + comentarios de las publicaciones típicas.", DL.engagement_total_pct) +
+    kpi("Eng. por publicación", fmt(B.engagement_promedio), `mediana: ${fmt(B.engagement_mediana)}`, false,
+        "Engagement total dividido entre el número de publicaciones.", DL.engagement_promedio_pct) +
+    kpi("Tasa de engagement", pctFmt(er), "eng. por publicación ÷ seguidores", false,
+        "Engagement promedio por publicación dividido entre los seguidores de la cuenta.");
+})();
+
+// ════════════════════════════════════════════════════════════
+// Desempeño
+// ════════════════════════════════════════════════════════════
+(function desempeno() {
+  if (!B.n_posts) {
+    document.getElementById("perf-grid").innerHTML = `<p style="color:var(--muted)">Sin publicaciones típicas en ${esc(DATA.periodo_short)}.</p>`;
+    return;
+  }
+  const wk = B.by_week;
+  const wkOpts = barOpts(false);
+  wkOpts.scales.y.ticks = { precision: 0 };
+  wkOpts.plugins.tooltip = { callbacks: { title: it => `Semana del ${it[0].label}` } };
+  new Chart(document.getElementById("c-week"), {
+    type: "bar", data: { labels: wk.labels, datasets: [{ label: "Publicaciones", data: wk.counts, backgroundColor: COLOR, borderRadius: 3 }] },
+    options: wkOpts,
+  });
+  const wkAvg = wk.counts.reduce((a, b) => a + b, 0) / wk.counts.length;
+  const wkMax = Math.max(...wk.counts), wkZero = wk.counts.filter(x => x === 0).length;
+  learn("l-week", `Cadencia promedio de <strong>${dec1(wkAvg)} ${wkAvg === 1 ? "publicación" : "publicaciones"} por semana</strong>, con un pico de ${wkMax} en la semana del ${wk.labels[wk.counts.indexOf(wkMax)]}` +
+    (wkZero ? `. ${wkZero} semana${wkZero !== 1 ? "s" : ""} sin publicaciones.` : "."));
+
+  const tp = B.by_type;
+  new Chart(document.getElementById("c-type"), {
+    type: "bar", data: { labels: tp.labels.map(prettyType), datasets: [{ data: tp.engagement_promedio, backgroundColor: COLOR, borderRadius: 4 }] },
+    options: barOpts(true),
+  });
+  if (tp.labels.length > 1) {
+    const hi = maxIdx(tp.engagement_promedio), lo = minIdx(tp.engagement_promedio);
+    const ratio = tp.engagement_promedio[lo] > 0 ? tp.engagement_promedio[hi] / tp.engagement_promedio[lo] : null;
+    learn("l-type", `Cada <strong>${prettyType(tp.labels[hi]).toLowerCase()}</strong> consigue en promedio <strong>${fmt(tp.engagement_promedio[hi])} interacciones</strong>` +
+      (ratio && ratio >= 1.3 ? `, ${dec1(ratio)} veces más que un ${prettyType(tp.labels[lo]).toLowerCase()} (${pub(tp.counts[hi])} frente a ${pub(tp.counts[lo])}).` : ". Los formatos rinden parecido: el tema y el copy pesan más que el formato."));
+  }
+
+  const dw = B.by_day;
+  new Chart(document.getElementById("c-dow"), {
+    type: "bar", data: { labels: dw.labels, datasets: [{ data: dw.engagement_promedio, backgroundColor: COLOR, borderRadius: 4 }] },
+    options: barOpts(false),
+  });
+  const dMax = maxIdx(dw.engagement_promedio), dMin = minIdx(dw.engagement_promedio);
+  learn("l-dow", `Los <strong>${dw.labels[dMax]}</strong> son el mejor día (${fmt(dw.engagement_promedio[dMax])} de engagement promedio, ${pub(dw.counts[dMax])}); los ${dw.labels[dMin]} caen a ${fmt(dw.engagement_promedio[dMin])}.`);
+
+  const hr = B.by_hour;
+  new Chart(document.getElementById("c-hour"), {
+    type: "bar",
+    data: { labels: hr.labels, datasets: [
+      { type: "bar", label: "Publicaciones", data: hr.counts, backgroundColor: rgba(COLOR, .67), borderRadius: 2, yAxisID: "y" },
+      { type: "line", label: "Engagement promedio", data: hr.engagement_promedio, borderColor: "#1F2D3D", borderWidth: 2, tension: .3, pointRadius: 3, pointBackgroundColor: "#1F2D3D", yAxisID: "y1" },
+    ] },
+    options: { maintainAspectRatio: false, plugins: { legend: { display: true, position: "bottom", labels: { font: { size: 10 } } } },
+      scales: { y: { beginAtZero: true, position: "left", ticks: { precision: 0 }, grid: { color: "#f0f2f5" } },
+                y1: { beginAtZero: true, position: "right", grid: { drawOnChartArea: false } }, x: { grid: { display: false } } } },
+  });
+  const hPeak = maxIdx(hr.counts), hBest = maxIdx(hr.engagement_promedio);
+  learn("l-hour", `La mayoría de publicaciones sale a las <strong>${hr.labels[hPeak]}:00</strong> (${hr.counts[hPeak]}), pero el mejor engagement promedio se da a las <strong>${hr.labels[hBest]}:00</strong> (${fmt(hr.engagement_promedio[hBest])} por publicación, ${pub(hr.counts[hBest])}).`);
+
+  const hm = B.by_day_hour;
+  document.getElementById("h-heatmap").innerHTML =
+    heatmapHTML(hm.matrix, hm.labels_dow, [...Array(24).keys()].map(String), COLOR, "40px repeat(24, minmax(22px, 1fr))");
+  let bd = 0, bh = 0, bv = 0;
+  hm.matrix.forEach((r, i) => r.forEach((v, j) => { if (v > bv) { bv = v; bd = i; bh = j; } }));
+  if (bv > 0) learn("l-heatmap", `Mejor ventana del período: <strong>${hm.labels_dow[bd]} ${bh}:00</strong>, con ${fmt(Math.round(bv))} interacciones promedio (${pub(hm.counts[bd][bh])}).`);
+})();
+
+// ════════════════════════════════════════════════════════════
+// Publicaciones
+// ════════════════════════════════════════════════════════════
+(function publicaciones() {
+  const head = `<thead><tr><th></th><th>Fecha</th><th>Formato</th><th>Caption</th><th>Categoría</th><th class="num">Likes</th><th class="num">Coments</th><th class="num">Engagement</th><th></th></tr></thead>`;
+  const tagPills = tags => (tags && tags.length) ? tags.map((t, i) =>
+      `<span class="tag-pill" style="background:${i === 0 ? rgba(COLOR, .15) : "#f0f2f5"};color:${i === 0 ? COLOR : "#6a6a6a"};border:1px solid ${i === 0 ? rgba(COLOR, .35) : "#e2e6eb"}">${esc(catLabel(t))}</span>`).join("")
+    : '<span style="color:#bbb;font-size:11px">—</span>';
+  const fill = (id, posts) => {
+    document.getElementById(id).innerHTML = head + "<tbody>" + posts.map(x => {
+      const cap = x.caption.length > 220 ? x.caption.slice(0, 220) + "…" : x.caption;
+      const thumb = x.media_url
+        ? `<img class="post-thumb" src="${esc(x.media_url)}" loading="lazy" referrerpolicy="no-referrer" alt="" onerror="this.outerHTML='<div class=&quot;post-thumb-placeholder&quot;>▣</div>'">`
+        : `<div class="post-thumb-placeholder">▣</div>`;
+      return `<tr><td style="width:120px">${thumb}</td><td style="white-space:nowrap">${x.fecha}</td>
+        <td><span class="pill">${esc(prettyType(x.tipo))}</span></td><td class="caption">${esc(cap)}</td><td>${tagPills(x.tags)}</td>
+        <td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.comentarios)}</td><td class="num"><strong>${fmt(x.engagement)}</strong></td>
+        <td><a href="${esc(x.url)}" target="_blank" rel="noopener">ver →</a></td></tr>`;
+    }).join("") + "</tbody>";
+  };
+  if ((B.atipicos || []).length) {
+    document.getElementById("h-atipicos").hidden = false;
+    document.getElementById("card-atipicos").hidden = false;
+    fill("t-atipicos", B.atipicos);
+  }
+  fill("t-top", B.top5 || []);
+  if ((B.worst5 || []).length) fill("t-worst", B.worst5);
+  else { document.getElementById("h-worst").hidden = true; document.getElementById("card-worst").hidden = true; }
+  if ((B.top5 || []).length && B.engagement_total) {
+    const conc = Math.round(B.top5.reduce((s, x) => s + x.engagement, 0) / B.engagement_total * 100);
+    learn("l-top", `Estas ${B.top5.length} publicaciones concentran el <strong>${conc}%</strong> del engagement típico del período; las otras ${B.n_posts - B.top5.length} se reparten el ${100 - conc}% restante.`);
+  }
+  document.getElementById("hashtags").innerHTML = (B.top_hashtags || []).length
+    ? B.top_hashtags.map(([h, n]) => `<span class="ht">#${esc(h)}<strong>${n}</strong></span>`).join("")
+    : `<span style="color:var(--muted)">La cuenta no usa hashtags de forma sistemática en este período.</span>`;
+})();
+
+// ════════════════════════════════════════════════════════════
+// Categorías
+// ════════════════════════════════════════════════════════════
+(function categorias() {
+  const ca = B.category_analysis || {};
+  if (!ca.mix_global || ca.mix_global.length < 2) {
+    document.querySelectorAll('[data-tab="categorias"]').forEach(b => b.hidden = true);
+    document.getElementById("tab-categorias").hidden = true;
+    return;
+  }
+  const mix = ca.mix_global;
+  new Chart(document.getElementById("c-cat-mix"), {
+    type: "bar",
+    data: { labels: mix.map(m => catLabel(m.category)), datasets: [{ data: mix.map(m => m.pct), backgroundColor: rgba(COLOR, .8), borderRadius: 3 }] },
+    options: { ...barOpts(true), plugins: { legend: { display: false }, tooltip: { callbacks: { label: x => `${pctFmt(x.parsed.x, 1)} (${pub(mix[x.dataIndex].count)})` } } } },
+  });
+  learn("l-cat-mix", `<strong>${catLabel(mix[0].category)}</strong> domina con ${pctFmt(mix[0].pct, 1)} del contenido (${pub(mix[0].count)})` +
+    (mix[1] ? `, seguida de <strong>${catLabel(mix[1].category)}</strong> con ${pctFmt(mix[1].pct, 1)}` : "") + `. ${mix.length} de 12 categorías en uso.`);
+
+  const perf = ca.performance;
+  new Chart(document.getElementById("c-cat-perf"), {
+    type: "bar",
+    data: { labels: perf.map(x => catLabel(x.category)), datasets: [
+      { label: "Promedio", data: perf.map(x => x.mean), backgroundColor: rgba(COLOR, .8), borderRadius: 3 },
+      { label: "Mediana", data: perf.map(x => x.median), backgroundColor: "rgba(31,45,61,.55)", borderRadius: 3 } ] },
+    options: { ...barOpts(true), plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { afterBody: it => [pub(perf[it[0].dataIndex].n)] } } } },
+  });
+  learn("l-cat-perf", `<strong>${catLabel(perf[0].category)}</strong> tiene el mejor engagement promedio (${fmt(perf[0].mean)}, ${pub(perf[0].n)}). Promedio de la cuenta: ${fmt(ca.global_mean)} por publicación.`);
+
+  const mt = ca.by_type;
+  const cols = mt.cols.map(prettyType);
+  document.getElementById("h-cat-type").innerHTML =
+    heatmapHTML(mt.matrix, mt.categories.map(catLabel), cols, COLOR, `150px repeat(${cols.length}, minmax(70px, 1fr))`);
+  let bi = 0, bj = 0, bv = 0;
+  mt.matrix.forEach((r, i) => r.forEach((v, j) => { if (v > bv) { bv = v; bi = i; bj = j; } }));
+  if (bv > 0) learn("l-cat-type", `Mejor combinación: <strong>${catLabel(mt.categories[bi])}</strong> en <strong>${esc(cols[bj].toLowerCase())}</strong>, con ${fmt(Math.round(bv))} interacciones promedio.`);
+
+  const gaps = ca.gaps || [];
+  document.getElementById("tbl-cat-gaps").innerHTML = gaps.length
+    ? `<table><thead><tr><th>Categoría</th><th class="num">% del mix</th><th class="num">Publicaciones</th><th class="num">Eng. prom.</th><th class="num">vs promedio</th></tr></thead><tbody>` +
+      gaps.map(g => `<tr><td><strong>${catLabel(g.category)}</strong></td><td class="num">${pctFmt(g.pct_of_mix, 1)}</td><td class="num">${g.count}</td><td class="num">${fmt(Math.round(g.avg_engagement))}</td><td class="num" style="color:#2f7d32;font-weight:700">${String(g.vs_global).replace(".", ",")}×</td></tr>`).join("") +
+      `</tbody></table>`
+    : `<p style="padding:8px 0;color:var(--muted)">Ninguna categoría poco usada supera el promedio de la cuenta en este período.</p>`;
+})();
+
+// ════════════════════════════════════════════════════════════
+// Hallazgos (IA)
+// ════════════════════════════════════════════════════════════
+(function hallazgos() {
+  const hz = B.hallazgos_llm;
+  if (!hz || !(hz.hallazgos_top || []).length) {
+    document.querySelectorAll('[data-tab="hallazgos"]').forEach(b => b.hidden = true);
+    document.getElementById("tab-hallazgos").hidden = true;
+    return;
+  }
+  if (hz.resumen_ejecutivo) {
+    document.getElementById("hz-resumen-box").hidden = false;
+    document.getElementById("hz-resumen").textContent = hz.resumen_ejecutivo;
+  }
+  document.getElementById("findings").innerHTML = hz.hallazgos_top.map((h, i) => `
+    <div class="finding"><div class="num">${String(i + 1).padStart(2, "0")}</div><div>
+      <h4>${esc(h.dato)}</h4>
+      <p>${esc(h.comparativo)} ${esc(h.interpretacion)}</p>
+      <p>${esc(h.implicacion)}</p>
+      <div class="action"><strong>Acción:</strong> ${esc(h.recomendacion.accion)}</div>
+      <span class="badge ${h.recomendacion.prioridad}">Prioridad ${esc(h.recomendacion.prioridad)}</span><span class="badge">Esfuerzo ${esc(h.recomendacion.esfuerzo)}</span>
+    </div></div>`).join("");
+  const recos = hz.recomendaciones || [];
+  if (!recos.length) document.getElementById("recos-head").hidden = true;
+  document.getElementById("recos").innerHTML = recos.map((r, i) => `
+    <div class="reco"><div class="num">${i + 1}</div><div><h4>${esc(r.title)}</h4><p>${esc(r.body)}</p>
+      <div class="tags">${(r.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div></div></div>`).join("");
+})();
+
+// Impresión desde el navegador: mostrar todas las pestañas y redibujar los gráficos
+(function printFix() {
+  const resize = () => document.querySelectorAll("canvas").forEach(cv => { const ch = Chart.getChart(cv); if (ch) { ch.resize(); ch.update("none"); } });
+  window.addEventListener("beforeprint", () => { document.querySelectorAll(".tab").forEach(t => t.style.display = "block"); resize(); });
+  window.addEventListener("afterprint", () => { document.querySelectorAll(".tab").forEach(t => t.style.display = ""); resize(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+# Pipeline (ingesta + build)
+pyyaml>=6.0.1
+Pillow>=10.4.0
+
+# El PDF usa Playwright; el workflow lo instala aparte:
+#   pip install playwright && python -m playwright install --with-deps chromium

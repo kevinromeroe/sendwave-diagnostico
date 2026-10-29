@@ -1,0 +1,59 @@
+name: Ingesta (Apify → Supabase)
+
+on:
+  workflow_dispatch:
+    inputs:
+      period:
+        description: "diagnostico | YYYY-MM | auto (mes actual + cierre del anterior los días 1-7)"
+        required: false
+        default: "auto"
+  schedule:
+    # Martes 21:00 Bogotá (UTC-5) == miércoles 02:00 UTC. Antes de noviembre 2026 no hace nada.
+    - cron: "0 2 * * 3"
+    # Día 2 de cada mes 06:00 Bogotá: cierre del mes anterior
+    - cron: "0 11 2 * *"
+
+concurrency:
+  group: sendwave-ingest
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: write
+    env:
+      APIFY_TOKEN:          ${{ secrets.APIFY_TOKEN }}
+      SUPABASE_URL:         ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip }
+      - run: pip install -r requirements.txt
+
+      - name: Ingesta con reintentos
+        run: |
+          P="${{ github.event.inputs.period }}"
+          [ -z "$P" ] && P="auto"
+          for i in 1 2 3; do
+            echo "== Intento $i · período $P =="
+            if python scripts/ingest.py --period "$P"; then exit 0; fi
+            echo "Falló el intento $i; reintento en 60 s"
+            sleep 60
+          done
+          echo "::error::La ingesta falló tras 3 intentos"
+          exit 1
+
+      - name: Commit de miniaturas
+        run: |
+          git config user.email "bot@datalitica.com.co"
+          git config user.name "Datalitica Bot"
+          git add assets/thumbs/ || true
+          git diff --quiet --cached && echo "Sin miniaturas nuevas" && exit 0
+          git commit -m "Ingesta: miniaturas $(date -u +%Y-%m-%d)"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && break
+            sleep 3
+          done

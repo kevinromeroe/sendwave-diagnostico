@@ -1,0 +1,97 @@
+# =============================================================
+# Configuración del cliente SendWave App
+# Dashboard orgánico de redes: diagnóstico inicial + reportes mensuales
+# =============================================================
+
+client:
+  id: sendwave
+  name: SendWave
+  descripcion_llm: "SendWave, app de envío de remesas y dinero internacional, con cuentas para LATAM (español) y Brasil (portugués)"
+  timezone: America/Bogota          # zona canónica de todos los cortes y heatmaps (UTC-5, sin DST)
+
+  deploy:
+    repo: kevinromeroe/sendwave-diagnostico
+    branch: main
+    domain: sendwave.datalitica.com.co
+
+# =============================================================
+# Períodos
+# - diagnostico: línea base, todas las publicaciones del rango
+# - mensual: un período YYYY-MM por mes, desde monthly_start
+# =============================================================
+periods:
+  diagnostico:
+    id: diagnostico
+    label: "Diagnóstico (Jun-Oct 2026)"
+    short_label: "Jun a Oct 2026"
+    starts_on: "2026-06-01"
+    ends_on: "2026-10-31"
+  monthly_start: "2026-11"          # primer mes de reporte mensual
+
+# =============================================================
+# Branding — PROVISIONAL hasta recibir el manual de marca del cliente.
+# Todos los colores del dashboard salen de aquí.
+# =============================================================
+branding:
+  primary: "#2B7DB9"        # azul Datalítica (provisional)
+  primary_soft: "#E3EEF7"
+  accent: "#F2B33D"
+  ink: "#1F2D3D"
+  bg_soft: "#F3F6FA"
+  bg_soft_2: "#F8FAFC"
+
+# =============================================================
+# Canales: una entrada por CUENTA analizada.
+# `key` es lo que se guarda en Supabase (columna platform) y en DATA.
+# Hoy solo Instagram; para sumar otra red se agrega otro canal con su
+# `platform` (instagram | tiktok | facebook | linkedin).
+# =============================================================
+channels:
+  - key: ig_latam
+    platform: instagram
+    label: "Instagram LATAM"
+    short: "LATAM"
+    idioma: es
+    handle: sendwaveapp_latam
+    url: https://www.instagram.com/sendwaveapp_latam/
+    color: "#7B3FE4"
+    apify:
+      actor_id: shu8hvrXbJbY3Eb9W         # apify/instagram-scraper
+      actor_name: apify/instagram-scraper
+      cap_usd: 0.60
+      input:
+        directUrls: ["https://www.instagram.com/sendwaveapp_latam/"]
+        resultsType: posts
+        resultsLimit: 200
+        addParentData: true
+
+  - key: ig_brasil
+    platform: instagram
+    label: "Instagram Brasil"
+    short: "Brasil"
+    idioma: pt
+    handle: sendwaveappbrasil
+    url: https://www.instagram.com/sendwaveappbrasil/
+    color: "#0E9F6E"
+    apify:
+      actor_id: shu8hvrXbJbY3Eb9W         # apify/instagram-scraper
+      actor_name: apify/instagram-scraper
+      cap_usd: 0.60
+      input:
+        directUrls: ["https://www.instagram.com/sendwaveappbrasil/"]
+        resultsType: posts
+        resultsLimit: 200
+        addParentData: true
+
+# =============================================================
+# Reglas analíticas
+# =============================================================
+analytics:
+  outlier_multiplier: 5           # atípico = engagement > 5× mediana del período (piso 5)
+  outlier_floor: 5
+  top_posts_n: 5
+  top_hashtags_n: 10
+
+llm:
+  provider: gemini
+  model: gemini-2.5-flash

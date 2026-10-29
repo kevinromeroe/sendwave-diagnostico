@@ -1,0 +1,37 @@
+name: Render PDF (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      periods:
+        description: "Períodos separados por espacio (ej: diagnostico 2026-11)"
+        required: true
+        default: "diagnostico"
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Instalar Playwright + Chromium
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Renderizar
+        run: |
+          python -m http.server 8000 >/dev/null 2>&1 &
+          sleep 3
+          python scripts/render_pdf.py ${{ github.event.inputs.periods }}
+      - name: Commit PDFs
+        run: |
+          git config user.email "bot@datalitica.com.co"
+          git config user.name "Datalitica Bot"
+          git add */reporte-*.pdf
+          git diff --staged --quiet && echo "Sin cambios en PDFs" && exit 0
+          git commit -m "PDF: render manual ($(date -u +%Y-%m-%d))"
+          git pull --rebase origin main && git push

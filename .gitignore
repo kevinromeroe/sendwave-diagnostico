@@ -1,0 +1,125 @@
+# =============================================================
+# Modelo whitelist BLINDADO — ignoramos TODO por defecto y solo
+# permitimos lo que debe versionarse. Cero filtraciones de datos.
+# =============================================================
+
+/*
+
+# -------------------------------------------------------------
+# Deploy en GitHub Pages (artefactos públicos)
+# -------------------------------------------------------------
+!/index.html
+!/CNAME
+!/robots.txt
+!/.gitignore
+!/README.md
+!/LICENSE
+
+# Reportes archivados por periodo (subrutas del sitio)
+!/diagnostico/
+!/diagnostico/**
+!/2[0-9][0-9][0-9]-[0-1][0-9]/
+!/2[0-9][0-9][0-9]-[0-1][0-9]/**
+
+# Assets visuales del deploy
+!/assets/
+/assets/*
+!/assets/logo-datalitica.png
+!/assets/favicon-16.png
+!/assets/favicon-32.png
+!/assets/apple-touch-icon.png
+!/assets/thumbs/
+/assets/thumbs/*
+!/assets/thumbs/*.jpg
+!/assets/thumbs/*.png
+
+# -------------------------------------------------------------
+# Código del pipeline (versionado)
+# -------------------------------------------------------------
+!/pipeline/
+!/pipeline/**
+
+!/scripts/
+!/scripts/**
+
+
+!/.github/
+!/.github/**
+
+# -------------------------------------------------------------
+# Documentación
+# -------------------------------------------------------------
+!/docs/
+!/docs/**
+!/templates/
+!/templates/**
+!/supabase/
+!/supabase/**
+
+# -------------------------------------------------------------
+# Configuración no sensible
+# -------------------------------------------------------------
+!/config/
+!/config/**
+
+# Plantillas de variables de entorno (sin valores reales)
+!/.env.example
+
+# Manifestos de Python
+!/requirements.txt
+!/pyproject.toml
+!/setup.cfg
+
+# -------------------------------------------------------------
+# BLOQUEOS ABSOLUTOS — nunca commitear
+# (defensa en profundidad: aunque la whitelist se rompa, estos no pasan)
+# -------------------------------------------------------------
+**/data/
+**/raw/
+**/*.csv
+**/*.parquet
+**/*.tsv
+**/*.xlsx
+**/*.sqlite
+**/*.db
+**/.env
+**/.env.local
+**/.env.*.local
+**/secrets.*
+**/credentials.*
+**/*.pem
+**/*.key
+**/.notes-*
+**/*-secret.*
+**/__pycache__/
+**/.pytest_cache/
+**/.mypy_cache/
+**/.ruff_cache/
+**/*.pyc
+**/*.pyo
+**/.venv/
+**/venv/
+/data/
+
+# JSONs de data (excepto fixtures explícitos)
+**/data/**/*.json
+**/raw/**/*.json
+
+# Excepción explícita: fixtures de tests sí versionados (sin datos sensibles)
+!/tests/fixtures/
+!/tests/fixtures/**
+
+
+# -------------------------------------------------------------
+# Sistema
+# -------------------------------------------------------------
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+
+# Herramientas locales de revisión
+/_pdfcheck.html

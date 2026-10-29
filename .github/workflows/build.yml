@@ -1,0 +1,88 @@
+name: Build dashboard + PDF
+
+on:
+  workflow_dispatch:
+    inputs:
+      period:
+        description: "Período a construir (all | diagnostico | YYYY-MM)"
+        required: false
+        default: "all"
+  # En cadena: corre cuando termina la ingesta
+  workflow_run:
+    workflows: ["Ingesta (Apify → Supabase)"]
+    types: [completed]
+
+concurrency:
+  group: sendwave-build
+  cancel-in-progress: false
+
+jobs:
+  build:
+    # Si viene en cadena, solo construye cuando la ingesta terminó bien
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    env:
+      SUPABASE_URL:         ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+      GEMINI_API_KEY:       ${{ secrets.GEMINI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip }
+      - run: pip install -r requirements.txt
+
+      - name: Construir HTML por período
+        id: build
+        run: |
+          P="${{ github.event.inputs.period }}"
+          [ -z "$P" ] && P="all"
+          python scripts/build_dashboard.py --period "$P"
+          echo "period=$P" >> "$GITHUB_OUTPUT"
+
+      - name: Instalar Playwright + Chromium
+        run: |
+          pip install playwright
+          python -m playwright install --with-deps chromium
+
+      - name: Renderizar PDF
+        run: |
+          python -m http.server 8000 >/dev/null 2>&1 &
+          sleep 3
+          P="${{ steps.build.outputs.period }}"
+          if [ "$P" = "all" ]; then
+            # Meses: el actual (+ el anterior los días 1-7). Diagnóstico: solo si aún no tiene PDF.
+            PERIODS="$(python -c 'import scripts.render_pdf as r; print(" ".join(r.periodos_auto()))')"
+            ls diagnostico/reporte-*.pdf >/dev/null 2>&1 || PERIODS="diagnostico $PERIODS"
+          else
+            PERIODS="$P"
+          fi
+          python scripts/render_pdf.py $PERIODS
+
+      - name: Commit & push
+        run: |
+          git config user.email "bot@datalitica.com.co"
+          git config user.name "Datalitica Bot"
+          git add -A index.html diagnostico/ 20??-??/ 2>/dev/null || true
+          git diff --quiet --cached && echo "Sin cambios" && exit 0
+          git commit -m "Build automático: dashboard y PDF ($(date -u +%Y-%m-%d))"
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && break
+            sleep 3
+          done
+
+      - name: Smoke test — el sitio publicado responde
+        run: |
+          DOMAIN="$(tr -d '[:space:]' < CNAME)"
+          URL="https://$DOMAIN/"
+          for i in $(seq 1 8); do
+            sleep 45
+            code=$(curl -s -o /dev/null -w "%{http_code}" -L "$URL")
+            echo "Intento $i → HTTP $code"
+            [ "$code" = "200" ] && exit 0
+          done
+          echo "::error::$URL no respondió 200 tras el build"
+          exit 1
