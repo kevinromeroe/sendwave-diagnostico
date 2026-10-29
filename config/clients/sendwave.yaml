@@ -36,7 +36,7 @@ branding:
   # Extraído de sendwave.com (oct-2026). Ver "Cliente SendWave App/MARCA_SENDWAVE.md".
   primary: "#3C0F19"        # vino oscuro: logo, titulares, texto
   accent: "#FFEC00"         # amarillo SendWave: barra de cuentas, botón PDF
-  ink: "#3C0F19"
+  ink: "#111111"         # texto en negro (el vino queda para marca y acentos)
   bg_soft: "#FAF6EC"        # crema
   bg_soft_2: "#FDFBF5"
   font_display: "Anton"     # sustituto de "Sendwavy" (propia de la marca)

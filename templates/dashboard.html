@@ -17,9 +17,9 @@
   :root {
     --brand: {{BRAND_PRIMARY}};
     --accent: #FFEC00;
-    --ink: #3C0F19;
-    --ink-soft: #5E4A4E;
-    --muted: #8C7F80;
+    --ink: #111111;
+    --ink-soft: #444444;
+    --muted: #808080;
     --line: #ECE6DA;
     --bg: #ffffff;
     --bg-soft: #FAF6EC;
@@ -533,7 +533,7 @@ const rgba = (h, a) => `rgba(${hexRgb(h).join(",")},${a})`;
   if (b.bg_soft_2) r.setProperty("--bg-soft-2", b.bg_soft_2);
 })();
 
-Chart.defaults.color = "#5E4A4E";
+Chart.defaults.color = "#444444";
 Chart.defaults.borderColor = "#ECE6DA";
 Chart.defaults.font.family = "Inter, -apple-system, Arial, sans-serif";
 Chart.defaults.font.size = 12;
@@ -758,8 +758,6 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
     let note = "";
     if (m.k === "seguidores" && idx.length < 2 && (B.account || {}).snapshot_fecha)
       note = `<div class="t-note">Medición al ${isoDay(B.account.snapshot_fecha)}.</div>`;
-    if (m.k === "tasa" && T.tasa_aprox.some(Boolean))
-      note = `<div class="t-note">Calculada con los seguidores de la medición más cercana a cada mes.</div>`;
     const card = document.createElement("div");
     card.className = "trend-card";
     card.innerHTML = `<div class="t-label">${m.label}</div><div class="t-val">${last === null ? "—" : m.f(last)}</div>${delta}` +
