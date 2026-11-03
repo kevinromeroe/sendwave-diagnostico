@@ -105,7 +105,115 @@
         "titulo": "Se publica en el momento equivocado",
         "texto": "Martes y miércoles rinden el doble que los viernes (977 y 946 frente a 474 interacciones por pieza), y la hora más usada (19:00) no es la mejor: de 10:00 a 16:00 se superan las 1.000."
       }
-    ]
+    ],
+    "en": {
+      "insights": [
+        {
+          "titulo": "Creators are the engine",
+          "texto": "86% of @sendwaveapp_latam's engagement comes from creators: collaborations make up 2 out of 3 posts and average 949 interactions, three times the brand's own content (310)."
+        },
+        {
+          "titulo": "Everything hinges on a handful of virals",
+          "texto": "35 outlier posts added up to 1.32 million interactions, 7.6 times what the other 236 generated combined. The largest, a collaboration from October 2, reached 485,152 on its own."
+        },
+        {
+          "titulo": "Posts go out at the wrong time",
+          "texto": "Tuesdays and Wednesdays perform twice as well as Fridays (977 and 946 vs. 474 interactions per post), and the most used time (7:00 PM) is not the best: posts between 10:00 AM and 4:00 PM exceed 1,000."
+        }
+      ],
+      "resumen_ejecutivo": "Between June and October, @sendwaveapp_latam published 236 regular posts with 172,839 interactions (732 per post) and a 0.64% engagement rate on 114,757 followers. The account works mainly as a showcase for creators: two out of three posts are collaborations and they generate 86% of engagement; the brand's own content, carousels in particular, performs far below.",
+      "hallazgos_top": [
+        {
+          "categoria": "patron",
+          "dato": "66% of regular posts (156 of 236) are creator collaborations, averaging 949 interactions per post.",
+          "comparativo": "The brand's own content averages 310 interactions per post (80 posts); overall, creators generate 86% of engagement.",
+          "interpretacion": "The audience responds to creators' faces and voices, not to institutional content.",
+          "implicacion": "The account's performance depends on the creator program: if collaboration volume drops, total engagement falls.",
+          "recomendacion": {
+            "accion": "Keep collaborations at the core and track which creators drive the most interactions per post, renewing the best ones.",
+            "prioridad": "alta",
+            "esfuerzo": "medio"
+          }
+        },
+        {
+          "categoria": "brecha",
+          "dato": "Reels average 842 interactions; carousels, 61.",
+          "comparativo": "The gap is even wider in the brand's own content: its reels average 439 and its carousels 23, 19 times less.",
+          "interpretacion": "On this account, carousels generate virtually no conversation.",
+          "implicacion": "Every carousel takes a calendar slot that a reel would use much better.",
+          "recomendacion": {
+            "accion": "Turn the product and community messages now published as carousels into short reels with a person on camera.",
+            "prioridad": "alta",
+            "esfuerzo": "medio"
+          }
+        },
+        {
+          "categoria": "tendencia",
+          "dato": "August had the best engagement per post (1,126) with 38 posts; September doubled the volume (76 posts) and dropped to 711.",
+          "comparativo": "June and July were around 535 and 678 interactions per post with 44 and 48 posts.",
+          "interpretacion": "Posting more did not translate into more interaction per post: September's volume diluted performance.",
+          "implicacion": "There is a point where adding posts stops paying off and saturates the feed.",
+          "recomendacion": {
+            "accion": "Set a cadence of 9 to 10 posts per week and prioritize creator quality over quantity.",
+            "prioridad": "media",
+            "esfuerzo": "bajo"
+          }
+        },
+        {
+          "categoria": "correlacion",
+          "dato": "Tuesdays (977) and Wednesdays (946) have the best average engagement; Fridays drop to 474.",
+          "comparativo": "The most used time is 7:00 PM (26 posts), but the 10:00 AM to 4:00 PM slots exceed 1,000 average interactions.",
+          "interpretacion": "The best windows are midweek and midday, not in the evening.",
+          "implicacion": "Moving key posts to those slots can lift performance without producing more content.",
+          "recomendacion": {
+            "accion": "Schedule launches and main collaborations on Tuesdays and Wednesdays between 10:00 AM and 4:00 PM (Bogotá time).",
+            "prioridad": "media",
+            "esfuerzo": "bajo"
+          }
+        },
+        {
+          "categoria": "anomalia",
+          "dato": "35 posts exceed 6,698 interactions and are treated as outliers; the largest reached 485,152 (a collaboration from October 2).",
+          "comparativo": "The 35 outliers added up to 1.32 million interactions, 7.6 times what the other 236 posts generated combined (median regular post: 179).",
+          "interpretacion": "A few creator virals generate huge spikes, likely boosted with paid media.",
+          "implicacion": "Those spikes inflate any average; that is why the dashboard KPIs exclude them and analyze them separately.",
+          "recomendacion": {
+            "accion": "Identify what the virals have in common (creator, humor, format) and replicate that brief in upcoming collaborations.",
+            "prioridad": "media",
+            "esfuerzo": "bajo"
+          }
+        }
+      ],
+      "recomendaciones": [
+        {
+          "title": "Manage collaborations as the account's engine",
+          "body": "They make up 66% of content and are the best-performing format. Keep a monthly ranking by creator (interactions per post) and renew the top five.",
+          "tags": [
+            "Medium effort",
+            "High impact",
+            "30 days"
+          ]
+        },
+        {
+          "title": "Reels instead of carousels",
+          "body": "Reels perform 14 times better than carousels. Move product, tutorial and community messages to video.",
+          "tags": [
+            "Medium effort",
+            "High impact",
+            "30-60 days"
+          ]
+        },
+        {
+          "title": "Reorganize the calendar",
+          "body": "Keep 9 to 10 posts per week and concentrate key posts on Tuesdays and Wednesdays from 10:00 AM to 4:00 PM (Bogotá time).",
+          "tags": [
+            "Low effort",
+            "Medium impact",
+            "30 days"
+          ]
+        }
+      ]
+    }
   },
   "ig_brasil": {
     "resumen_ejecutivo": "Entre junio y octubre, @sendwaveappbrasil publicó 70 piezas típicas con 15.649 interacciones (224 por publicación) y una tasa de engagement de 0,57 % sobre 39.022 seguidores. La cuenta se reactivó desde agosto y su rendimiento depende de los creadores: el contenido propio de la marca casi no genera interacción, sin importar el formato.",
@@ -217,6 +325,118 @@
         "titulo": "Se publica en los días más flojos",
         "texto": "Los lunes rinden más del triple que martes a jueves (436 frente a 104–123 interacciones por pieza), y aun así el jueves es de los días con más publicaciones (12)."
       }
-    ]
+    ],
+    "en": {
+      "insights": [
+        {
+          "titulo": "Creators are the engine",
+          "texto": "76% of @sendwaveappbrasil's engagement comes from creators: its 26 collaborations average 459 interactions, more than five times the brand's own content (84)."
+        },
+        {
+          "titulo": "The account came back to life in August",
+          "texto": "It went from 9 posts in June and July to 61 between August and October; that is when high-performing posts started to appear."
+        },
+        {
+          "titulo": "The brand's own content isn't taking off",
+          "texto": "Half of the brand's own posts get no more than 24 interactions; half of the collaborations exceed 321."
+        },
+        {
+          "titulo": "Posts go out on the weakest days",
+          "texto": "Mondays perform more than three times better than Tuesday through Thursday (436 vs. 104–123 interactions per post), yet Thursday is one of the days with the most posts (12)."
+        }
+      ],
+      "resumen_ejecutivo": "Between June and October, @sendwaveappbrasil published 70 regular posts with 15,649 interactions (224 per post) and a 0.57% engagement rate on 39,022 followers. The account was reactivated in August and its performance depends on creators: the brand's own content generates almost no interaction, regardless of format.",
+      "hallazgos_top": [
+        {
+          "categoria": "tendencia",
+          "dato": "The account went from 3 posts in June and 6 in July to 14 in August, 27 in September and 20 in October.",
+          "comparativo": "Total engagement rose from 163 in June to 8,234 in August and 5,082 in September.",
+          "interpretacion": "Reactivating the account in August multiplied both presence and interaction.",
+          "implicacion": "The foundation for growth is in place; the challenge now is to sustain the pace without losing performance per post.",
+          "recomendacion": {
+            "accion": "Sustain 5 to 6 posts per week, the September–October pace.",
+            "prioridad": "alta",
+            "esfuerzo": "medio"
+          }
+        },
+        {
+          "categoria": "patron",
+          "dato": "Creator collaborations average 459 interactions per post (26 posts).",
+          "comparativo": "The brand's own content averages 84 interactions per post (44 posts); overall, creators generate 76% of engagement.",
+          "interpretacion": "In Brazil, as in LATAM, the audience responds to creators, not to institutional messages.",
+          "implicacion": "The brand's own posts take up calendar space without driving interaction.",
+          "recomendacion": {
+            "accion": "Move product messages (Pix, exchange rate, security) to a creator format or a real person on camera.",
+            "prioridad": "alta",
+            "esfuerzo": "medio"
+          }
+        },
+        {
+          "categoria": "brecha",
+          "dato": "The brand's 44 own posts have a median of 24 interactions: its carousels average 105 and its reels 66.",
+          "comparativo": "Half of the creator collaborations exceed 321 interactions.",
+          "interpretacion": "It is not a format problem but a question of who is speaking: without a creator, no format takes off.",
+          "implicacion": "Switching own content from carousel to reel is not enough on its own; it needs a face to tell it.",
+          "recomendacion": {
+            "accion": "Move the brand's own messages to creators or employees on camera, and keep carousels for save-worthy content (promo code steps, tips).",
+            "prioridad": "media",
+            "esfuerzo": "medio"
+          }
+        },
+        {
+          "categoria": "correlacion",
+          "dato": "Monday is the best day (436 average interactions), followed by Sunday (292) and Friday (255).",
+          "comparativo": "Tuesday, Wednesday and Thursday stay between 104 and 123.",
+          "interpretacion": "The Brazilian audience responds best at the start and end of the week.",
+          "implicacion": "Posts often go out on Thursdays (12 posts), one of the weakest days.",
+          "recomendacion": {
+            "accion": "Concentrate main collaborations on Mondays and Sundays, and test 10:00 AM (Bogotá time), the slot with the best response.",
+            "prioridad": "media",
+            "esfuerzo": "bajo"
+          }
+        },
+        {
+          "categoria": "anomalia",
+          "dato": "7 posts exceed 2,016 interactions and are treated as outliers; the largest reached 22,028 (an August 25 collaboration about living in the United States).",
+          "comparativo": "The median regular post gets 45 interactions.",
+          "interpretacion": "Immigrant-life topics, told by creators, are the ones that can go viral.",
+          "implicacion": "There is a proven content territory that is still underused.",
+          "recomendacion": {
+            "accion": "Build a recurring creator series about Brazilian life abroad (costs, paperwork, curiosities).",
+            "prioridad": "media",
+            "esfuerzo": "medio"
+          }
+        }
+      ],
+      "recomendaciones": [
+        {
+          "title": "Sustain the reactivation",
+          "body": "Keep 5 to 6 posts per week, as in September and October, prioritizing Mondays, Fridays and Sundays.",
+          "tags": [
+            "Medium effort",
+            "High impact",
+            "30 days"
+          ]
+        },
+        {
+          "title": "Put faces on the brand's own content",
+          "body": "Collaborations perform more than five times better than the brand's own content (459 vs. 84 interactions per post). Move product and education content to creators or employees on camera.",
+          "tags": [
+            "Medium effort",
+            "High impact",
+            "30-60 days"
+          ]
+        },
+        {
+          "title": "Life-abroad series",
+          "body": "The account's virals talk about the immigrant experience. Turn it into a recurring series with creators.",
+          "tags": [
+            "Medium effort",
+            "Medium impact",
+            "60-90 days"
+          ]
+        }
+      ]
+    }
   }
 }

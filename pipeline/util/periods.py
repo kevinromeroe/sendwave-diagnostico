@@ -50,6 +50,24 @@ def short_label(cfg: dict, period: str) -> str:
     return label(cfg, period)
 
 
+MONTHS_EN = ["", "January", "February", "March", "April", "May", "June", "July",
+             "August", "September", "October", "November", "December"]
+
+
+def label_en(cfg: dict, period: str) -> str:
+    diag = cfg["periods"]["diagnostico"]
+    if period == diag["id"]:
+        return diag.get("label_en") or diag["label"]
+    return f"{MONTHS_EN[int(period[5:])]} {period[:4]}"
+
+
+def short_label_en(cfg: dict, period: str) -> str:
+    diag = cfg["periods"]["diagnostico"]
+    if period == diag["id"]:
+        return diag.get("short_label_en") or label_en(cfg, period)
+    return label_en(cfg, period)
+
+
 def previous(cfg: dict, period: str) -> str | None:
     """Mes anterior de un período mensual. None para el diagnóstico."""
     if not is_month(period):

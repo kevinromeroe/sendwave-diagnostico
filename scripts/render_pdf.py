@@ -52,7 +52,7 @@ def _open(page, url):
 
 
 def render(periods):
-    """Un PDF por período y por cuenta: <período>/reporte-<cuenta>.pdf"""
+    """Un PDF por período, cuenta e idioma: <período>/reporte-<cuenta>[-en].pdf"""
     with sync_playwright() as p:
         browser = p.chromium.launch(args=["--no-sandbox", "--disable-dev-shm-usage"])
         page = browser.new_page(viewport={"width": 1400, "height": 1000})
@@ -62,8 +62,9 @@ def render(periods):
                 continue
             _open(page, f"{BASE}/{per}/")
             accounts = page.evaluate("() => CLIENT.channels.map(c => c.key)")
-            for acc in accounts:
-                url = f"{BASE}/{per}/?cuenta={acc}"
+            # Un PDF por cuenta e idioma: reporte-<cuenta>.pdf (español) y reporte-<cuenta>-en.pdf (inglés)
+            for acc, lang in [(a, lg) for a in accounts for lg in ("es", "en")]:
+                url = f"{BASE}/{per}/?cuenta={acc}" + ("&lang=en" if lang == "en" else "")
                 print(f"→ Renderizando {url}")
                 _open(page, url)
                 # 1) Clic en cada pestaña visible para que Chart.js inicialice sus gráficos
@@ -96,7 +97,7 @@ def render(periods):
                     ])"""
                 )
                 page.wait_for_timeout(2500)
-                out = Path(per) / f"reporte-{acc}.pdf"
+                out = Path(per) / f"reporte-{acc}{'-en' if lang == 'en' else ''}.pdf"
                 page.pdf(
                     path=str(out),
                     format="A4",

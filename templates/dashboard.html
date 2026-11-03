@@ -268,6 +268,14 @@
   @media (max-width: 520px) { .trend-grid { grid-template-columns: 1fr; } }
   @media print { .trend-card .t-chart { height: 70px; } .trend-grid { break-inside: avoid; } }
 
+
+  /* Selector de idioma */
+  .lang-switch { display: inline-flex; margin-left: 8px; border: 1px solid var(--ink); border-radius: 6px; overflow: hidden; vertical-align: middle; }
+  .lang-switch a { padding: 5px 10px; font-size: 12px; font-weight: 700; color: var(--ink); text-decoration: none; background: #fff; }
+  .lang-switch a + a { border-left: 1px solid var(--ink); }
+  .lang-switch a.active { background: var(--ink); color: #fff; }
+  .lang-switch a:not(.active):hover { background: var(--accent); }
+
   /* ===== Look & feel SendWave ===== */
   h1, h2, .wordmark, .kpi .value, .finding .num, .reco .num, .net-card .stat {
     font-family: var(--font-display); font-weight: 400; letter-spacing: .2px; }
@@ -336,7 +344,7 @@
     @page { size: A4 landscape; margin: .8cm; }
     html, body { background: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     body { font-size: 10.5px !important; }
-    .menu-toggle, .menu-drawer, .menu-backdrop, .period-selector, .pdf-btn, nav.tabs, .account-bar, .info-icon, .global-tooltip { display: none !important; }
+    .menu-toggle, .menu-drawer, .menu-backdrop, .period-selector, .pdf-btn, .lang-switch, nav.tabs, .account-bar, .info-icon, .global-tooltip { display: none !important; }
     .topbar { position: static; padding: 6px 0 10px !important; border-bottom: 2px solid var(--brand) !important; }
     section.tab { display: block !important; break-before: page; padding-top: 4px !important; }
     section.tab:first-of-type { break-before: avoid; }
@@ -373,32 +381,35 @@
     <span class="wordmark" id="wordmark"></span>
     <div class="divider"></div>
     <div class="title-block">
-      <span class="eyebrow">Inteligencia de redes</span>
-      <span class="title">Dashboard de Redes Sociales · <em id="title-account"></em></span>
+      <span class="eyebrow" data-en="Social media intelligence">Inteligencia de redes</span>
+      <span class="title"><span data-en="Social Media Dashboard">Dashboard de Redes Sociales</span> · <em id="title-account"></em></span>
     </div>
   </div>
   <div class="meta">
     <strong id="meta-period"></strong>
     <span id="meta-window"></span>
-    <select id="period-selector" class="period-selector" aria-label="Seleccionar período"
+    <select id="period-selector" class="period-selector" aria-label="Período / Period"
             onchange="if(this.value)window.location.href=this.value"></select>
-    <button class="pdf-btn" type="button" id="pdf-btn" aria-label="Descargar el PDF de esta cuenta y período">
+    <button class="pdf-btn" type="button" id="pdf-btn" aria-label="PDF">
       <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M5 1h6l4 4v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zm6 1.5V5h2.5L11 2.5zM6 10h4v1H6v-1zm0-2h4v1H6V8z"/></svg>
       <span>PDF</span>
     </button>
+    <div class="lang-switch" role="group" aria-label="Idioma / Language">
+      <a id="lang-es" href="#" hreflang="es">ES</a><a id="lang-en" href="#" hreflang="en">EN</a>
+    </div>
   </div>
-  <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+  <button class="menu-toggle" id="menu-toggle" aria-label="Menú / Menu"><span></span><span></span><span></span></button>
 </div>
 
 <!-- Selector de cuenta: cada cuenta es un reporte independiente -->
-<div class="account-bar" role="tablist" aria-label="Cuenta analizada">
-  <span class="lbl">Cuenta</span>
+<div class="account-bar" role="tablist">
+  <span class="lbl" data-en="Account">Cuenta</span>
   <div id="account-buttons" class="acc-buttons"></div>
 </div>
 
 <div class="menu-backdrop" id="menu-backdrop"></div>
-<aside class="menu-drawer" id="menu-drawer" aria-label="Menú de secciones">
-  <div class="menu-drawer-head"><span>Secciones</span><button class="menu-close" id="menu-close" aria-label="Cerrar menú">×</button></div>
+<aside class="menu-drawer" id="menu-drawer">
+  <div class="menu-drawer-head"><span data-en="Sections">Secciones</span><button class="menu-close" id="menu-close" aria-label="×">×</button></div>
 </aside>
 
 <nav class="tabs" id="tabs"></nav>
@@ -408,89 +419,89 @@
 <!-- ============ RESUMEN ============ -->
 <section class="tab active" id="tab-resumen">
   <div class="resumen-corp">
-    <div class="lbl">Resumen ejecutivo</div>
+    <div class="lbl" data-en="Executive summary">Resumen ejecutivo</div>
     <div id="resumen-text" class="resumen-text"></div>
   </div>
   <div class="hero">
     <div class="eyebrow" id="hero-eyebrow"></div>
-    <h1>Cómo se comporta <em id="hero-handle"></em> en Instagram.</h1>
+    <h1 id="hero-h1"></h1>
     <p class="lead" id="hero-lead"></p>
     <div class="kpi-grid cols-5" id="kpi-main"></div>
   </div>
 
   <div class="section-head">
-    <div class="num">Tendencia</div>
-    <h2>Cómo evolucionan los indicadores mes a mes</h2>
+    <div class="num" data-en="Trend">Tendencia</div>
+    <h2 data-en="How the metrics evolve month by month">Cómo evolucionan los indicadores mes a mes</h2>
     <div class="desc" id="trend-desc"></div>
   </div>
   <div class="trend-grid" id="trend-grid"></div>
   <div class="learn" id="l-trend"></div>
-  <div class="note"><strong>Sobre estas métricas</strong> · Los KPIs y las gráficas se calculan solo sobre las <strong>publicaciones típicas</strong>. Se excluyen las atípicas (engagement muy por encima del resto: más que el tercer cuartil + 3 veces el rango intercuartílico; suele ser pauta o un viral aislado) para que no distorsionen las tendencias; se listan aparte en Publicaciones. Engagement = likes + comentarios. Tasa de engagement = engagement promedio por publicación ÷ seguidores.</div>
+  <div class="note" data-en="<strong>About these metrics</strong> · KPIs and charts are calculated on <strong>regular posts</strong> only. Outliers (engagement far above the rest: more than the third quartile + 3 times the interquartile range, usually paid media or an isolated viral) are excluded so they don't distort trends, and are listed separately under Posts. Engagement = likes + comments. Engagement rate = average engagement per post ÷ followers."><strong>Sobre estas métricas</strong> · Los KPIs y las gráficas se calculan solo sobre las <strong>publicaciones típicas</strong>. Se excluyen las atípicas (engagement muy por encima del resto: más que el tercer cuartil + 3 veces el rango intercuartílico; suele ser pauta o un viral aislado) para que no distorsionen las tendencias; se listan aparte en Publicaciones. Engagement = likes + comentarios. Tasa de engagement = engagement promedio por publicación ÷ seguidores.</div>
 </section>
 
 <!-- ============ DESEMPEÑO ============ -->
 <section class="tab" id="tab-desempeno">
   <div class="section-head">
-    <div class="num">Desempeño</div>
-    <h2>Ritmo, formatos y momentos de publicación</h2>
-    <div class="desc">Cuándo y cómo publica la cuenta, y qué combinaciones obtienen más interacción. Horas en zona Bogotá.</div>
+    <div class="num" data-en="Performance">Desempeño</div>
+    <h2 data-en="Cadence, formats and posting times">Ritmo, formatos y momentos de publicación</h2>
+    <div class="desc" data-en="When and how the account posts, and which combinations drive the most interaction. Times in Bogotá time zone.">Cuándo y cómo publica la cuenta, y qué combinaciones obtienen más interacción. Horas en zona Bogotá.</div>
   </div>
   <div class="resumen-corp" id="perf-resumen-box" hidden>
-    <div class="lbl">Resumen ejecutivo de desempeño</div>
+    <div class="lbl" data-en="Performance summary">Resumen ejecutivo de desempeño</div>
     <ul class="perf-points" id="perf-resumen"></ul>
   </div>
   <div class="chart-grid cols-2" id="perf-grid">
-    <div class="chart-card"><h3>Volumen semanal de publicación<i class="info-icon" data-tip="Cantidad de publicaciones por semana: el ritmo del calendario editorial.">i</i></h3><div class="chart-wrap"><canvas id="c-week"></canvas></div><div class="learn" id="l-week"></div></div>
-    <div class="chart-card"><h3>Engagement promedio por formato<i class="info-icon" data-tip="Promedio de likes + comentarios por formato (foto, carrusel, reel).">i</i></h3><div class="chart-wrap"><canvas id="c-type"></canvas></div><div class="learn" id="l-type"></div></div>
-    <div class="chart-card"><h3>Mejor día de la semana<i class="info-icon" data-tip="Engagement promedio de las publicaciones hechas cada día de la semana.">i</i></h3><div class="chart-wrap"><canvas id="c-dow"></canvas></div><div class="learn" id="l-dow"></div></div>
-    <div class="chart-card"><h3>Publicaciones y engagement por hora<i class="info-icon" data-tip="Barras: publicaciones por hora del día. Línea: engagement promedio por hora.">i</i></h3><div class="chart-wrap"><canvas id="c-hour"></canvas></div><div class="learn" id="l-hour"></div></div>
+    <div class="chart-card"><h3><span data-en="Weekly posting volume">Volumen semanal de publicación</span><i class="info-icon" data-tip="Cantidad de publicaciones por semana: el ritmo del calendario editorial." data-tip-en="Number of posts per week: the pace of the editorial calendar.">i</i></h3><div class="chart-wrap"><canvas id="c-week"></canvas></div><div class="learn" id="l-week"></div></div>
+    <div class="chart-card"><h3><span data-en="Average engagement by format">Engagement promedio por formato</span><i class="info-icon" data-tip="Promedio de likes + comentarios por formato (foto, carrusel, reel)." data-tip-en="Average likes + comments per format (photo, carousel, reel).">i</i></h3><div class="chart-wrap"><canvas id="c-type"></canvas></div><div class="learn" id="l-type"></div></div>
+    <div class="chart-card"><h3><span data-en="Best day of the week">Mejor día de la semana</span><i class="info-icon" data-tip="Engagement promedio de las publicaciones hechas cada día de la semana." data-tip-en="Average engagement of posts published on each day of the week.">i</i></h3><div class="chart-wrap"><canvas id="c-dow"></canvas></div><div class="learn" id="l-dow"></div></div>
+    <div class="chart-card"><h3><span data-en="Posts and engagement by hour">Publicaciones y engagement por hora</span><i class="info-icon" data-tip="Barras: publicaciones por hora del día. Línea: engagement promedio por hora." data-tip-en="Bars: posts per hour of the day. Line: average engagement per hour.">i</i></h3><div class="chart-wrap"><canvas id="c-hour"></canvas></div><div class="learn" id="l-hour"></div></div>
   </div>
-  <div class="chart-card" style="margin-top:20px"><h3>Heatmap día × hora — engagement promedio<i class="info-icon" data-tip="Engagement promedio por día y hora de publicación. Más intenso = mejor desempeño.">i</i></h3><div id="h-heatmap" style="overflow-x:auto"></div><div class="learn" id="l-heatmap"></div></div>
+  <div class="chart-card" style="margin-top:20px"><h3><span data-en="Day × hour heatmap — average engagement">Heatmap día × hora — engagement promedio</span><i class="info-icon" data-tip="Engagement promedio por día y hora de publicación. Más intenso = mejor desempeño." data-tip-en="Average engagement by day and hour of posting. Darker = better performance.">i</i></h3><div id="h-heatmap" style="overflow-x:auto"></div><div class="learn" id="l-heatmap"></div></div>
 </section>
 
 <!-- ============ PUBLICACIONES ============ -->
 <section class="tab" id="tab-publicaciones">
   <div class="section-head">
-    <div class="num">Publicaciones</div>
-    <h2>Las piezas que más y menos conectaron</h2>
-    <div class="desc">Las 5 publicaciones con mejor y con menor engagement entre las típicas, y las 5 atípicas con más interacciones.</div>
+    <div class="num" data-en="Posts">Publicaciones</div>
+    <h2 data-en="The posts that connected the most and the least">Las piezas que más y menos conectaron</h2>
+    <div class="desc" data-en="The 5 regular posts with the highest and lowest engagement, and the 5 outliers with the most interactions.">Las 5 publicaciones con mejor y con menor engagement entre las típicas, y las 5 atípicas con más interacciones.</div>
   </div>
-  <h3 style="font-size:16px">Top 5 publicaciones con mejor engagement (sin atípicas)</h3>
+  <h3 style="font-size:16px" data-en="Top 5 posts by engagement (excluding outliers)">Top 5 publicaciones con mejor engagement (sin atípicas)</h3>
   <div class="chart-card" style="padding:0"><table id="t-top"></table><div class="learn" id="l-top" style="margin:0;border-radius:0 0 6px 6px"></div></div>
-  <h3 id="h-worst" style="margin-top:28px;font-size:16px">Top 5 publicaciones con menor engagement</h3>
+  <h3 id="h-worst" style="margin-top:28px;font-size:16px" data-en="Bottom 5 posts by engagement">Top 5 publicaciones con menor engagement</h3>
   <div class="chart-card" id="card-worst" style="padding:0"><table id="t-worst"></table></div>
-  <h3 id="h-atipicos" style="margin-top:28px;font-size:16px" hidden>Top 5 publicaciones atípicas</h3>
+  <h3 id="h-atipicos" style="margin-top:28px;font-size:16px" data-en="Top 5 outlier posts" hidden>Top 5 publicaciones atípicas</h3>
   <p class="note" id="atip-note" hidden></p>
   <div class="chart-card" id="card-atipicos" style="padding:0" hidden><table id="t-atipicos"></table></div>
-  <h2 style="margin-top:48px">Hashtags más usados</h2>
+  <h2 style="margin-top:48px" data-en="Most used hashtags">Hashtags más usados</h2>
   <div class="hashtags" id="hashtags"></div>
 </section>
 
 <!-- ============ CATEGORÍAS ============ -->
 <section class="tab" id="tab-categorias">
   <div class="section-head">
-    <div class="num">Categorías de contenido</div>
-    <h2>Qué tipo de contenido funciona en esta cuenta</h2>
-    <div class="desc">Cada publicación se clasifica automáticamente en una de 12 categorías editoriales a partir de su texto. Se analizan solo las publicaciones típicas.</div>
+    <div class="num" data-en="Content categories">Categorías de contenido</div>
+    <h2 data-en="What type of content works on this account">Qué tipo de contenido funciona en esta cuenta</h2>
+    <div class="desc" data-en="Each post is classified into one of 12 editorial categories based on its text. Only regular posts are analyzed.">Cada publicación se clasifica en una de 12 categorías editoriales a partir de su texto. Se analizan solo las publicaciones típicas.</div>
   </div>
   <div class="chart-grid cols-2">
-    <div class="chart-card"><h3>Mix de contenido<i class="info-icon" data-tip="Porcentaje de publicaciones de cada categoría.">i</i></h3><div class="chart-wrap" style="height:340px"><canvas id="c-cat-mix"></canvas></div><div class="learn" id="l-cat-mix"></div></div>
-    <div class="chart-card"><h3>Desempeño por categoría<i class="info-icon" data-tip="Engagement promedio y mediana por categoría. Una mediana muy por debajo del promedio indica pocos éxitos muy grandes.">i</i></h3><div class="chart-wrap" style="height:340px"><canvas id="c-cat-perf"></canvas></div><div class="learn" id="l-cat-perf"></div></div>
+    <div class="chart-card"><h3><span data-en="Content mix">Mix de contenido</span><i class="info-icon" data-tip="Porcentaje de publicaciones de cada categoría." data-tip-en="Share of posts in each category.">i</i></h3><div class="chart-wrap" style="height:340px"><canvas id="c-cat-mix"></canvas></div><div class="learn" id="l-cat-mix"></div></div>
+    <div class="chart-card"><h3><span data-en="Performance by category">Desempeño por categoría</span><i class="info-icon" data-tip="Engagement promedio y mediana por categoría. Una mediana muy por debajo del promedio indica pocos éxitos muy grandes." data-tip-en="Average and median engagement by category. A median far below the average means a few very large hits.">i</i></h3><div class="chart-wrap" style="height:340px"><canvas id="c-cat-perf"></canvas></div><div class="learn" id="l-cat-perf"></div></div>
   </div>
-  <div class="chart-card" style="margin-top:24px"><h3>Categoría × formato — engagement promedio<i class="info-icon" data-tip="Engagement promedio por categoría y formato (foto, carrusel, reel).">i</i></h3><div id="h-cat-type" style="overflow-x:auto"></div><div class="learn" id="l-cat-type"></div></div>
-  <div class="chart-card" style="margin-top:24px"><h3>Oportunidades: categorías poco usadas que rinden más<i class="info-icon" data-tip="Categorías con menos del 10% del mix y engagement promedio por encima del promedio de la cuenta.">i</i></h3><div id="tbl-cat-gaps"></div></div>
+  <div class="chart-card" style="margin-top:24px"><h3><span data-en="Category × format — average engagement">Categoría × formato — engagement promedio</span><i class="info-icon" data-tip="Engagement promedio por categoría y formato (foto, carrusel, reel)." data-tip-en="Average engagement by category and format (photo, carousel, reel).">i</i></h3><div id="h-cat-type" style="overflow-x:auto"></div><div class="learn" id="l-cat-type"></div></div>
+  <div class="chart-card" style="margin-top:24px"><h3><span data-en="Opportunities: underused categories that outperform">Oportunidades: categorías poco usadas que rinden más</span><i class="info-icon" data-tip="Categorías con menos del 10% del mix y engagement promedio por encima del promedio de la cuenta." data-tip-en="Categories under 10% of the mix with average engagement above the account average.">i</i></h3><div id="tbl-cat-gaps"></div></div>
 </section>
 
 <!-- ============ HALLAZGOS ============ -->
 <section class="tab" id="tab-hallazgos">
   <div class="section-head">
-    <div class="num">Hallazgos y recomendaciones</div>
-    <h2>Qué dicen los datos y qué hacer al respecto</h2>
-    <div class="desc">Lectura asistida por IA a partir de las métricas reales de esta cuenta en el período; ninguna cifra se calcula fuera de este dashboard.</div>
+    <div class="num" data-en="Findings and recommendations">Hallazgos y recomendaciones</div>
+    <h2 data-en="What the data says and what to do about it">Qué dicen los datos y qué hacer al respecto</h2>
+    <div class="desc" data-en="Analysis based on this account's actual metrics for the period; every figure comes from this dashboard.">Análisis a partir de las métricas reales de esta cuenta en el período; todas las cifras salen de este dashboard.</div>
   </div>
-  <div class="resumen-corp" id="hz-resumen-box" hidden><div class="lbl">Síntesis</div><p id="hz-resumen"></p></div>
+  <div class="resumen-corp" id="hz-resumen-box" hidden><div class="lbl" data-en="Synthesis">Síntesis</div><p id="hz-resumen"></p></div>
   <div id="findings"></div>
-  <div class="section-head" id="recos-head"><div class="num">Plan de acción</div><h2>Recomendaciones priorizadas</h2></div>
+  <div class="section-head" id="recos-head"><div class="num" data-en="Action plan">Plan de acción</div><h2 data-en="Prioritized recommendations">Recomendaciones priorizadas</h2></div>
   <div id="recos"></div>
 </section>
 
@@ -499,9 +510,9 @@
 <footer>
   <div class="footer-grid">
     <div style="flex:1; min-width:280px">
-      <div class="powered">© <span id="foot-year"></span> <strong>Datalítica Colombia S.A.S.</strong> · Entregable confidencial para <strong id="foot-client"></strong> · Datos de fuentes públicas</div>
-      <details><summary>Aviso legal y tratamiento de datos</summary>
-        <p>Reporte confidencial: acceso o distribución no autorizada prohibida. Tratamiento de datos conforme a la Ley 1581 de 2012 (Colombia). Las métricas se calculan sobre información pública de las cuentas analizadas.</p>
+      <div class="powered">© <span id="foot-year"></span> <strong>Datalítica Colombia S.A.S.</strong> · <span data-en="Confidential deliverable for">Entregable confidencial para</span> <strong id="foot-client"></strong> · <span data-en="Public data sources">Datos de fuentes públicas</span></div>
+      <details><summary data-en="Legal notice and data processing">Aviso legal y tratamiento de datos</summary>
+        <p data-en="Confidential report: unauthorized access or distribution is prohibited. Data processed in accordance with Colombian Law 1581 of 2012. Metrics are calculated from public information of the analyzed accounts.">Reporte confidencial: acceso o distribución no autorizada prohibida. Tratamiento de datos conforme a la Ley 1581 de 2012 (Colombia). Las métricas se calculan sobre información pública de las cuentas analizadas.</p>
       </details>
     </div>
     <img class="logo-dtl" src="/assets/logo-datalitica.png" alt="Datalítica">
@@ -515,14 +526,27 @@ const DATA = __DATA__;
 </script>
 <script>
 // ════════════════════════════════════════════════════════════
-// Cuenta seleccionada (?cuenta=<key>). Todo el reporte es de UNA cuenta.
+// Cuenta (?cuenta=<key>) e idioma (?lang=en). Todo el reporte es de UNA cuenta.
 // ════════════════════════════════════════════════════════════
 const CH = CLIENT.channels;
 const params = new URLSearchParams(location.search);
 const ACC = CH.find(c => c.key === params.get("cuenta")) || CH[0];
+const EN = params.get("lang") === "en";
+const L = (es, en) => EN ? en : es;           // texto según idioma
+const LOC = EN ? "en-US" : "es-CO";
 const B = DATA.channels[ACC.key];
 const COLOR = ACC.color;
 const BRAND = CLIENT.brand.primary;
+document.documentElement.lang = EN ? "en" : "es";
+
+// Textos fijos del HTML: data-en / data-tip-en
+if (EN) {
+  document.querySelectorAll("[data-en]").forEach(el => { el.innerHTML = el.dataset.en; });
+  document.querySelectorAll("[data-tip-en]").forEach(el => { el.dataset.tip = el.dataset.tipEn; });
+}
+// URL con cuenta e idioma (para selectores y enlaces)
+const lbl = c => L(c.label, c.label_en || c.label);
+const urlFor = (path, cuenta, en) => `${path}?cuenta=${encodeURIComponent(cuenta)}${en ? "&lang=en" : ""}`;
 
 const hexRgb = h => { const n = parseInt(h.replace("#", ""), 16); return [n >> 16, (n >> 8) & 255, n & 255]; };
 const rgba = (h, a) => `rgba(${hexRgb(h).join(",")},${a})`;
@@ -547,26 +571,44 @@ const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt
 const fmt = n => {
   if (n === null || n === undefined || n === "") return "—";
   const num = Number(n);
-  return isNaN(num) ? n : new Intl.NumberFormat("es-CO").format(num);
+  return isNaN(num) ? n : new Intl.NumberFormat(LOC).format(num);
 };
 const pctFmt = (x, d = 2) => (x === null || x === undefined || isNaN(x)) ? "—"
-  : x.toLocaleString("es-CO", { minimumFractionDigits: d, maximumFractionDigits: d }) + " %";
-const dec1 = x => x.toLocaleString("es-CO", { maximumFractionDigits: 1 });
-const CAT_LABEL = { promocion: "Promoción", producto: "Producto", tutorial: "Tutorial", educacion: "Educación financiera",
-  testimonio: "Testimonio", comunidad: "Comunidad", estacional: "Estacional", tendencia: "Tendencia",
-  concurso: "Concurso", interaccion: "Interacción", marca: "Marca", alianza: "Alianza" };
+  : x.toLocaleString(LOC, { minimumFractionDigits: d, maximumFractionDigits: d }) + (EN ? "%" : " %");
+const dec1 = x => x.toLocaleString(LOC, { maximumFractionDigits: 1 });
+const dec = (x, d) => x.toLocaleString(LOC, { minimumFractionDigits: d, maximumFractionDigits: d });
+
+const CAT_LABEL = EN
+  ? { promocion: "Promotion", producto: "Product", tutorial: "Tutorial", educacion: "Financial education",
+      testimonio: "Testimonial", comunidad: "Community", estacional: "Seasonal", tendencia: "Trend",
+      concurso: "Giveaway", interaccion: "Audience prompt", marca: "Brand", alianza: "Creator collab" }
+  : { promocion: "Promoción", producto: "Producto", tutorial: "Tutorial", educacion: "Educación financiera",
+      testimonio: "Testimonio", comunidad: "Comunidad", estacional: "Estacional", tendencia: "Tendencia",
+      concurso: "Concurso", interaccion: "Interacción", marca: "Marca", alianza: "Alianza" };
 const catLabel = c => CAT_LABEL[c] || ((c || "").charAt(0).toUpperCase() + (c || "").slice(1));
-const DIA = { Lun: "lunes", Mar: "martes", Mié: "miércoles", Jue: "jueves", Vie: "viernes", Sáb: "sábados", Dom: "domingos" };
+const DOW_EN = { Lun: "Mon", Mar: "Tue", Mié: "Wed", Jue: "Thu", Vie: "Fri", Sáb: "Sat", Dom: "Sun" };
+const dowLabel = d => EN ? (DOW_EN[d] || d) : d;
+const DIA = EN
+  ? { Lun: "Mondays", Mar: "Tuesdays", Mié: "Wednesdays", Jue: "Thursdays", Vie: "Fridays", Sáb: "Saturdays", Dom: "Sundays" }
+  : { Lun: "lunes", Mar: "martes", Mié: "miércoles", Jue: "jueves", Vie: "viernes", Sáb: "sábados", Dom: "domingos" };
 const dia = d => DIA[d] || d;
-const pub = n => `${fmt(n)} ${Number(n) === 1 ? "publicación" : "publicaciones"}`;
-const TYPE_LABEL = { Image: "Foto", Sidecar: "Carrusel", Video: "Reel", Photo: "Foto", Album: "Carrusel", Text: "Solo texto", post: "Publicación" };
+const pub = n => `${fmt(n)} ${Number(n) === 1 ? L("publicación", "post") : L("publicaciones", "posts")}`;
+const TYPE_LABEL = EN
+  ? { Image: "Photo", Sidecar: "Carousel", Video: "Reel", Photo: "Photo", Album: "Carousel", Text: "Text only", post: "Post" }
+  : { Image: "Foto", Sidecar: "Carrusel", Video: "Reel", Photo: "Foto", Album: "Carrusel", Text: "Solo texto", post: "Publicación" };
 const prettyType = t => TYPE_LABEL[t] || t;
+// Meses abreviados que llegan en los datos ("Jun", "Ago S2"…) → inglés
+const MES_EN = { Ene: "Jan", Feb: "Feb", Mar: "Mar", Abr: "Apr", May: "May", Jun: "Jun", Jul: "Jul",
+                 Ago: "Aug", Sep: "Sep", Oct: "Oct", Nov: "Nov", Dic: "Dec" };
+const monthLabel = s => EN ? s.replace(/^(\w{3})/, m => MES_EN[m] || m).replace(/ S(\d)/, " W$1") : s;
 const maxIdx = arr => arr.indexOf(Math.max(...arr));
 const minIdx = arr => { const pos = arr.filter(x => x > 0); return pos.length ? arr.indexOf(Math.min(...pos)) : 0; };
 const learn = (id, html) => { const el = document.getElementById(id); if (el && html) el.innerHTML = `<p>${html}</p>`; };
 const followers = (() => { const v = (B.account || {}).seguidores; return (v === null || v === undefined) ? null : Number(v); })();
 const er = followers ? B.engagement_promedio / followers * 100 : null;
 const DL = B.deltas || {};
+const PERIODO = L(DATA.periodo_short, DATA.periodo_short_en || DATA.periodo_short);
+const PREV = L(DATA.prev_label || "mes anterior", DATA.prev_label_en || "previous month");
 
 function deltaBadge(pct) {
   if (pct === null || pct === undefined || isNaN(parseFloat(pct))) return "";
@@ -574,12 +616,12 @@ function deltaBadge(pct) {
   const arrow = p > .5 ? "▲" : (p < -.5 ? "▼" : "▬");
   const color = p > .5 ? "#2f7d32" : (p < -.5 ? "#c33" : "#8a8a8a");
   const bg = p > .5 ? "#e8f2e2" : (p < -.5 ? "#fbe6e6" : "#f0f0f0");
-  return `<span class="delta" style="background:${bg};color:${color}" title="vs ${esc(DATA.prev_label || "mes anterior")}">${arrow} ${p > 0 ? "+" : ""}${p.toFixed(1).replace(".", ",")}%</span>`;
+  return `<span class="delta" style="background:${bg};color:${color}" title="vs ${esc(PREV)}">${arrow} ${p > 0 ? "+" : ""}${dec(p, 1)}%</span>`;
 }
 function deltaAbs(v) {
   if (v === null || v === undefined || isNaN(parseFloat(v)) || parseFloat(v) === 0) return "";
   const p = parseFloat(v);
-  return `<span class="delta-abs" style="color:${p > 0 ? "#2f7d32" : "#c33"}">${p > 0 ? "+" : "−"}${fmt(Math.abs(p))} vs ${esc(DATA.prev_label || "mes anterior")}</span>`;
+  return `<span class="delta-abs" style="color:${p > 0 ? "#2f7d32" : "#c33"}">${p > 0 ? "+" : "−"}${fmt(Math.abs(p))} vs ${esc(PREV)}</span>`;
 }
 const kpi = (label, value, sub, accent, tip, deltaPct) => {
   const tipHtml = tip ? `<i class="info-icon" data-tip="${esc(tip)}">i</i>` : "";
@@ -588,42 +630,50 @@ const kpi = (label, value, sub, accent, tip, deltaPct) => {
 };
 
 // ════════════════════════════════════════════════════════════
-// Encabezado, selector de cuenta y de período, pestañas
+// Encabezado, selectores de cuenta, período e idioma, pestañas
 // ════════════════════════════════════════════════════════════
-document.title = `${ACC.label} · ${CLIENT.name} · Dashboard de Redes Sociales`;
+document.title = `${lbl(ACC)} · ${CLIENT.name} · ${L("Dashboard de Redes Sociales", "Social Media Dashboard")}`;
 document.getElementById("wordmark").textContent = CLIENT.name;
-document.getElementById("title-account").textContent = ACC.label;
-document.getElementById("hero-handle").textContent = "@" + ACC.handle;
+document.getElementById("title-account").textContent = lbl(ACC);
 document.getElementById("foot-client").textContent = CLIENT.name;
 document.getElementById("foot-year").textContent = (DATA.ventana.hasta || "").slice(0, 4);
-document.getElementById("meta-period").textContent = DATA.periodo_label;
-const MES = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-const isoDay = iso => { const [y, m, d] = iso.split("-"); return `${parseInt(d, 10)} ${MES[parseInt(m, 10)]} ${y}`; };
+document.getElementById("meta-period").textContent = L(DATA.periodo_label, DATA.periodo_label_en || DATA.periodo_label);
+const MES = EN ? ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+               : ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
+const isoDay = iso => { const [y, m, d] = iso.split("-"); return EN ? `${MES[parseInt(m, 10)]} ${parseInt(d, 10)}, ${y}` : `${parseInt(d, 10)} ${MES[parseInt(m, 10)]} ${y}`; };
 document.getElementById("meta-window").textContent = `${isoDay(DATA.ventana.desde)} → ${isoDay(DATA.ventana.hasta)}`;
-document.getElementById("pdf-btn").addEventListener("click", () => window.open(`reporte-${ACC.key}.pdf`, "_blank", "noopener"));
+document.getElementById("pdf-btn").addEventListener("click", () =>
+  window.open(`reporte-${ACC.key}${EN ? "-en" : ""}.pdf`, "_blank", "noopener"));
 
+(function langSwitch() {
+  const es = document.getElementById("lang-es"), en = document.getElementById("lang-en");
+  es.href = urlFor(location.pathname, ACC.key, false);
+  en.href = urlFor(location.pathname, ACC.key, true);
+  (EN ? en : es).classList.add("active");
+  (EN ? en : es).setAttribute("aria-current", "true");
+})();
 (function accountSelector() {
   const host = document.getElementById("account-buttons");
   CH.forEach(c => {
     const on = c.key === ACC.key;
     host.insertAdjacentHTML("beforeend",
-      `<a class="acc-btn ${on ? "active" : ""}" role="tab" aria-selected="${on}" style="--c:${c.color}" href="?cuenta=${encodeURIComponent(c.key)}">
-        <span class="dot" style="background:${on ? "#fff" : c.color}"></span>${esc(c.label)} <span class="h">@${esc(c.handle)}</span></a>`);
+      `<a class="acc-btn ${on ? "active" : ""}" role="tab" aria-selected="${on}" style="--c:${c.color}" href="${urlFor("", c.key, EN)}">
+        <span class="dot" style="background:${on ? "#fff" : c.color}"></span>${esc(lbl(c))} <span class="h">@${esc(c.handle)}</span></a>`);
   });
 })();
 (function periodSelector() {
   const sel = document.getElementById("period-selector");
   (REPORT_META.available || []).forEach(p => {
     const o = document.createElement("option");
-    o.value = `${p.url}?cuenta=${encodeURIComponent(ACC.key)}`; o.textContent = p.label; o.selected = p.id === REPORT_META.current;
+    o.value = urlFor(p.url, ACC.key, EN); o.textContent = L(p.label, p.label_en || p.label); o.selected = p.id === REPORT_META.current;
     sel.appendChild(o);
   });
 })();
 
 const TABS = [
-  { id: "resumen", label: "Resumen" }, { id: "desempeno", label: "Desempeño" },
-  { id: "publicaciones", label: "Publicaciones" }, { id: "categorias", label: "Categorías" },
-  { id: "hallazgos", label: "Hallazgos" },
+  { id: "resumen", label: L("Resumen", "Summary") }, { id: "desempeno", label: L("Desempeño", "Performance") },
+  { id: "publicaciones", label: L("Publicaciones", "Posts") }, { id: "categorias", label: L("Categorías", "Categories") },
+  { id: "hallazgos", label: L("Hallazgos", "Findings") },
 ];
 (function mountTabs() {
   const nav = document.getElementById("tabs"), drawer = document.getElementById("menu-drawer");
@@ -632,7 +682,9 @@ const TABS = [
     drawer.insertAdjacentHTML("beforeend", `<button data-tab="${t.id}" class="${i === 0 ? "active" : ""}">${t.label}</button>`);
   });
   CH.forEach(c => drawer.insertAdjacentHTML("beforeend",
-    `<a class="drawer-acc ${c.key === ACC.key ? "active" : ""}" href="?cuenta=${encodeURIComponent(c.key)}"><span class="dot" style="background:${c.color}"></span>${esc(c.label)}</a>`));
+    `<a class="drawer-acc ${c.key === ACC.key ? "active" : ""}" href="${urlFor("", c.key, EN)}"><span class="dot" style="background:${c.color}"></span>${esc(lbl(c))}</a>`));
+  drawer.insertAdjacentHTML("beforeend",
+    `<a class="drawer-acc" href="${urlFor(location.pathname, ACC.key, !EN)}">${EN ? "Ver en español" : "View in English"}</a>`);
 })();
 function activateTab(id) {
   document.querySelectorAll("[data-tab]").forEach(x => x.classList.toggle("active", x.dataset.tab === id));
@@ -693,7 +745,7 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
     html += `<div class="hm-cell hm-d">${esc(r)}</div>`;
     colLabels.forEach((c, j) => {
       const v = m[i][j], a = v > 0 ? .15 + Math.min(1, v / maxV) * .85 : 0;
-      html += `<div class="hm-cell hm-v" style="background:${rgba(color, a)};color:${a > .6 ? "#fff" : "inherit"}" title="${esc(r)} · ${esc(c)} → ${v > 0 ? fmt(v) + " eng. prom." : "sin publicaciones"}">${v > 0 ? Math.round(v) : ""}</div>`;
+      html += `<div class="hm-cell hm-v" style="background:${rgba(color, a)};color:${a > .6 ? "#fff" : "inherit"}" title="${esc(r)} · ${esc(c)} → ${v > 0 ? fmt(v) + L(" eng. prom.", " avg. eng.") : L("sin publicaciones", "no posts")}">${v > 0 ? Math.round(v) : ""}</div>`;
     });
   });
   return html + "</div>";
@@ -703,24 +755,31 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
 // Resumen
 // ════════════════════════════════════════════════════════════
 (function resumen() {
-  document.getElementById("resumen-text").innerHTML = B.resumen_html || "";
-  document.getElementById("hero-eyebrow").textContent = `${ACC.label} · ${DATA.periodo_short}`;
-  document.getElementById("hero-lead").textContent =
+  document.getElementById("resumen-text").innerHTML = L(B.resumen_html, B.resumen_html_en || B.resumen_html) || "";
+  document.getElementById("hero-eyebrow").textContent = `${lbl(ACC)} · ${PERIODO}`;
+  document.getElementById("hero-h1").innerHTML = L(`Cómo se comporta <em>@${esc(ACC.handle)}</em> en Instagram.`,
+                                                   `How <em>@${esc(ACC.handle)}</em> performs on Instagram.`);
+  document.getElementById("hero-lead").textContent = L(
     `Actividad y desempeño orgánico de la cuenta, a partir de sus datos públicos` +
-    (DATA.is_baseline ? ". Este diagnóstico es la línea base para los reportes mensuales." : ".");
+      (DATA.is_baseline ? ". Este diagnóstico es la línea base para los reportes mensuales." : "."),
+    `Organic activity and performance of the account, based on its public data` +
+      (DATA.is_baseline ? ". This baseline audit is the reference point for the monthly reports." : "."));
   const acc = B.account || {};
   const cadencia = B.n_posts ? dec1(B.n_posts / DATA.semanas) : "—";
+  const nA = B.n_atipicos;
   document.getElementById("kpi-main").innerHTML =
-    kpi("Seguidores", fmt(followers), acc.snapshot_fecha ? `al ${isoDay(acc.snapshot_fecha)} ${deltaAbs(DL.audience_abs)}` : "", false,
-        "Personas que siguen la cuenta, según la última captura del período.", DL.audience_pct) +
-    kpi("Publicaciones", fmt(B.n_posts), `${cadencia} por semana` + (B.n_atipicos ? ` · + ${B.n_atipicos} atípica${B.n_atipicos !== 1 ? "s" : ""}` : ""), true,
-        "Publicaciones típicas del período (sin atípicas) y su promedio semanal.", DL.n_posts_pct) +
-    kpi("Engagement total", fmt(B.engagement_total), "likes + comentarios", false,
-        "Suma de likes + comentarios de las publicaciones típicas.", DL.engagement_total_pct) +
-    kpi("Eng. por publicación", fmt(B.engagement_promedio), `mediana: ${fmt(B.engagement_mediana)}`, false,
-        "Engagement total dividido entre el número de publicaciones.", DL.engagement_promedio_pct) +
-    kpi("Tasa de engagement", pctFmt(er), "eng. por publicación ÷ seguidores", false,
-        "Engagement promedio por publicación dividido entre los seguidores de la cuenta.");
+    kpi(L("Seguidores", "Followers"), fmt(followers),
+        acc.snapshot_fecha ? `${L("al", "as of")} ${isoDay(acc.snapshot_fecha)} ${deltaAbs(DL.audience_abs)}` : "", false,
+        L("Personas que siguen la cuenta, según la última captura del período.", "People following the account, as of the latest capture in the period."), DL.audience_pct) +
+    kpi(L("Publicaciones", "Posts"), fmt(B.n_posts),
+        `${cadencia} ${L("por semana", "per week")}` + (nA ? ` · + ${nA} ${L(nA !== 1 ? "atípicas" : "atípica", nA !== 1 ? "outliers" : "outlier")}` : ""), true,
+        L("Publicaciones típicas del período (sin atípicas) y su promedio semanal.", "Regular posts in the period (excluding outliers) and their weekly average."), DL.n_posts_pct) +
+    kpi(L("Engagement total", "Total engagement"), fmt(B.engagement_total), L("likes + comentarios", "likes + comments"), false,
+        L("Suma de likes + comentarios de las publicaciones típicas.", "Sum of likes + comments on regular posts."), DL.engagement_total_pct) +
+    kpi(L("Eng. por publicación", "Eng. per post"), fmt(B.engagement_promedio), `${L("mediana", "median")}: ${fmt(B.engagement_mediana)}`, false,
+        L("Engagement total dividido entre el número de publicaciones.", "Total engagement divided by the number of posts."), DL.engagement_promedio_pct) +
+    kpi(L("Tasa de engagement", "Engagement rate"), pctFmt(er), L("eng. por publicación ÷ seguidores", "eng. per post ÷ followers"), false,
+        L("Engagement promedio por publicación dividido entre los seguidores de la cuenta.", "Average engagement per post divided by the account's followers."));
 })();
 
 // ════════════════════════════════════════════════════════════
@@ -729,17 +788,20 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
 (function tendencia() {
   const T = B.tendencia;
   if (!T || !T.labels.length) return;
-  const labels = T.labels.map((l, i) => T.parcial[i] ? l + "*" : l);
-  const nMeses = T.labels.length;
-  document.getElementById("trend-desc").textContent =
-    `${nMeses} ${nMeses === 1 ? "mes" : "meses"} de ${ACC.label}, de ${T.labels[0]} a ${T.labels[nMeses - 1]}. Publicaciones y engagement se calculan sin atípicas.` +
-    (T.parcial.includes(true) ? " * Mes en curso." : "");
+  const ML = T.labels.map(monthLabel);
+  const labels = ML.map((l, i) => T.parcial[i] ? l + "*" : l);
+  const nMeses = ML.length;
+  document.getElementById("trend-desc").textContent = L(
+    `${nMeses} ${nMeses === 1 ? "mes" : "meses"} de ${lbl(ACC)}, de ${ML[0]} a ${ML[nMeses - 1]}. Publicaciones y engagement se calculan sin atípicas.` +
+      (T.parcial.includes(true) ? " * Mes en curso." : ""),
+    `${nMeses} ${nMeses === 1 ? "month" : "months"} of ${lbl(ACC)}, from ${ML[0]} to ${ML[nMeses - 1]}. Posts and engagement exclude outliers.` +
+      (T.parcial.includes(true) ? " * Month in progress." : ""));
   const M = [
-    { k: "seguidores", label: "Seguidores", f: v => fmt(v) },
-    { k: "n_posts", label: "Publicaciones", f: v => fmt(v) },
-    { k: "engagement_total", label: "Engagement total", f: v => fmt(v) },
-    { k: "engagement_promedio", label: "Eng. por publicación", f: v => fmt(v) },
-    { k: "tasa", label: "Tasa de engagement", f: v => pctFmt(v) },
+    { k: "seguidores", label: L("Seguidores", "Followers"), f: v => fmt(v) },
+    { k: "n_posts", label: L("Publicaciones", "Posts"), f: v => fmt(v) },
+    { k: "engagement_total", label: L("Engagement total", "Total engagement"), f: v => fmt(v) },
+    { k: "engagement_promedio", label: L("Eng. por publicación", "Eng. per post"), f: v => fmt(v) },
+    { k: "tasa", label: L("Tasa de engagement", "Engagement rate"), f: v => pctFmt(v) },
   ];
   const grid = document.getElementById("trend-grid");
   const frases = [];
@@ -755,18 +817,21 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
     if (cmp.length >= 2 && s[i0]) {
       const d = s[i1] - s[i0], p = d / s[i0] * 100;
       const dTxt = m.k === "tasa"
-        ? `${d >= 0 ? "+" : "−"}${Math.abs(d).toFixed(2).replace(".", ",")} pp`
+        ? `${d >= 0 ? "+" : "−"}${dec(Math.abs(d), 2)} pp`
         : `${d >= 0 ? "+" : "−"}${fmt(Math.abs(Math.round(d * 10) / 10))}`;
-      delta = `<div class="t-delta ${d >= 0 ? "up" : "down"}">${d >= 0 ? "▲" : "▼"} ${dTxt} (${p > 0 ? "+" : ""}${p.toFixed(0)}%) <span>${T.labels[i0]} → ${T.labels[i1]}</span></div>`;
-      if (m.k !== "seguidores") { frases.push(`<strong>${m.label.toLowerCase()}</strong> de ${m.f(s[i0])} a ${m.f(s[i1])} ${d >= 0 ? "▲" : "▼"}`); rango = `${T.labels[i0]} y ${T.labels[i1]}`; }
+      delta = `<div class="t-delta ${d >= 0 ? "up" : "down"}">${d >= 0 ? "▲" : "▼"} ${dTxt} (${p > 0 ? "+" : ""}${p.toFixed(0)}%) <span>${ML[i0]} → ${ML[i1]}</span></div>`;
+      if (m.k !== "seguidores") {
+        frases.push(`<strong>${m.label.toLowerCase()}</strong> ${L("de", "from")} ${m.f(s[i0])} ${L("a", "to")} ${m.f(s[i1])} ${d >= 0 ? "▲" : "▼"}`);
+        rango = `${ML[i0]} ${L("y", "and")} ${ML[i1]}`;
+      }
     }
     let note = "";
     if (m.k === "seguidores" && idx.length < 2 && (B.account || {}).snapshot_fecha)
-      note = `<div class="t-note">Medición al ${isoDay(B.account.snapshot_fecha)}.</div>`;
+      note = `<div class="t-note">${L("Medición al", "Measured on")} ${isoDay(B.account.snapshot_fecha)}.</div>`;
     const card = document.createElement("div");
     card.className = "trend-card";
     card.innerHTML = `<div class="t-label">${m.label}</div><div class="t-val">${last === null ? "—" : m.f(last)}</div>${delta}` +
-      (idx.length >= 2 ? `<div class="t-chart"><canvas aria-label="${m.label} por mes"></canvas></div>` : "") + note;
+      (idx.length >= 2 ? `<div class="t-chart"><canvas aria-label="${m.label}"></canvas></div>` : "") + note;
     grid.appendChild(card);
     if (idx.length >= 2) {
       new Chart(card.querySelector("canvas"), {
@@ -781,7 +846,8 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
       });
     }
   });
-  if (frases.length) learn("l-trend", `Entre ${rango} (meses completos): ${frases.join(", ")}.`);
+  if (frases.length) learn("l-trend", L(`Entre ${rango} (meses completos): ${frases.join(", ")}.`,
+                                        `Between ${rango} (full months): ${frases.join(", ")}.`));
 })();
 
 // ════════════════════════════════════════════════════════════
@@ -792,24 +858,32 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
   const pts = [];
   const wk = B.by_week, wkAvg = wk.counts.reduce((a, b) => a + b, 0) / wk.counts.length;
   const wkZero = wk.counts.filter(x => x === 0).length;
-  pts.push(`<strong>Ritmo:</strong> ${dec1(wkAvg)} publicaciones por semana en promedio${wkZero ? `, con ${wkZero} semana${wkZero !== 1 ? "s" : ""} sin publicar` : ""}.`);
+  pts.push(L(`<strong>Ritmo:</strong> ${dec1(wkAvg)} publicaciones por semana en promedio${wkZero ? `, con ${wkZero} semana${wkZero !== 1 ? "s" : ""} sin publicar` : ""}.`,
+             `<strong>Cadence:</strong> ${dec1(wkAvg)} posts per week on average${wkZero ? `, with ${wkZero} week${wkZero !== 1 ? "s" : ""} without posts` : ""}.`));
   const tp = B.by_type;
   if (tp.labels.length) {
     const hi = maxIdx(tp.engagement_promedio), mas = maxIdx(tp.counts);
-    pts.push(`<strong>Formato:</strong> el que más conecta es el <strong>${prettyType(tp.labels[hi]).toLowerCase()}</strong> (${fmt(tp.engagement_promedio[hi])} de engagement promedio)` +
-      (mas !== hi ? `, pero el más publicado es el ${prettyType(tp.labels[mas]).toLowerCase()} (${pub(tp.counts[mas])}).` : `, y también es el más publicado.`));
+    const best = prettyType(tp.labels[hi]).toLowerCase(), most = prettyType(tp.labels[mas]).toLowerCase();
+    pts.push(L(`<strong>Formato:</strong> el que más conecta es el <strong>${best}</strong> (${fmt(tp.engagement_promedio[hi])} de engagement promedio)` +
+                 (mas !== hi ? `, pero el más publicado es el ${most} (${pub(tp.counts[mas])}).` : `, y también es el más publicado.`),
+               `<strong>Format:</strong> the best-performing format is the <strong>${best}</strong> (${fmt(tp.engagement_promedio[hi])} average engagement)` +
+                 (mas !== hi ? `, but the most published is the ${most} (${pub(tp.counts[mas])}).` : `, and it is also the most published.`)));
   }
   const dw = B.by_day, dMax = maxIdx(dw.engagement_promedio);
-  pts.push(`<strong>Día:</strong> los ${dia(dw.labels[dMax])} rinden más (${fmt(dw.engagement_promedio[dMax])} de engagement promedio).`);
+  pts.push(L(`<strong>Día:</strong> los ${dia(dw.labels[dMax])} rinden más (${fmt(dw.engagement_promedio[dMax])} de engagement promedio).`,
+             `<strong>Day:</strong> ${dia(dw.labels[dMax])} perform best (${fmt(dw.engagement_promedio[dMax])} average engagement).`));
   const hr = B.by_hour;
   if (hr.labels.length) {
     const hBest = maxIdx(hr.engagement_promedio), hPeak = maxIdx(hr.counts);
-    pts.push(`<strong>Hora:</strong> la mejor respuesta llega a las ${hr.labels[hBest]}:00` +
-      (hBest !== hPeak ? `, aunque la mayoría se publica a las ${hr.labels[hPeak]}:00.` : `, que también es la hora más usada.`));
+    pts.push(L(`<strong>Hora:</strong> la mejor respuesta llega a las ${hr.labels[hBest]}:00` +
+                 (hBest !== hPeak ? `, aunque la mayoría se publica a las ${hr.labels[hPeak]}:00.` : `, que también es la hora más usada.`),
+               `<strong>Time:</strong> the best response comes at ${hr.labels[hBest]}:00` +
+                 (hBest !== hPeak ? `, although most posts go out at ${hr.labels[hPeak]}:00.` : `, which is also the most used time.`)));
   }
   let bd = 0, bh = 0, bv = 0;
   B.by_day_hour.matrix.forEach((r, i) => r.forEach((v, j) => { if (v > bv) { bv = v; bd = i; bh = j; } }));
-  if (bv > 0) pts.push(`<strong>Mejor ventana:</strong> ${B.by_day_hour.labels_dow[bd]} a las ${bh}:00 (${fmt(Math.round(bv))} interacciones promedio, ${pub(B.by_day_hour.counts[bd][bh])}).`);
+  if (bv > 0) pts.push(L(`<strong>Mejor ventana:</strong> ${B.by_day_hour.labels_dow[bd]} a las ${bh}:00 (${fmt(Math.round(bv))} interacciones promedio, ${pub(B.by_day_hour.counts[bd][bh])}).`,
+                         `<strong>Best window:</strong> ${dowLabel(B.by_day_hour.labels_dow[bd])} at ${bh}:00 (${fmt(Math.round(bv))} average interactions, ${pub(B.by_day_hour.counts[bd][bh])}).`));
   document.getElementById("perf-resumen").innerHTML = pts.map(p => `<li>${p}</li>`).join("");
   document.getElementById("perf-resumen-box").hidden = false;
 })();
@@ -819,22 +893,26 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
 // ════════════════════════════════════════════════════════════
 (function desempeno() {
   if (!B.n_posts) {
-    document.getElementById("perf-grid").innerHTML = `<p style="color:var(--muted)">Sin publicaciones típicas en ${esc(DATA.periodo_short)}.</p>`;
+    document.getElementById("perf-grid").innerHTML = `<p style="color:var(--muted)">${L("Sin publicaciones típicas en", "No regular posts in")} ${esc(PERIODO)}.</p>`;
     return;
   }
   const wk = B.by_week;
+  const WL = wk.labels.map(monthLabel);
   const wkOpts = barOpts(false);
   wkOpts.scales.y.ticks = { precision: 0 };
-  wkOpts.plugins.tooltip = { callbacks: { title: it => `${it[0].label} · semana del ${wk.desde[it[0].dataIndex]}` } };
+  wkOpts.plugins.tooltip = { callbacks: { title: it => `${it[0].label} · ${L("semana del", "week of")} ${wk.desde[it[0].dataIndex]}` } };
   wkOpts.scales.x.ticks = { autoSkip: true, maxRotation: 0, font: { size: 10 } };
   new Chart(document.getElementById("c-week"), {
-    type: "bar", data: { labels: wk.labels, datasets: [{ label: "Publicaciones", data: wk.counts, backgroundColor: COLOR, borderRadius: 3 }] },
+    type: "bar", data: { labels: WL, datasets: [{ label: L("Publicaciones", "Posts"), data: wk.counts, backgroundColor: COLOR, borderRadius: 3 }] },
     options: wkOpts,
   });
   const wkAvg = wk.counts.reduce((a, b) => a + b, 0) / wk.counts.length;
-  const wkMax = Math.max(...wk.counts), wkZero = wk.counts.filter(x => x === 0).length;
-  learn("l-week", `Cadencia promedio de <strong>${dec1(wkAvg)} ${wkAvg === 1 ? "publicación" : "publicaciones"} por semana</strong>, con un pico de ${wkMax} en ${wk.labels[wk.counts.indexOf(wkMax)]} (semana del ${wk.desde[wk.counts.indexOf(wkMax)]})` +
-    (wkZero ? `. ${wkZero} semana${wkZero !== 1 ? "s" : ""} sin publicaciones.` : "."));
+  const wkMax = Math.max(...wk.counts), wkZero = wk.counts.filter(x => x === 0).length, iMax = wk.counts.indexOf(wkMax);
+  learn("l-week", L(
+    `Cadencia promedio de <strong>${dec1(wkAvg)} ${wkAvg === 1 ? "publicación" : "publicaciones"} por semana</strong>, con un pico de ${wkMax} en ${WL[iMax]} (semana del ${wk.desde[iMax]})` +
+      (wkZero ? `. ${wkZero} semana${wkZero !== 1 ? "s" : ""} sin publicaciones.` : "."),
+    `Average cadence of <strong>${dec1(wkAvg)} ${wkAvg === 1 ? "post" : "posts"} per week</strong>, peaking at ${wkMax} in ${WL[iMax]} (week of ${wk.desde[iMax]})` +
+      (wkZero ? `. ${wkZero} week${wkZero !== 1 ? "s" : ""} without posts.` : ".")));
 
   const tp = B.by_type;
   new Chart(document.getElementById("c-type"), {
@@ -844,45 +922,55 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
   if (tp.labels.length > 1) {
     const hi = maxIdx(tp.engagement_promedio), lo = minIdx(tp.engagement_promedio);
     const ratio = tp.engagement_promedio[lo] > 0 ? tp.engagement_promedio[hi] / tp.engagement_promedio[lo] : null;
-    learn("l-type", `Cada <strong>${prettyType(tp.labels[hi]).toLowerCase()}</strong> consigue en promedio <strong>${fmt(tp.engagement_promedio[hi])} interacciones</strong>` +
-      (ratio && ratio >= 1.3 ? `, ${dec1(ratio)} veces más que un ${prettyType(tp.labels[lo]).toLowerCase()} (${pub(tp.counts[hi])} frente a ${pub(tp.counts[lo])}).` : ". Los formatos rinden parecido: el tema y el copy pesan más que el formato."));
+    const hiT = prettyType(tp.labels[hi]).toLowerCase(), loT = prettyType(tp.labels[lo]).toLowerCase();
+    learn("l-type", L(
+      `Cada <strong>${hiT}</strong> consigue en promedio <strong>${fmt(tp.engagement_promedio[hi])} interacciones</strong>` +
+        (ratio && ratio >= 1.3 ? `, ${dec1(ratio)} veces más que un ${loT} (${pub(tp.counts[hi])} frente a ${pub(tp.counts[lo])}).` : ". Los formatos rinden parecido: el tema y el copy pesan más que el formato."),
+      `Each <strong>${hiT}</strong> gets <strong>${fmt(tp.engagement_promedio[hi])} interactions</strong> on average` +
+        (ratio && ratio >= 1.3 ? `, ${dec1(ratio)} times more than a ${loT} (${pub(tp.counts[hi])} vs ${pub(tp.counts[lo])}).` : ". Formats perform similarly: topic and copy matter more than format.")));
   }
 
   const dw = B.by_day;
   new Chart(document.getElementById("c-dow"), {
-    type: "bar", data: { labels: dw.labels, datasets: [{ data: dw.engagement_promedio, backgroundColor: COLOR, borderRadius: 4 }] },
+    type: "bar", data: { labels: dw.labels.map(dowLabel), datasets: [{ data: dw.engagement_promedio, backgroundColor: COLOR, borderRadius: 4 }] },
     options: barOpts(false),
   });
   const dMax = maxIdx(dw.engagement_promedio), dMin = minIdx(dw.engagement_promedio);
-  learn("l-dow", `Los <strong>${dia(dw.labels[dMax])}</strong> son el mejor día (${fmt(dw.engagement_promedio[dMax])} de engagement promedio, ${pub(dw.counts[dMax])}); los ${dia(dw.labels[dMin])} caen a ${fmt(dw.engagement_promedio[dMin])}.`);
+  learn("l-dow", L(
+    `Los <strong>${dia(dw.labels[dMax])}</strong> son el mejor día (${fmt(dw.engagement_promedio[dMax])} de engagement promedio, ${pub(dw.counts[dMax])}); los ${dia(dw.labels[dMin])} caen a ${fmt(dw.engagement_promedio[dMin])}.`,
+    `<strong>${dia(dw.labels[dMax])}</strong> are the best day (${fmt(dw.engagement_promedio[dMax])} average engagement, ${pub(dw.counts[dMax])}); ${dia(dw.labels[dMin])} drop to ${fmt(dw.engagement_promedio[dMin])}.`));
 
   const hr = B.by_hour;
   new Chart(document.getElementById("c-hour"), {
     type: "bar",
     data: { labels: hr.labels, datasets: [
-      { type: "bar", label: "Publicaciones", data: hr.counts, backgroundColor: rgba(COLOR, .35), borderRadius: 2, yAxisID: "y" },
-      { type: "line", label: "Engagement promedio", data: hr.engagement_promedio, borderColor: "#0D0B01", borderWidth: 2, tension: .3, pointRadius: 3, pointBackgroundColor: "#0D0B01", yAxisID: "y1" },
+      { type: "bar", label: L("Publicaciones", "Posts"), data: hr.counts, backgroundColor: rgba(COLOR, .35), borderRadius: 2, yAxisID: "y" },
+      { type: "line", label: L("Engagement promedio", "Average engagement"), data: hr.engagement_promedio, borderColor: "#0D0B01", borderWidth: 2, tension: .3, pointRadius: 3, pointBackgroundColor: "#0D0B01", yAxisID: "y1" },
     ] },
     options: { maintainAspectRatio: false, plugins: { legend: { display: true, position: "bottom", labels: { font: { size: 10 } } } },
       scales: { y: { beginAtZero: true, position: "left", ticks: { precision: 0 }, grid: { color: "#f0f2f5" } },
                 y1: { beginAtZero: true, position: "right", grid: { drawOnChartArea: false } }, x: { grid: { display: false } } } },
   });
   const hPeak = maxIdx(hr.counts), hBest = maxIdx(hr.engagement_promedio);
-  learn("l-hour", `La mayoría de publicaciones sale a las <strong>${hr.labels[hPeak]}:00</strong> (${hr.counts[hPeak]}), pero el mejor engagement promedio se da a las <strong>${hr.labels[hBest]}:00</strong> (${fmt(hr.engagement_promedio[hBest])} por publicación, ${pub(hr.counts[hBest])}).`);
+  learn("l-hour", L(
+    `La mayoría de publicaciones sale a las <strong>${hr.labels[hPeak]}:00</strong> (${hr.counts[hPeak]}), pero el mejor engagement promedio se da a las <strong>${hr.labels[hBest]}:00</strong> (${fmt(hr.engagement_promedio[hBest])} por publicación, ${pub(hr.counts[hBest])}).`,
+    `Most posts go out at <strong>${hr.labels[hPeak]}:00</strong> (${hr.counts[hPeak]}), but the best average engagement comes at <strong>${hr.labels[hBest]}:00</strong> (${fmt(hr.engagement_promedio[hBest])} per post, ${pub(hr.counts[hBest])}).`));
 
   const hm = B.by_day_hour;
   document.getElementById("h-heatmap").innerHTML =
-    heatmapHTML(hm.matrix, hm.labels_dow, [...Array(24).keys()].map(String), COLOR, "40px repeat(24, minmax(22px, 1fr))");
+    heatmapHTML(hm.matrix, hm.labels_dow.map(dowLabel), [...Array(24).keys()].map(String), COLOR, "40px repeat(24, minmax(22px, 1fr))");
   let bd = 0, bh = 0, bv = 0;
   hm.matrix.forEach((r, i) => r.forEach((v, j) => { if (v > bv) { bv = v; bd = i; bh = j; } }));
-  if (bv > 0) learn("l-heatmap", `Mejor ventana del período: <strong>${hm.labels_dow[bd]} ${bh}:00</strong>, con ${fmt(Math.round(bv))} interacciones promedio (${pub(hm.counts[bd][bh])}).`);
+  if (bv > 0) learn("l-heatmap", L(
+    `Mejor ventana del período: <strong>${hm.labels_dow[bd]} ${bh}:00</strong>, con ${fmt(Math.round(bv))} interacciones promedio (${pub(hm.counts[bd][bh])}).`,
+    `Best window in the period: <strong>${dowLabel(hm.labels_dow[bd])} ${bh}:00</strong>, with ${fmt(Math.round(bv))} average interactions (${pub(hm.counts[bd][bh])}).`));
 })();
 
 // ════════════════════════════════════════════════════════════
 // Publicaciones
 // ════════════════════════════════════════════════════════════
 (function publicaciones() {
-  const head = `<thead><tr><th></th><th>Fecha</th><th>Formato</th><th>Caption</th><th>Categoría</th><th class="num">Likes</th><th class="num">Coments</th><th class="num">Engagement</th><th></th></tr></thead>`;
+  const head = `<thead><tr><th></th><th>${L("Fecha", "Date")}</th><th>${L("Formato", "Format")}</th><th>Caption</th><th>${L("Categoría", "Category")}</th><th class="num">Likes</th><th class="num">${L("Coments", "Comments")}</th><th class="num">Engagement</th><th></th></tr></thead>`;
   const tagPills = tags => (tags && tags.length) ? tags.map((t, i) =>
       `<span class="tag-pill" style="background:${i === 0 ? rgba(COLOR, .15) : "#f0f2f5"};color:${i === 0 ? COLOR : "#6a6a6a"};border:1px solid ${i === 0 ? rgba(COLOR, .35) : "#e2e6eb"}">${esc(catLabel(t))}</span>`).join("")
     : '<span style="color:#bbb;font-size:11px">—</span>';
@@ -890,20 +978,22 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
     document.getElementById(id).innerHTML = head + "<tbody>" + posts.map(x => {
       const cap = x.caption.length > 220 ? x.caption.slice(0, 220) + "…" : x.caption;
       const thumb = x.media_url
-        ? `<img class="post-thumb" src="${esc(x.media_url)}" referrerpolicy="no-referrer" alt=""" onerror="this.outerHTML='<div class=&quot;post-thumb-placeholder&quot;>▣</div>'">`
+        ? `<img class="post-thumb" src="${esc(x.media_url)}" referrerpolicy="no-referrer" alt="" onerror="this.outerHTML='<div class=&quot;post-thumb-placeholder&quot;>▣</div>'">`
         : `<div class="post-thumb-placeholder">▣</div>`;
       return `<tr><td style="width:120px">${thumb}</td><td style="white-space:nowrap">${x.fecha}</td>
         <td><span class="pill">${esc(prettyType(x.tipo))}</span></td><td class="caption">${esc(cap)}</td><td>${tagPills(x.tags)}</td>
         <td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.comentarios)}</td><td class="num"><strong>${fmt(x.engagement)}</strong></td>
-        <td><a href="${esc(x.url)}" target="_blank" rel="noopener">ver →</a></td></tr>`;
+        <td><a href="${esc(x.url)}" target="_blank" rel="noopener">${L("ver", "view")} →</a></td></tr>`;
     }).join("") + "</tbody>";
   };
   if ((B.atipicos || []).length) {
     document.getElementById("h-atipicos").hidden = false;
     document.getElementById("card-atipicos").hidden = false;
-    const na = document.getElementById("atip-note");
+    const na = document.getElementById("atip-note"), n = B.n_atipicos, k = Math.min(5, n);
     na.hidden = false;
-    na.innerHTML = `La cuenta tuvo <strong>${pub(B.n_atipicos)} atípica${B.n_atipicos !== 1 ? "s" : ""}</strong> en el período (engagement mayor a ${fmt(B.outlier_threshold)} interacciones). Se muestran las ${Math.min(5, B.n_atipicos)} con más interacciones; no cuentan en los KPIs ni en las gráficas.`;
+    na.innerHTML = L(
+      `La cuenta tuvo <strong>${pub(n)} atípica${n !== 1 ? "s" : ""}</strong> en el período (engagement mayor a ${fmt(B.outlier_threshold)} interacciones). Se muestran las ${k} con más interacciones; no cuentan en los KPIs ni en las gráficas.`,
+      `The account had <strong>${n} outlier post${n !== 1 ? "s" : ""}</strong> in the period (engagement above ${fmt(B.outlier_threshold)} interactions). The ${k} with the most interactions are shown; they are not counted in KPIs or charts.`);
     fill("t-atipicos", B.atipicos);
   }
   fill("t-top", B.top5 || []);
@@ -911,11 +1001,13 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
   else { document.getElementById("h-worst").hidden = true; document.getElementById("card-worst").hidden = true; }
   if ((B.top5 || []).length && B.engagement_total) {
     const conc = Math.round(B.top5.reduce((s, x) => s + x.engagement, 0) / B.engagement_total * 100);
-    learn("l-top", `Estas ${B.top5.length} publicaciones concentran el <strong>${conc}%</strong> del engagement típico del período; las otras ${B.n_posts - B.top5.length} se reparten el ${100 - conc}% restante.`);
+    learn("l-top", L(
+      `Estas ${B.top5.length} publicaciones concentran el <strong>${conc}%</strong> del engagement típico del período; las otras ${B.n_posts - B.top5.length} se reparten el ${100 - conc}% restante.`,
+      `These ${B.top5.length} posts account for <strong>${conc}%</strong> of the period's regular engagement; the other ${B.n_posts - B.top5.length} share the remaining ${100 - conc}%.`));
   }
   document.getElementById("hashtags").innerHTML = (B.top_hashtags || []).length
     ? B.top_hashtags.map(([h, n]) => `<span class="ht">#${esc(h)}<strong>${n}</strong></span>`).join("")
-    : `<span style="color:var(--muted)">La cuenta no usa hashtags de forma sistemática en este período.</span>`;
+    : `<span style="color:var(--muted)">${L("La cuenta no usa hashtags de forma sistemática en este período.", "The account does not use hashtags consistently in this period.")}</span>`;
 })();
 
 // ════════════════════════════════════════════════════════════
@@ -934,18 +1026,23 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
     data: { labels: mix.map(m => catLabel(m.category)), datasets: [{ data: mix.map(m => m.pct), backgroundColor: rgba(COLOR, .8), borderRadius: 3 }] },
     options: { ...barOpts(true), plugins: { legend: { display: false }, tooltip: { callbacks: { label: x => `${pctFmt(x.parsed.x, 1)} (${pub(mix[x.dataIndex].count)})` } } } },
   });
-  learn("l-cat-mix", `<strong>${catLabel(mix[0].category)}</strong> domina con ${pctFmt(mix[0].pct, 1)} del contenido (${pub(mix[0].count)})` +
-    (mix[1] ? `, seguida de <strong>${catLabel(mix[1].category)}</strong> con ${pctFmt(mix[1].pct, 1)}` : "") + `. ${mix.length} de 12 categorías en uso.`);
+  learn("l-cat-mix", L(
+    `<strong>${catLabel(mix[0].category)}</strong> domina con ${pctFmt(mix[0].pct, 1)} del contenido (${pub(mix[0].count)})` +
+      (mix[1] ? `, seguida de <strong>${catLabel(mix[1].category)}</strong> con ${pctFmt(mix[1].pct, 1)}` : "") + `. ${mix.length} de 12 categorías en uso.`,
+    `<strong>${catLabel(mix[0].category)}</strong> leads with ${pctFmt(mix[0].pct, 1)} of content (${pub(mix[0].count)})` +
+      (mix[1] ? `, followed by <strong>${catLabel(mix[1].category)}</strong> at ${pctFmt(mix[1].pct, 1)}` : "") + `. ${mix.length} of 12 categories in use.`));
 
   const perf = ca.performance;
   new Chart(document.getElementById("c-cat-perf"), {
     type: "bar",
     data: { labels: perf.map(x => catLabel(x.category)), datasets: [
-      { label: "Promedio", data: perf.map(x => x.mean), backgroundColor: rgba(COLOR, .8), borderRadius: 3 },
-      { label: "Mediana", data: perf.map(x => x.median), backgroundColor: "#C9BFB8", borderRadius: 3 } ] },
+      { label: L("Promedio", "Average"), data: perf.map(x => x.mean), backgroundColor: rgba(COLOR, .8), borderRadius: 3 },
+      { label: L("Mediana", "Median"), data: perf.map(x => x.median), backgroundColor: "#C9BFB8", borderRadius: 3 } ] },
     options: { ...barOpts(true), plugins: { legend: { position: "bottom" }, tooltip: { callbacks: { afterBody: it => [pub(perf[it[0].dataIndex].n)] } } } },
   });
-  learn("l-cat-perf", `<strong>${catLabel(perf[0].category)}</strong> tiene el mejor engagement promedio (${fmt(perf[0].mean)}, ${pub(perf[0].n)}). Promedio de la cuenta: ${fmt(ca.global_mean)} por publicación.`);
+  learn("l-cat-perf", L(
+    `<strong>${catLabel(perf[0].category)}</strong> tiene el mejor engagement promedio (${fmt(perf[0].mean)}, ${pub(perf[0].n)}). Promedio de la cuenta: ${fmt(ca.global_mean)} por publicación.`,
+    `<strong>${catLabel(perf[0].category)}</strong> has the highest average engagement (${fmt(perf[0].mean)}, ${pub(perf[0].n)}). Account average: ${fmt(ca.global_mean)} per post.`));
 
   const mt = ca.by_type;
   const cols = mt.cols.map(prettyType);
@@ -953,26 +1050,31 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
     heatmapHTML(mt.matrix, mt.categories.map(catLabel), cols, COLOR, `150px repeat(${cols.length}, minmax(70px, 1fr))`);
   let bi = 0, bj = 0, bv = 0;
   mt.matrix.forEach((r, i) => r.forEach((v, j) => { if (v > bv) { bv = v; bi = i; bj = j; } }));
-  if (bv > 0) learn("l-cat-type", `Mejor combinación: <strong>${catLabel(mt.categories[bi])}</strong> en <strong>${esc(cols[bj].toLowerCase())}</strong>, con ${fmt(Math.round(bv))} interacciones promedio.`);
+  if (bv > 0) learn("l-cat-type", L(
+    `Mejor combinación: <strong>${catLabel(mt.categories[bi])}</strong> en <strong>${esc(cols[bj].toLowerCase())}</strong>, con ${fmt(Math.round(bv))} interacciones promedio.`,
+    `Best combination: <strong>${catLabel(mt.categories[bi])}</strong> as a <strong>${esc(cols[bj].toLowerCase())}</strong>, with ${fmt(Math.round(bv))} average interactions.`));
 
   const gaps = ca.gaps || [];
   document.getElementById("tbl-cat-gaps").innerHTML = gaps.length
-    ? `<table><thead><tr><th>Categoría</th><th class="num">% del mix</th><th class="num">Publicaciones</th><th class="num">Eng. prom.</th><th class="num">vs promedio</th></tr></thead><tbody>` +
-      gaps.map(g => `<tr><td><strong>${catLabel(g.category)}</strong></td><td class="num">${pctFmt(g.pct_of_mix, 1)}</td><td class="num">${g.count}</td><td class="num">${fmt(Math.round(g.avg_engagement))}</td><td class="num" style="color:#2f7d32;font-weight:700">${String(g.vs_global).replace(".", ",")}×</td></tr>`).join("") +
+    ? `<table><thead><tr><th>${L("Categoría", "Category")}</th><th class="num">${L("% del mix", "% of mix")}</th><th class="num">${L("Publicaciones", "Posts")}</th><th class="num">${L("Eng. prom.", "Avg. eng.")}</th><th class="num">${L("vs promedio", "vs average")}</th></tr></thead><tbody>` +
+      gaps.map(g => `<tr><td><strong>${catLabel(g.category)}</strong></td><td class="num">${pctFmt(g.pct_of_mix, 1)}</td><td class="num">${g.count}</td><td class="num">${fmt(Math.round(g.avg_engagement))}</td><td class="num" style="color:#2f7d32;font-weight:700">${dec(g.vs_global, 2)}×</td></tr>`).join("") +
       `</tbody></table>`
-    : `<p style="padding:8px 0;color:var(--muted)">Ninguna categoría poco usada supera el promedio de la cuenta en este período.</p>`;
+    : `<p style="padding:8px 0;color:var(--muted)">${L("Ninguna categoría poco usada supera el promedio de la cuenta en este período.", "No underused category outperforms the account average in this period.")}</p>`;
 })();
 
 // ════════════════════════════════════════════════════════════
-// Hallazgos (IA)
+// Hallazgos
 // ════════════════════════════════════════════════════════════
 (function hallazgos() {
-  const hz = B.hallazgos_llm;
+  // En inglés se usa la versión traducida si existe; si no, la original
+  const hz = (EN && B.hallazgos_en) ? B.hallazgos_en : B.hallazgos_llm;
   if (!hz || !(hz.hallazgos_top || []).length) {
     document.querySelectorAll('[data-tab="hallazgos"]').forEach(b => b.hidden = true);
     document.getElementById("tab-hallazgos").hidden = true;
     return;
   }
+  const NIVEL = EN ? { alta: "high", media: "medium", baja: "low", alto: "high", medio: "medium", bajo: "low" } : {};
+  const nivel = v => NIVEL[v] || v;
   if (hz.resumen_ejecutivo) {
     document.getElementById("hz-resumen-box").hidden = false;
     document.getElementById("hz-resumen").textContent = hz.resumen_ejecutivo;
@@ -982,8 +1084,8 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
       <h4>${esc(h.dato)}</h4>
       <p>${esc(h.comparativo)} ${esc(h.interpretacion)}</p>
       <p>${esc(h.implicacion)}</p>
-      <div class="action"><strong>Acción:</strong> ${esc(h.recomendacion.accion)}</div>
-      <span class="badge ${h.recomendacion.prioridad}">Prioridad ${esc(h.recomendacion.prioridad)}</span><span class="badge">Esfuerzo ${esc(h.recomendacion.esfuerzo)}</span>
+      <div class="action"><strong>${L("Acción", "Action")}:</strong> ${esc(h.recomendacion.accion)}</div>
+      <span class="badge ${h.recomendacion.prioridad}">${L("Prioridad", "Priority")} ${esc(nivel(h.recomendacion.prioridad))}</span><span class="badge">${L("Esfuerzo", "Effort")} ${esc(nivel(h.recomendacion.esfuerzo))}</span>
     </div></div>`).join("");
   const recos = hz.recomendaciones || [];
   if (!recos.length) document.getElementById("recos-head").hidden = true;

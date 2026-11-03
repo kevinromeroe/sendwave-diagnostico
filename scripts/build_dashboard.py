@@ -508,6 +508,30 @@ def resumen_html(ch: dict, b: dict, acc: dict, periodo: str) -> str:
 
 
 TYPE_ES = {"Image": "la foto", "Sidecar": "el carrusel", "Video": "el reel"}
+TYPE_EN = {"Image": "photos", "Sidecar": "carousels", "Video": "reels"}
+
+
+def _fmt_en(n) -> str:
+    return f"{n:,.0f}"
+
+
+def resumen_html_en(ch: dict, b: dict, acc: dict, periodo: str) -> str:
+    """Versión en inglés del resumen automático de métricas."""
+    if not b["n_posts"]:
+        return f"No regular posts from <strong>@{ch['handle']}</strong> in {periodo}."
+    txt = (f"<strong>In {periodo}, @{ch['handle']} published {b['n_posts']} organic posts "
+           f"({_fmt_en(b['engagement_total'])} interactions, {_fmt_en(b['engagement_promedio'])} per post).</strong>")
+    seg = (acc or {}).get("seguidores")
+    if seg:
+        txt += f" With {_fmt_en(seg)} followers, its engagement rate is {b['engagement_promedio'] / seg * 100:.2f}%."
+    tp = b["by_type"]
+    if len(tp["labels"]) > 1:
+        best = tp["labels"][tp["engagement_promedio"].index(max(tp["engagement_promedio"]))]
+        txt += f" The best-performing format is {TYPE_EN.get(best, best)}."
+    if b["n_atipicos"]:
+        n = b["n_atipicos"]
+        txt += f" {n} outlier post{'s' if n != 1 else ''} (likely paid) {'are' if n != 1 else 'is'} analyzed separately."
+    return txt
 
 
 # ─────────────────────────────────────────────────────────────
@@ -523,7 +547,7 @@ def client_meta(cfg: dict) -> dict:
         "name": cfg["client"]["name"],
         "brand": cfg["branding"],
         "diagnostico_id": cfg["periods"]["diagnostico"]["id"],
-        "channels": [{k: ch[k] for k in ("key", "platform", "label", "short", "handle", "url", "color")}
+        "channels": [{k: ch.get(k) for k in ("key", "platform", "label", "label_en", "short", "handle", "url", "color")}
                      for ch in cfg["channels"]],
     }
 
@@ -583,6 +607,7 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
             pb = channel_block([p for p in prev_posts if p["platform"] == key], an, ps, pe)
             b["deltas"] = compute_deltas(b, pb, b["account"], prev_acc.get(key))
         b["resumen_html"] = resumen_html(ch, b, b["account"], P.short_label(cfg, period))
+        b["resumen_html_en"] = resumen_html_en(ch, b, b["account"], P.short_label_en(cfg, period))
         channels[key] = b
 
     data = {
@@ -590,6 +615,9 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
         "periodo_id": period,
         "periodo_label": P.label(cfg, period),
         "periodo_short": P.short_label(cfg, period),
+        "periodo_label_en": P.label_en(cfg, period),
+        "periodo_short_en": P.short_label_en(cfg, period),
+        "prev_label_en": P.label_en(cfg, prev) if prev else None,
         "is_baseline": period == diag_id,
         "prev_label": P.label(cfg, prev) if prev else None,
         "ventana": {"desde": start.date().isoformat(), "hasta": end.date().isoformat()},
@@ -603,13 +631,16 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
     manual = json.loads(manual_path.read_text(encoding="utf-8")) if manual_path.exists() else {}
     for ch in cfg["channels"]:
         if manual.get(ch["key"]):
-            insights = manual[ch["key"]].get("insights")
-            if insights:
-                # Los insights aprobados reemplazan el resumen automático de métricas
-                channels[ch["key"]]["resumen_html"] = "<ol class=\"insights\">" + "".join(
-                    f"<li><strong>{html.escape(i['titulo'])}.</strong> {html.escape(i['texto'])}</li>"
-                    for i in insights) + "</ol>"
-            channels[ch["key"]]["hallazgos_llm"] = {**manual[ch["key"]], "_meta": {"model": "analista"}}
+            m = manual[ch["key"]]
+            en = m.get("en") or {}
+            # Los insights aprobados reemplazan el resumen automático de métricas
+            if m.get("insights"):
+                channels[ch["key"]]["resumen_html"] = insights_html(m["insights"])
+            if en.get("insights"):
+                channels[ch["key"]]["resumen_html_en"] = insights_html(en["insights"])
+            channels[ch["key"]]["hallazgos_llm"] = {k: v for k, v in m.items() if k != "en"} | {"_meta": {"model": "analista"}}
+            channels[ch["key"]]["hallazgos_en"] = ({k: v for k, v in en.items() if k != "insights"}
+                                                  if en.get("hallazgos_top") else None)
             print(f"  ✓ hallazgos {ch['key']}: del archivo {manual_path.relative_to(ROOT)}")
             continue
         try:
@@ -623,6 +654,12 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
     folder = "diagnostico" if period == diag_id else period
     render(cfg, data, meta, ROOT / folder / "index.html")
     return True
+
+
+def insights_html(insights: list[dict]) -> str:
+    return "<ol class=\"insights\">" + "".join(
+        f"<li><strong>{html.escape(i['titulo'])}.</strong> {html.escape(i['texto'])}</li>"
+        for i in insights) + "</ol>"
 
 
 def write_landing(latest_url: str) -> None:
@@ -651,7 +688,7 @@ def main() -> int:
     if not period_ids:
         print("✗ No hay períodos en Supabase. Corre primero la ingesta del diagnóstico.")
         return 1
-    available = [{"id": p, "label": P.label(cfg, p),
+    available = [{"id": p, "label": P.label(cfg, p), "label_en": P.label_en(cfg, p),
                   "url": "/diagnostico/" if p == diag_id else f"/{p}/"} for p in period_ids]
     targets = period_ids if args.period == "all" else [args.period]
 

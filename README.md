@@ -12,7 +12,7 @@ Se construyó sobre el pipeline del dashboard de Comapan. La diferencia es que *
 | Diagnóstico (línea base) | 1 jun – 31 oct 2026 | `/diagnostico/` |
 | Mensual | desde nov 2026 | `/2026-11/`, `/2026-12/`, … |
 
-Cada cuenta es un reporte independiente: un selector arriba cambia entre LATAM y Brasil (`?cuenta=ig_latam`), sin cifras combinadas. La raíz `/` redirige al período más reciente. Cada período tiene un PDF por cuenta (`reporte-ig_latam.pdf`, `reporte-ig_brasil.pdf`) que baja el botón **PDF**.
+Cada cuenta es un reporte independiente: un selector arriba cambia entre LATAM y Brasil (`?cuenta=ig_latam`), sin cifras combinadas. La raíz `/` redirige al período más reciente. Cada período tiene un PDF por cuenta (`reporte-ig_latam.pdf`, `reporte-ig_brasil.pdf`) que baja el botón **PDF**. El botón **ES | EN** cambia todo el reporte a inglés (`&lang=en`), con PDF propio (`reporte-<cuenta>-en.pdf`).
 
 ## Flujo
 

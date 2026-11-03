@@ -24,6 +24,8 @@ periods:
     id: diagnostico
     label: "Diagnóstico (Jun-Oct 2026)"
     short_label: "Jun a Oct 2026"
+    label_en: "Baseline audit (Jun-Oct 2026)"
+    short_label_en: "Jun to Oct 2026"
     starts_on: "2026-06-01"
     ends_on: "2026-10-31"
   monthly_start: "2026-11"          # primer mes de reporte mensual
@@ -52,6 +54,7 @@ channels:
   - key: ig_latam
     platform: instagram
     label: "Instagram LATAM"
+    label_en: "Instagram LATAM"
     short: "LATAM"
     idioma: es
     handle: sendwaveapp_latam
@@ -70,6 +73,7 @@ channels:
   - key: ig_brasil
     platform: instagram
     label: "Instagram Brasil"
+    label_en: "Instagram Brazil"
     short: "Brasil"
     idioma: pt
     handle: sendwaveappbrasil
