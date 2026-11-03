@@ -476,6 +476,8 @@ def compute_deltas(b: dict, pb: dict, acc: dict, prev_acc: dict) -> dict:
         "engagement_promedio_pct": _pct(b["engagement_promedio"], pb["engagement_promedio"]),
         "audience_pct": _pct(cf, pf),
         "audience_abs": (cf - pf) if (cf is not None and pf is not None) else None,
+        # Los seguidores se comparan contra la medición anterior, no contra un tramo de días
+        "audience_ref": (prev_acc or {}).get("snapshot_fecha") or None,
         "n_posts_abs": b["n_posts"] - pb["n_posts"],
         "engagement_total_abs": b["engagement_total"] - pb["engagement_total"],
         "engagement_promedio_abs": round(b["engagement_promedio"] - pb["engagement_promedio"], 1),
@@ -587,8 +589,22 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
     semanas = round(days / 7, 1)
 
     prev = P.previous(cfg, period)
+    prev_label = P.label(cfg, prev) if prev else None
+    prev_label_en = P.label_en(cfg, prev) if prev else None
+    parcial = None
     if prev:
         ps, pe = P.window(cfg, prev)
+        if start <= now < end:
+            # Mes en curso: se compara contra los mismos días del mes anterior (1 al N),
+            # no contra el mes completo. N = último día con datos (fecha de la ingesta).
+            fechas = [a["snapshot_fecha"] for a in accounts.values() if a.get("snapshot_fecha")]
+            hasta = min(datetime.fromisoformat(max(fechas)).date(), now.date()) if fechas else now.date()
+            dias = max((hasta - start.date()).days + 1, 1)
+            pe = min(pe, ps + timedelta(days=dias) - timedelta(seconds=1))
+            mes_es, mes_en = MES_CORTO[pe.month].lower(), P.MONTHS_EN[pe.month][:3]
+            prev_label = f"1 {mes_es}" if pe.day == 1 else f"1–{pe.day} {mes_es}"
+            prev_label_en = f"{mes_en} 1" if pe.day == 1 else f"{mes_en} 1–{pe.day}"
+            parcial = {"hasta": hasta.isoformat(), "dias": dias}
         prev_posts = in_window(all_posts, ps, pe)
         prev_acc = load_accounts(sb, client_id, prev, diag_id)
 
@@ -600,6 +616,12 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
         key = ch["key"]
         b = channel_block(by_ch[key], an, start, end)
         b["account"] = accounts.get(key) or {}
+        if b["account"].get("seguidores") is None:
+            # Sin publicaciones en el período la ingesta no trae el perfil: se usa la
+            # última medición de seguidores (captura semanal) hasta el fin del período
+            hist = {m: v for m, v in followers_hist.get(key, {}).items() if m <= end.strftime("%Y-%m")}
+            if hist:
+                b["account"] = {**b["account"], "seguidores": hist[max(hist)]}
         b["tendencia"] = monthly_trend(cfg, key, all_posts, followers_hist.get(key, {}), end, an)
         b["category_analysis"] = category_analysis(by_ch[key], an)
         b["deltas"] = None
@@ -617,9 +639,10 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
         "periodo_short": P.short_label(cfg, period),
         "periodo_label_en": P.label_en(cfg, period),
         "periodo_short_en": P.short_label_en(cfg, period),
-        "prev_label_en": P.label_en(cfg, prev) if prev else None,
+        "prev_label_en": prev_label_en,
+        "comparacion_parcial": parcial,
         "is_baseline": period == diag_id,
-        "prev_label": P.label(cfg, prev) if prev else None,
+        "prev_label": prev_label,
         "ventana": {"desde": start.date().isoformat(), "hasta": end.date().isoformat()},
         "semanas": semanas,
         "channels": channels,

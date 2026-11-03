@@ -427,6 +427,7 @@
     <h1 id="hero-h1"></h1>
     <p class="lead" id="hero-lead"></p>
     <div class="kpi-grid cols-5" id="kpi-main"></div>
+    <div class="note" id="parcial-note" hidden></div>
   </div>
 
   <div class="section-head">
@@ -618,10 +619,10 @@ function deltaBadge(pct) {
   const bg = p > .5 ? "#e8f2e2" : (p < -.5 ? "#fbe6e6" : "#f0f0f0");
   return `<span class="delta" style="background:${bg};color:${color}" title="vs ${esc(PREV)}">${arrow} ${p > 0 ? "+" : ""}${dec(p, 1)}%</span>`;
 }
-function deltaAbs(v) {
+function deltaAbs(v, ref) {
   if (v === null || v === undefined || isNaN(parseFloat(v)) || parseFloat(v) === 0) return "";
   const p = parseFloat(v);
-  return `<span class="delta-abs" style="color:${p > 0 ? "#2f7d32" : "#c33"}">${p > 0 ? "+" : "−"}${fmt(Math.abs(p))} vs ${esc(PREV)}</span>`;
+  return `<span class="delta-abs" style="color:${p > 0 ? "#2f7d32" : "#c33"}">${p > 0 ? "+" : "−"}${fmt(Math.abs(p))} vs ${esc(ref || PREV)}</span>`;
 }
 const kpi = (label, value, sub, accent, tip, deltaPct) => {
   const tipHtml = tip ? `<i class="info-icon" data-tip="${esc(tip)}">i</i>` : "";
@@ -764,12 +765,20 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
       (DATA.is_baseline ? ". Este diagnóstico es la línea base para los reportes mensuales." : "."),
     `Organic activity and performance of the account, based on its public data` +
       (DATA.is_baseline ? ". This baseline audit is the reference point for the monthly reports." : "."));
+  const P0 = DATA.comparacion_parcial;
+  if (P0 && DATA.deltas !== null) {
+    const n = document.getElementById("parcial-note");
+    n.hidden = false;
+    n.innerHTML = L(
+      `<strong>Mes en curso</strong> · datos al ${isoDay(P0.hasta)}. Para que la comparación sea justa, las variaciones se calculan contra el mismo tramo del mes anterior (<strong>${esc(PREV)}</strong>), no contra el mes completo.`,
+      `<strong>Month in progress</strong> · data as of ${isoDay(P0.hasta)}. For a fair comparison, changes are measured against the same stretch of the previous month (<strong>${esc(PREV)}</strong>), not the full month.`);
+  }
   const acc = B.account || {};
   const cadencia = B.n_posts ? dec1(B.n_posts / DATA.semanas) : "—";
   const nA = B.n_atipicos;
   document.getElementById("kpi-main").innerHTML =
     kpi(L("Seguidores", "Followers"), fmt(followers),
-        acc.snapshot_fecha ? `${L("al", "as of")} ${isoDay(acc.snapshot_fecha)} ${deltaAbs(DL.audience_abs)}` : "", false,
+        acc.snapshot_fecha ? `${L("al", "as of")} ${isoDay(acc.snapshot_fecha)} ${deltaAbs(DL.audience_abs, DL.audience_ref ? isoDay(DL.audience_ref) : null)}` : "", false,
         L("Personas que siguen la cuenta, según la última captura del período.", "People following the account, as of the latest capture in the period."), DL.audience_pct) +
     kpi(L("Publicaciones", "Posts"), fmt(B.n_posts),
         `${cadencia} ${L("por semana", "per week")}` + (nA ? ` · + ${nA} ${L(nA !== 1 ? "atípicas" : "atípica", nA !== 1 ? "outliers" : "outlier")}` : ""), true,
