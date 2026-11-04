@@ -212,8 +212,72 @@
             "30 days"
           ]
         }
+      ],
+      "puntos_publicaciones": [
+        {
+          "titulo": "The virals come from creators",
+          "texto": "4 of the 5 outliers are collaboration reels. The largest, from October 2, reached 485,152 interactions and 9.4 million views."
+        },
+        {
+          "titulo": "Five posts outweigh everything else",
+          "texto": "The 5 outliers add up to 712,417 interactions, 4 times what the 236 regular posts achieved combined (172,839)."
+        },
+        {
+          "titulo": "Among regular posts, the pattern holds",
+          "texto": "4 of the 5 best are also creator reels, with 4,715 to 6,449 interactions each."
+        },
+        {
+          "titulo": "Collaborating doesn't guarantee results",
+          "texto": "4 of the 5 weakest are also collaborations, with 1 to 5 interactions, even though one passed 16,000 views. The choice of creator matters more than the format."
+        }
+      ],
+      "puntos_categorias": [
+        {
+          "titulo": "Collaborations dominate the mix",
+          "texto": "They make up 66% of posts (156) and average 949 interactions, 1.3 times the account average (732)."
+        },
+        {
+          "titulo": "Trends look promising but need more testing",
+          "texto": "It is the category with the best average (1,214), with only 8 posts (3% of the mix) and a median of 46: it relies on a single hit."
+        },
+        {
+          "titulo": "The brand's own content doesn't connect",
+          "texto": "Product, brand and interaction add up to 30 posts averaging 41 to 207 interactions; the median product post gets 14."
+        }
       ]
-    }
+    },
+    "puntos_publicaciones": [
+      {
+        "titulo": "Los virales son de creadores",
+        "texto": "4 de las 5 atípicas son reels de colaboraciones. La mayor, del 2 de octubre, sumó 485.152 interacciones y 9,4 millones de reproducciones."
+      },
+      {
+        "titulo": "Cinco piezas pesan más que todo el resto",
+        "texto": "Las 5 atípicas suman 712.417 interacciones, 4 veces lo que lograron juntas las 236 publicaciones típicas (172.839)."
+      },
+      {
+        "titulo": "Entre las típicas, el patrón se repite",
+        "texto": "4 de las 5 mejores también son reels con creadores, con 4.715 a 6.449 interacciones cada una."
+      },
+      {
+        "titulo": "Colaborar no garantiza resultados",
+        "texto": "4 de las 5 peores también son colaboraciones, con 1 a 5 interacciones, aunque una superó las 16.000 reproducciones. El creador elegido pesa más que el formato."
+      }
+    ],
+    "puntos_categorias": [
+      {
+        "titulo": "Las colaboraciones dominan el mix",
+        "texto": "Son el 66% de las publicaciones (156) y promedian 949 interacciones, 1,3 veces el promedio de la cuenta (732)."
+      },
+      {
+        "titulo": "Tendencia promete, pero falta probarla",
+        "texto": "Es la categoría con mejor promedio (1.214), con solo 8 publicaciones (3% del mix) y una mediana de 46: depende de un éxito puntual."
+      },
+      {
+        "titulo": "El contenido propio no conecta",
+        "texto": "Producto, marca e interacción suman 30 publicaciones con promedios de 41 a 207 interacciones; la mediana de producto es 14."
+      }
+    ]
   },
   "ig_brasil": {
     "resumen_ejecutivo": "Entre junio y octubre, @sendwaveappbrasil publicó 70 piezas típicas con 15.649 interacciones (224 por publicación) y una tasa de engagement de 0,57 % sobre 39.022 seguidores. La cuenta se reactivó desde agosto y su rendimiento depende de los creadores: el contenido propio de la marca casi no genera interacción, sin importar el formato.",
@@ -436,7 +500,71 @@
             "60-90 days"
           ]
         }
+      ],
+      "puntos_publicaciones": [
+        {
+          "titulo": "The virals come from creators",
+          "texto": "All 5 outliers are collaboration reels and add up to 46,920 interactions, three times what the 70 regular posts achieved combined (15,649)."
+        },
+        {
+          "titulo": "Life outside Brazil is the topic that goes viral",
+          "texto": "3 of the 5 outliers are about living or traveling abroad (United States, Peru, Spain); the largest, from August 25, reached 22,028 interactions."
+        },
+        {
+          "titulo": "A few posts carry the account",
+          "texto": "The 5 best regular posts account for 43% of the period's regular engagement; 4 of them are creator reels."
+        },
+        {
+          "titulo": "The brand's own carousels don't take off",
+          "texto": "The 5 weakest posts are brand carousels with 4 to 8 interactions; two are in Spanish on an account aimed at Brazil."
+        }
+      ],
+      "puntos_categorias": [
+        {
+          "titulo": "Collaborations sustain engagement",
+          "texto": "They make up 37% of the mix (26 posts) and average 459 interactions, twice the account average (224)."
+        },
+        {
+          "titulo": "Contests perform, but there are few",
+          "texto": "There are only 2 and they average 833 interactions, 3.7 times the account: the back-to-school giveaway was the best regular post (1,646)."
+        },
+        {
+          "titulo": "Six of the brand's own categories barely generate interaction",
+          "texto": "Interaction, community, product, education, tutorial and promotion add up to 28 posts (40% of the mix) and none averages more than 46 interactions."
+        }
       ]
-    }
+    },
+    "puntos_publicaciones": [
+      {
+        "titulo": "Los virales son de creadores",
+        "texto": "Las 5 atípicas son reels de colaboraciones y suman 46.920 interacciones, tres veces lo que lograron juntas las 70 publicaciones típicas (15.649)."
+      },
+      {
+        "titulo": "La vida fuera de Brasil es el tema que viraliza",
+        "texto": "3 de las 5 atípicas hablan de vivir o viajar fuera (Estados Unidos, Perú, España); la mayor, del 25 de agosto, sumó 22.028 interacciones."
+      },
+      {
+        "titulo": "Pocas piezas sostienen la cuenta",
+        "texto": "Las 5 mejores típicas concentran el 43% del engagement típico del período; 4 de ellas son reels con creadores."
+      },
+      {
+        "titulo": "Los carruseles propios no despegan",
+        "texto": "Las 5 peores son carruseles de la marca, con 4 a 8 interacciones; dos están en español en una cuenta dirigida a Brasil."
+      }
+    ],
+    "puntos_categorias": [
+      {
+        "titulo": "Las colaboraciones sostienen el engagement",
+        "texto": "Son el 37% del mix (26 publicaciones) y promedian 459 interacciones, el doble del promedio de la cuenta (224)."
+      },
+      {
+        "titulo": "Los concursos rinden, pero son pocos",
+        "texto": "Solo hay 2 y promedian 833 interacciones, 3,7 veces la cuenta: el giveaway de regreso a clases fue la mejor publicación típica (1.646)."
+      },
+      {
+        "titulo": "Seis categorías propias casi no generan interacción",
+        "texto": "Interacción, comunidad, producto, educación, tutorial y promoción suman 28 publicaciones (40% del mix) y ninguna pasa de 46 interacciones en promedio."
+      }
+    ]
   }
 }

@@ -661,8 +661,13 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
                 channels[ch["key"]]["resumen_html"] = insights_html(m["insights"])
             if en.get("insights"):
                 channels[ch["key"]]["resumen_html_en"] = insights_html(en["insights"])
-            channels[ch["key"]]["hallazgos_llm"] = {k: v for k, v in m.items() if k != "en"} | {"_meta": {"model": "analista"}}
-            channels[ch["key"]]["hallazgos_en"] = ({k: v for k, v in en.items() if k != "insights"}
+            # Puntos clave de las pestañas Publicaciones y Categorías
+            for campo, clave in (("puntos_publicaciones", "puntos_pub"), ("puntos_categorias", "puntos_cat")):
+                channels[ch["key"]][clave] = m.get(campo) or None
+                channels[ch["key"]][f"{clave}_en"] = en.get(campo) or None
+            omitir = ("en", "puntos_publicaciones", "puntos_categorias")
+            channels[ch["key"]]["hallazgos_llm"] = {k: v for k, v in m.items() if k not in omitir} | {"_meta": {"model": "analista"}}
+            channels[ch["key"]]["hallazgos_en"] = ({k: v for k, v in en.items() if k not in ("insights", *omitir)}
                                                   if en.get("hallazgos_top") else None)
             print(f"  ✓ hallazgos {ch['key']}: del archivo {manual_path.relative_to(ROOT)}")
             continue
@@ -690,7 +695,7 @@ def write_landing(latest_url: str) -> None:
         '<!doctype html><html lang="es"><head><meta charset="utf-8">'
         f'<meta http-equiv="refresh" content="0; url={latest_url}">'
         '<meta name="robots" content="noindex"><title>Dashboard</title></head>'
-        f'<body><a href="{latest_url}">Ir al reporte más reciente</a></body></html>\n',
+        f'<body><a href="{latest_url}">Ir al reporte</a></body></html>\n',
         encoding="utf-8")
     print(f"  ✓ index.html → {latest_url}")
 
@@ -726,7 +731,10 @@ def main() -> int:
             import traceback
             traceback.print_exc()
             print(f"  ✗ {period} falló: {exc}")
-    write_landing(available[-1]["url"])
+    # La raíz abre el período fijado en la configuración (landing_period) o, si no hay, el más reciente
+    fijo = cfg["periods"].get("landing_period")
+    landing = next((a for a in available if a["id"] == fijo), available[-1])
+    write_landing(landing["url"])
     print(f"\n═══ {ok}/{len(targets)} períodos generados ═══")
     return 0 if ok == len(targets) else 1
 

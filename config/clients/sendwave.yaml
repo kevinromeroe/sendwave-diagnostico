@@ -29,6 +29,7 @@ periods:
     starts_on: "2026-06-01"
     ends_on: "2026-10-31"
   monthly_start: "2026-11"          # primer mes de reporte mensual
+  landing_period: diagnostico       # la raíz del sitio abre aquí; quitar para abrir el mes más reciente
 
 # =============================================================
 # Branding — PROVISIONAL hasta recibir el manual de marca del cliente.

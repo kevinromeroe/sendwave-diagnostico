@@ -3,9 +3,9 @@ name: Seguidores (captura semanal)
 # Instagram no expone el histórico de seguidores: esta captura arma la serie que
 # usa la tendencia del dashboard. Corre todos los lunes 07:00 Bogotá (12:00 UTC).
 
+# Programación APAGADA (3 nov 2026): solo corre a mano (Run workflow).
+# Para reactivarla: schedule: - cron: "0 12 * * 1"
 on:
-  schedule:
-    - cron: "0 12 * * 1"
   workflow_dispatch:
 
 jobs:

@@ -7,11 +7,11 @@ on:
         description: "diagnostico | YYYY-MM | auto (mes actual + cierre del anterior los días 1-7)"
         required: false
         default: "auto"
-  schedule:
-    # Martes 21:00 Bogotá (UTC-5) == miércoles 02:00 UTC. Antes de noviembre 2026 no hace nada.
-    - cron: "0 2 * * 3"
-    # Día 2 de cada mes 06:00 Bogotá: cierre del mes anterior
-    - cron: "0 11 2 * *"
+  # Programación APAGADA (3 nov 2026): la ingesta solo corre a mano (Run workflow).
+  # Para reactivarla, restaurar:
+  # schedule:
+  #   - cron: "0 2 * * 3"     # martes 21:00 Bogotá
+  #   - cron: "0 11 2 * *"    # día 2 de cada mes, cierre del mes anterior
 
 concurrency:
   group: sendwave-ingest
