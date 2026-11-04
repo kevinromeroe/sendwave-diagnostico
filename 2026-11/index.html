@@ -90,7 +90,11 @@
   .topbar .divider { width: 1px; height: 36px; background: var(--line); }
   .logo-dtl { height: 30px; display: block; }
   .logo-agency { height: 34px; width: auto; display: block; flex: none; mix-blend-mode: multiply; }
-  .topbar .meta { text-align: right; font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .topbar .meta { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+  .topbar .meta .period-selector, .topbar .meta .pdf-btn, .topbar .meta .lang-switch { height: 34px; margin: 0; box-sizing: border-box; }
+  .topbar .meta .lang-switch a { display: inline-flex; align-items: center; height: 100%; padding: 0 11px; }
+  @media screen { .print-only { display: none !important; } }
+  .topbar .title-block .title { white-space: nowrap; }
   .topbar .meta strong { color: var(--brand); display: block; font-size: 13px; font-family: var(--font-display); font-weight: 700; }
   .period-selector { display: inline-block; margin-left: 14px; padding: 6px 28px 6px 12px; border: 1px solid var(--line);
     border-radius: 6px; background: #fff; font-family: inherit; font-size: 12px; font-weight: 500; color: var(--ink);
@@ -316,8 +320,7 @@
     .topbar .brand { gap: 12px; flex-wrap: wrap; }
     .topbar .divider { display: none; }
     .topbar .title-block .title { font-size: 18px; }
-    .topbar .meta { text-align: left; white-space: normal; }
-    .period-selector { margin-left: 0; margin-top: 6px; }
+    .topbar .meta { flex-wrap: wrap; white-space: normal; }
     main { padding: 0 16px; }
     .tab { padding: 24px 0; }
     .hero { padding: 32px 0; }
@@ -347,6 +350,8 @@
     body { font-size: 10.5px !important; }
     .menu-toggle, .menu-drawer, .menu-backdrop, .period-selector, .pdf-btn, .lang-switch, nav.tabs, .account-bar, .info-icon, .global-tooltip { display: none !important; }
     .topbar { position: static; padding: 6px 0 10px !important; border-bottom: 2px solid var(--brand) !important; }
+    .print-only { display: inline !important; }
+    .topbar .meta { flex-direction: column; align-items: flex-end; gap: 2px; }
     section.tab { display: block !important; break-before: page; padding-top: 4px !important; }
     section.tab:first-of-type { break-before: avoid; }
     .tab[hidden] { display: none !important; }
@@ -384,13 +389,11 @@
     <img class="logo-agency" src="/assets/logo-felipe-agency.png" alt="Felipe Agency">
     <div class="divider"></div>
     <div class="title-block">
-      <span class="eyebrow" data-en="Social media intelligence">Inteligencia de redes</span>
-      <span class="title"><span data-en="Social Media Dashboard">Dashboard de Redes Sociales</span> · <em id="title-account"></em></span>
+      <span class="title"><span data-en="Social Media Dashboard">Dashboard de Redes Sociales</span><span class="print-only"> · <em id="title-account"></em></span></span>
     </div>
   </div>
   <div class="meta">
-    <strong id="meta-period"></strong>
-    <span id="meta-window"></span>
+    <strong id="meta-period" class="print-only"></strong>
     <select id="period-selector" class="period-selector" aria-label="Período / Period"
             onchange="if(this.value)window.location.href=this.value"></select>
     <button class="pdf-btn" type="button" id="pdf-btn" aria-label="PDF">
@@ -533,7 +536,7 @@
 
 <script>
 const CLIENT = {"name":"SendWave","brand":{"primary":"#3C0F19","accent":"#FFEC00","ink":"#111111","bg_soft":"#FAF6EC","bg_soft_2":"#FDFBF5","font_display":"Anton","font_body":"Inter"},"diagnostico_id":"diagnostico","channels":[{"key":"ig_latam","platform":"instagram","label":"Instagram LATAM","label_en":"Instagram LATAM","short":"LATAM","handle":"sendwaveapp_latam","url":"https://www.instagram.com/sendwaveapp_latam/","color":"#3C0F19"},{"key":"ig_brasil","platform":"instagram","label":"Instagram Brasil","label_en":"Instagram Brazil","short":"Brasil","handle":"sendwaveappbrasil","url":"https://www.instagram.com/sendwaveappbrasil/","color":"#16889B"}]};
-const REPORT_META = {"current":"2026-11","available":[{"id":"diagnostico","label":"Diagnóstico (Jun-Oct 2026)","label_en":"Baseline audit (Jun-Oct 2026)","url":"/diagnostico/"},{"id":"2026-11","label":"Noviembre 2026","label_en":"November 2026","url":"/2026-11/"}]};
+const REPORT_META = {"current":"2026-11","available":[{"id":"diagnostico","label":"Periodo junio-octubre 2026","label_en":"Period June-October 2026","url":"/diagnostico/"},{"id":"2026-11","label":"Noviembre 2026","label_en":"November 2026","url":"/2026-11/"}]};
 const DATA = {"generated_at":"03/11/2026","periodo_id":"2026-11","periodo_label":"Noviembre 2026","periodo_short":"Noviembre 2026","periodo_label_en":"November 2026","periodo_short_en":"November 2026","prev_label_en":"Oct 1–2","comparacion_parcial":{"hasta":"2026-11-02","dias":2},"is_baseline":false,"prev_label":"1–2 oct","ventana":{"desde":"2026-11-01","hasta":"2026-11-30"},"semanas":0.4,"channels":{"ig_latam":{"n_posts":1,"n_atipicos":0,"engagement_total":11,"engagement_promedio":11.0,"engagement_mediana":11,"likes_total":8,"comentarios_total":3,"views_total":null,"n_con_views":0,"by_type":{"labels":["Image"],"counts":[1],"engagement_promedio":[11.0]},"by_day":{"labels":["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"],"counts":[0,0,0,0,0,0,1],"engagement_promedio":[0,0,0,0,0,0,11.0]},"by_hour":{"labels":["12"],"counts":[1],"engagement_promedio":[11.0]},"by_week":{"labels":["Nov S1","Nov S2","Nov S3","Nov S4","Nov S5","Nov S6"],"desde":["26/10","02/11","09/11","16/11","23/11","30/11"],"counts":[1,0,0,0,0,0],"engagement":[11,0,0,0,0,0]},"by_day_hour":{"labels_dow":["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"],"matrix":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,11.0,0,0,0,0,0,0,0,0,0,0,0]],"counts":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0]]},"tag_summary":{"estacional":1},"tag_engagement":{"estacional":11.0},"top_hashtags":[["sendwave",1],["díademuertos",1],["culturamexicana",1],["latinoculture",1]],"captions_avg_len":449.0,"top5":[{"id":"4020931053228283467","url":"https://www.instagram.com/p/DfNN302AlZL/","tipo":"Image","fecha":"2026-11-01","likes":8,"comentarios":3,"engagement":11,"views":null,"caption":"🌼💀 En Sendwave celebramos el Día de Muertos, una de las tradiciones más hermosas de México.\n\nUna fecha llena de color, flores de cempasúchil, altares y recuerdos que honran a quienes siguen viviendo en nuestros corazones.\n\nCelebramos la riqueza de la cultura mexicana y esas tradiciones que nos mantienen conectados con nuestras raíces, sin importar la distancia. 💛\n\n¡Feliz Día de Muertos! 🇲🇽\n\n#Sendwave #DíaDeMuertos #CulturaMexicana #LatinoCulture","media_url":"/assets/thumbs/ig_latam-07f0f8522d52.jpg","tags":["estacional","comunidad"],"tag_primary":"estacional"}],"worst5":[],"atipicos":[],"outlier_threshold":0,"account":{"username":"sendwaveapp_latam","nombre":"Sendwaveapp_latam","bio":"Aquí para que envíes dinero rápido, de forma segura y asequible a todo el mundo.\nNovedades globales: @sendwaveapp\nDescárgala ahora⬇️","seguidores":115410,"siguiendo":345,"posts_totales":634,"snapshot_fecha":"2026-11-02"},"tendencia":{"labels":["Jun","Jul","Ago","Sep","Oct","Nov"],"parcial":[false,false,false,false,false,true],"n_posts":[44,48,38,76,29,1],"engagement_total":[23542,32560,42774,54042,14439,11],"engagement_promedio":[535.0,678.3,1125.6,711.1,497.9,11.0],"seguidores":[null,null,null,null,114775,115416],"tasa":[0.466,0.591,0.981,0.62,0.434,0.01],"tasa_aprox":[true,true,true,true,false,false]},"category_analysis":{"total_posts":1,"global_mean":11.0,"mix_global":[{"category":"estacional","count":1,"pct":100.0}],"performance":[{"category":"estacional","n":1,"mean":11.0,"median":11}],"by_type":{"categories":["estacional"],"cols":["Image"],"matrix":[[11.0]]},"gaps":[]},"deltas":{"n_posts_pct":-85.7,"engagement_total_pct":-99.8,"engagement_promedio_pct":-98.5,"audience_pct":0.6,"audience_abs":653,"audience_ref":"2026-10-29","n_posts_abs":-6,"engagement_total_abs":-5269,"engagement_promedio_abs":-743.3},"resumen_html":"<strong>En Noviembre 2026, @sendwaveapp_latam publicó 1 piezas orgánicas (11 interacciones, 11 por publicación).<\/strong> Con 115.410 seguidores, su tasa de engagement es 0,01 %.","resumen_html_en":"<strong>In November 2026, @sendwaveapp_latam published 1 organic posts (11 interactions, 11 per post).<\/strong> With 115,410 followers, its engagement rate is 0.01%.","hallazgos_llm":null},"ig_brasil":{"n_posts":0,"n_atipicos":0,"engagement_total":0,"engagement_promedio":0,"engagement_mediana":0,"likes_total":0,"comentarios_total":0,"views_total":null,"n_con_views":0,"by_type":{"labels":[],"counts":[],"engagement_promedio":[]},"by_day":{"labels":["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"],"counts":[0,0,0,0,0,0,0],"engagement_promedio":[0,0,0,0,0,0,0]},"by_hour":{"labels":[],"counts":[],"engagement_promedio":[]},"by_week":{"labels":["Nov S1","Nov S2","Nov S3","Nov S4","Nov S5","Nov S6"],"desde":["26/10","02/11","09/11","16/11","23/11","30/11"],"counts":[0,0,0,0,0,0],"engagement":[0,0,0,0,0,0]},"by_day_hour":{"labels_dow":["Lun","Mar","Mié","Jue","Vie","Sáb","Dom"],"matrix":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],"counts":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]},"tag_summary":{},"tag_engagement":{},"top_hashtags":[],"captions_avg_len":0,"top5":[],"worst5":[],"atipicos":[],"outlier_threshold":0,"account":{"username":"","nombre":"","bio":"","seguidores":39304,"siguiendo":null,"posts_totales":null,"snapshot_fecha":"2026-11-02"},"tendencia":{"labels":["Jun","Jul","Ago","Sep","Oct","Nov"],"parcial":[false,false,false,false,false,true],"n_posts":[3,6,14,27,20,0],"engagement_total":[163,142,8234,5082,3617,0],"engagement_promedio":[54.3,23.7,588.1,188.2,180.8,0],"seguidores":[null,null,null,null,39031,39304],"tasa":[0.139,0.061,1.507,0.482,0.463,null],"tasa_aprox":[true,true,true,true,false,false]},"category_analysis":{},"deltas":{"n_posts_pct":-100.0,"engagement_total_pct":-100.0,"engagement_promedio_pct":-100.0,"audience_pct":0.7,"audience_abs":282,"audience_ref":"2026-10-29","n_posts_abs":-3,"engagement_total_abs":-3861,"engagement_promedio_abs":-1287.0},"resumen_html":"Sin publicaciones típicas de <strong>@sendwaveappbrasil<\/strong> en Noviembre 2026.","resumen_html_en":"No regular posts from <strong>@sendwaveappbrasil<\/strong> in November 2026.","hallazgos_llm":null}}};
 </script>
 <script>
@@ -660,7 +663,6 @@ document.getElementById("meta-period").textContent = L(DATA.periodo_label, DATA.
 const MES = EN ? ["", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
                : ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
 const isoDay = iso => { const [y, m, d] = iso.split("-"); return EN ? `${MES[parseInt(m, 10)]} ${parseInt(d, 10)}, ${y}` : `${parseInt(d, 10)} ${MES[parseInt(m, 10)]} ${y}`; };
-document.getElementById("meta-window").textContent = `${isoDay(DATA.ventana.desde)} → ${isoDay(DATA.ventana.hasta)}`;
 document.getElementById("pdf-btn").addEventListener("click", () =>
   window.open(`reporte-${ACC.key}${EN ? "-en" : ""}.pdf`, "_blank", "noopener"));
 
