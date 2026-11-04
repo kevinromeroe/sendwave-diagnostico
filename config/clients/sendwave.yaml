@@ -22,9 +22,9 @@ client:
 periods:
   diagnostico:
     id: diagnostico
-    label: "Diagnóstico (Jun-Oct 2026)"
+    label: "Periodo junio-octubre 2026"
     short_label: "Jun a Oct 2026"
-    label_en: "Baseline audit (Jun-Oct 2026)"
+    label_en: "Period June-October 2026"
     short_label_en: "Jun to Oct 2026"
     starts_on: "2026-06-01"
     ends_on: "2026-10-31"
