@@ -89,6 +89,7 @@
   .topbar .title-block .title em { color: var(--brand); font-style: normal; }
   .topbar .divider { width: 1px; height: 36px; background: var(--line); }
   .logo-dtl { height: 30px; display: block; }
+  .logo-agency { height: 34px; width: auto; display: block; flex: none; mix-blend-mode: multiply; }
   .topbar .meta { text-align: right; font-size: 12px; color: var(--muted); white-space: nowrap; }
   .topbar .meta strong { color: var(--brand); display: block; font-size: 13px; font-family: var(--font-display); font-weight: 700; }
   .period-selector { display: inline-block; margin-left: 14px; padding: 6px 28px 6px 12px; border: 1px solid var(--line);
@@ -380,6 +381,8 @@
   <div class="brand">
     <span class="wordmark" id="wordmark"></span>
     <div class="divider"></div>
+    <img class="logo-agency" src="/assets/logo-felipe-agency.png" alt="Felipe Agency">
+    <div class="divider"></div>
     <div class="title-block">
       <span class="eyebrow" data-en="Social media intelligence">Inteligencia de redes</span>
       <span class="title"><span data-en="Social Media Dashboard">Dashboard de Redes Sociales</span> · <em id="title-account"></em></span>
@@ -465,15 +468,19 @@
   <div class="section-head">
     <div class="num" data-en="Posts">Publicaciones</div>
     <h2 data-en="The posts that connected the most and the least">Las piezas que más y menos conectaron</h2>
-    <div class="desc" data-en="The 5 regular posts with the highest and lowest engagement, and the 5 outliers with the most interactions.">Las 5 publicaciones con mejor y con menor engagement entre las típicas, y las 5 atípicas con más interacciones.</div>
+    <div class="desc" data-en="The 5 outliers with the most interactions, followed by the 5 regular posts with the highest and the lowest engagement.">Las 5 atípicas con más interacciones y, después, las 5 publicaciones típicas con mejor y con menor engagement.</div>
   </div>
-  <h3 style="font-size:16px" data-en="Top 5 posts by engagement (excluding outliers)">Top 5 publicaciones con mejor engagement (sin atípicas)</h3>
+  <div class="resumen-corp" id="pub-puntos-box" hidden>
+    <div class="lbl" data-en="Key points">Puntos clave</div>
+    <ul class="perf-points" id="pub-puntos"></ul>
+  </div>
+  <h3 id="h-atipicos" style="font-size:16px" data-en="Top 5 outlier posts" hidden>Top 5 publicaciones atípicas</h3>
+  <p class="note" id="atip-note" hidden></p>
+  <div class="chart-card" id="card-atipicos" style="padding:0" hidden><table id="t-atipicos"></table></div>
+  <h3 style="margin-top:28px;font-size:16px" data-en="Top 5 posts by engagement (excluding outliers)">Top 5 publicaciones con mejor engagement (sin atípicas)</h3>
   <div class="chart-card" style="padding:0"><table id="t-top"></table><div class="learn" id="l-top" style="margin:0;border-radius:0 0 6px 6px"></div></div>
   <h3 id="h-worst" style="margin-top:28px;font-size:16px" data-en="Bottom 5 posts by engagement">Top 5 publicaciones con menor engagement</h3>
   <div class="chart-card" id="card-worst" style="padding:0"><table id="t-worst"></table></div>
-  <h3 id="h-atipicos" style="margin-top:28px;font-size:16px" data-en="Top 5 outlier posts" hidden>Top 5 publicaciones atípicas</h3>
-  <p class="note" id="atip-note" hidden></p>
-  <div class="chart-card" id="card-atipicos" style="padding:0" hidden><table id="t-atipicos"></table></div>
   <h2 style="margin-top:48px" data-en="Most used hashtags">Hashtags más usados</h2>
   <div class="hashtags" id="hashtags"></div>
 </section>
@@ -484,6 +491,10 @@
     <div class="num" data-en="Content categories">Categorías de contenido</div>
     <h2 data-en="What type of content works on this account">Qué tipo de contenido funciona en esta cuenta</h2>
     <div class="desc" data-en="Each post is classified into one of 12 editorial categories based on its text. Only regular posts are analyzed.">Cada publicación se clasifica en una de 12 categorías editoriales a partir de su texto. Se analizan solo las publicaciones típicas.</div>
+  </div>
+  <div class="resumen-corp" id="cat-puntos-box" hidden>
+    <div class="lbl" data-en="Key points">Puntos clave</div>
+    <ul class="perf-points" id="cat-puntos"></ul>
   </div>
   <div class="chart-grid cols-2">
     <div class="chart-card"><h3><span data-en="Content mix">Mix de contenido</span><i class="info-icon" data-tip="Porcentaje de publicaciones de cada categoría." data-tip-en="Share of posts in each category.">i</i></h3><div class="chart-wrap" style="height:340px"><canvas id="c-cat-mix"></canvas></div><div class="learn" id="l-cat-mix"></div></div>
@@ -587,6 +598,13 @@ const CAT_LABEL = EN
       testimonio: "Testimonio", comunidad: "Comunidad", estacional: "Estacional", tendencia: "Tendencia",
       concurso: "Concurso", interaccion: "Interacción", marca: "Marca", alianza: "Alianza" };
 const catLabel = c => CAT_LABEL[c] || ((c || "").charAt(0).toUpperCase() + (c || "").slice(1));
+// Puntos clave escritos por el analista (hallazgos/<cliente>/<período>.json)
+function puntos(id, items) {
+  if (!items || !items.length) return;
+  document.getElementById(`${id}-puntos`).innerHTML = items.map(p =>
+    `<li><strong>${esc(p.titulo)}.</strong> ${esc(p.texto)}</li>`).join("");
+  document.getElementById(`${id}-puntos-box`).hidden = false;
+}
 const DOW_EN = { Lun: "Mon", Mar: "Tue", Mié: "Wed", Jue: "Thu", Vie: "Fri", Sáb: "Sat", Dom: "Sun" };
 const dowLabel = d => EN ? (DOW_EN[d] || d) : d;
 const DIA = EN
@@ -995,6 +1013,7 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
         <td><a href="${esc(x.url)}" target="_blank" rel="noopener">${L("ver", "view")} →</a></td></tr>`;
     }).join("") + "</tbody>";
   };
+  puntos("pub", EN ? B.puntos_pub_en : B.puntos_pub);
   if ((B.atipicos || []).length) {
     document.getElementById("h-atipicos").hidden = false;
     document.getElementById("card-atipicos").hidden = false;
@@ -1029,6 +1048,7 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
     document.getElementById("tab-categorias").hidden = true;
     return;
   }
+  puntos("cat", EN ? B.puntos_cat_en : B.puntos_cat);
   const mix = ca.mix_global;
   new Chart(document.getElementById("c-cat-mix"), {
     type: "bar",
