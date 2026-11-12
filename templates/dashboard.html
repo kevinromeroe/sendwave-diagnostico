@@ -94,6 +94,9 @@
   .topbar .meta .period-selector, .topbar .meta .pdf-btn, .topbar .meta .lang-switch { height: 34px; margin: 0; box-sizing: border-box; }
   .topbar .meta .lang-switch a { display: inline-flex; align-items: center; height: 100%; padding: 0 11px; }
   @media screen { .print-only { display: none !important; } }
+  .aud-cities { columns: 2; column-gap: 40px; margin-top: 8px; }
+  .aud-city { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13.5px; break-inside: avoid; }
+  .aud-city strong { font-weight: 700; }
   .topbar .title-block .title { white-space: nowrap; }
   .topbar .meta strong { color: var(--brand); display: block; font-size: 13px; font-family: var(--font-display); font-weight: 700; }
   .period-selector { display: inline-block; margin-left: 14px; padding: 6px 28px 6px 12px; border: 1px solid var(--line);
@@ -329,6 +332,7 @@
     .section-head { margin: 36px 0 20px; }
     .section-head h2 { font-size: 22px; }
     .kpi-grid, .kpi-grid.cols-5, .ranking, .chart-grid.cols-2 { grid-template-columns: 1fr; }
+    .aud-cities { columns: 1; }
     .kpi { border-right: 0; border-bottom: 1px solid var(--line); padding: 18px 20px; }
     .kpi .value { font-size: 28px; }
     .chart-card { padding: 16px; }
@@ -507,6 +511,26 @@
   <div class="chart-card" style="margin-top:24px"><h3><span data-en="Opportunities: underused categories that outperform">Oportunidades: categorías poco usadas que rinden más</span><i class="info-icon" data-tip="Categorías con menos del 10% del mix y engagement promedio por encima del promedio de la cuenta." data-tip-en="Categories under 10% of the mix with average engagement above the account average.">i</i></h3><div id="tbl-cat-gaps"></div></div>
 </section>
 
+<!-- ============ AUDIENCIA ============ -->
+<section class="tab" id="tab-audiencia">
+  <div class="section-head">
+    <div class="num" data-en="Audience">Audiencia</div>
+    <h2 data-en="Who follows the account and where they live">Quién sigue la cuenta y dónde vive</h2>
+    <div class="desc" id="aud-desc"></div>
+  </div>
+  <div class="resumen-corp" id="aud-puntos-box" hidden>
+    <div class="lbl" data-en="Key points">Puntos clave</div>
+    <ul class="perf-points" id="aud-puntos"></ul>
+  </div>
+  <div class="kpi-grid" id="aud-kpis"></div>
+  <div class="chart-grid cols-2" style="margin-top:24px">
+    <div class="chart-card"><h3><span data-en="Age and gender">Edad y género</span><i class="info-icon" data-tip="Porcentaje del total de seguidores en cada rango de edad, separado por género." data-tip-en="Share of total followers in each age bracket, split by gender.">i</i></h3><div class="chart-wrap" style="height:300px"><canvas id="c-aud-edad"></canvas></div><div class="learn" id="l-aud-edad"></div></div>
+    <div class="chart-card"><h3><span data-en="Top countries">Países principales</span><i class="info-icon" data-tip="Los 10 países con más seguidores. El color separa los países desde donde se envía dinero de los que lo reciben." data-tip-en="The 10 countries with the most followers. Color separates the countries money is sent from and those that receive it.">i</i></h3><div class="chart-wrap" style="height:300px"><canvas id="c-aud-pais"></canvas></div><div class="learn" id="l-aud-pais"></div></div>
+  </div>
+  <div class="chart-card" style="margin-top:24px"><h3 data-en="Top cities">Ciudades principales</h3><div class="aud-cities" id="aud-ciudades"></div></div>
+  <div class="note" id="aud-fuente"></div>
+</section>
+
 <!-- ============ HALLAZGOS ============ -->
 <section class="tab" id="tab-hallazgos">
   <div class="section-head">
@@ -525,7 +549,7 @@
 <footer>
   <div class="footer-grid">
     <div style="flex:1; min-width:280px">
-      <div class="powered">© <span id="foot-year"></span> <strong>Datalítica Colombia S.A.S.</strong> · <span data-en="Confidential deliverable for">Entregable confidencial para</span> <strong id="foot-client"></strong> · <span data-en="Public data sources">Datos de fuentes públicas</span></div>
+      <div class="powered">© <span id="foot-year"></span> <strong>Datalítica Colombia S.A.S.</strong> · <span data-en="Confidential deliverable for">Entregable confidencial para</span> <strong id="foot-client"></strong> · <span data-en="Public data sources and the account's audience data">Datos de fuentes públicas y de audiencia de la cuenta</span></div>
       <details><summary data-en="Legal notice and data processing">Aviso legal y tratamiento de datos</summary>
         <p data-en="Confidential report: unauthorized access or distribution is prohibited. Data processed in accordance with Colombian Law 1581 of 2012. Metrics are calculated from public information of the analyzed accounts.">Reporte confidencial: acceso o distribución no autorizada prohibida. Tratamiento de datos conforme a la Ley 1581 de 2012 (Colombia). Las métricas se calculan sobre información pública de las cuentas analizadas.</p>
       </details>
@@ -694,7 +718,7 @@ document.getElementById("pdf-btn").addEventListener("click", () =>
 const TABS = [
   { id: "resumen", label: L("Resumen", "Summary") }, { id: "desempeno", label: L("Desempeño", "Performance") },
   { id: "publicaciones", label: L("Publicaciones", "Posts") }, { id: "categorias", label: L("Categorías", "Categories") },
-  { id: "hallazgos", label: L("Hallazgos", "Findings") },
+  { id: "audiencia", label: L("Audiencia", "Audience") }, { id: "hallazgos", label: L("Hallazgos", "Findings") },
 ];
 (function mountTabs() {
   const nav = document.getElementById("tabs"), drawer = document.getElementById("menu-drawer");
@@ -1038,6 +1062,57 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
   document.getElementById("hashtags").innerHTML = (B.top_hashtags || []).length
     ? B.top_hashtags.map(([h, n]) => `<span class="ht">#${esc(h)}<strong>${n}</strong></span>`).join("")
     : `<span style="color:var(--muted)">${L("La cuenta no usa hashtags de forma sistemática en este período.", "The account does not use hashtags consistently in this period.")}</span>`;
+})();
+
+// ════════════════════════════════════════════════════════════
+// Audiencia (datos exportados de Instagram por la cuenta)
+// ════════════════════════════════════════════════════════════
+(function audiencia() {
+  const A = B.audiencia;
+  if (!A) {
+    document.querySelectorAll('[data-tab="audiencia"]').forEach(b => b.hidden = true);
+    document.getElementById("tab-audiencia").hidden = true;
+    return;
+  }
+  puntos("aud", EN ? A.puntos_en : A.puntos);
+  const [ay, am] = A.exportado.split("-");
+  const mm = parseInt(am, 10) - 1;
+  const mesExp = EN
+    ? `${["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"][mm]} ${ay}`
+    : `${["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"][mm]} de ${ay}`;
+  document.getElementById("aud-desc").textContent = L(
+    "Edad, género y ubicación de los seguidores, según los datos de audiencia de Instagram de la cuenta.",
+    "Followers' age, gender and location, based on the account's Instagram audience data.");
+  document.getElementById("aud-kpis").innerHTML = A.kpis.map(k =>
+    kpi(esc(L(k.texto, k.texto_en)), esc(L(k.valor, k.valor_en)))).join("");
+  const edades = A.edades.map(e => e === "65+" ? "65+" : e.replace("-", "–"));
+  const pctTip = { callbacks: { label: x => `${x.dataset.label ? x.dataset.label + ": " : ""}${pctFmt(x.raw, 1)}` } };
+  new Chart(document.getElementById("c-aud-edad"), {
+    type: "bar",
+    data: { labels: edades, datasets: [
+      { label: L("Hombres", "Men"), data: A.hombres, backgroundColor: COLOR, borderRadius: 3, maxBarThickness: 18 },
+      { label: L("Mujeres", "Women"), data: A.mujeres, backgroundColor: "#C9BFB8", borderRadius: 3, maxBarThickness: 18 } ] },
+    options: { ...barOpts(true), plugins: { legend: { position: "bottom" }, tooltip: pctTip },
+      scales: { x: { beginAtZero: true, grid: { color: "#f0f2f5" }, ticks: { callback: v => v + "%" } }, y: { grid: { display: false } } } },
+  });
+  learn("l-aud-edad", esc(L(A.nota_edad, A.nota_edad_en)));
+  const leg = EN ? A.leyenda_en : A.leyenda;
+  new Chart(document.getElementById("c-aud-pais"), {
+    type: "bar",
+    data: { labels: A.paises.map(c => L(c.nombre, c.nombre_en)), datasets: [
+      { data: A.paises.map(c => c.pct), backgroundColor: A.paises.map(c => c.envia ? COLOR : "#C9BFB8"), borderRadius: 3, maxBarThickness: 18 } ] },
+    options: { ...barOpts(true), plugins: { legend: { display: false }, tooltip: pctTip },
+      scales: { x: { beginAtZero: true, grid: { color: "#f0f2f5" }, ticks: { callback: v => v + "%" } }, y: { grid: { display: false }, ticks: { autoSkip: false } } } },
+  });
+  learn("l-aud-pais",
+    `<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:${COLOR};margin-right:5px"></span>${esc(leg[0])} &nbsp; ` +
+    `<span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#C9BFB8;margin-right:5px"></span>${esc(leg[1])}<br>` +
+    esc(L(A.nota_paises, A.nota_paises_en)));
+  document.getElementById("aud-ciudades").innerHTML = A.ciudades.map((c, i) =>
+    `<div class="aud-city"><span>${i + 1}. ${esc(L(c.nombre, c.nombre_en))}</span><strong>${pctFmt(c.pct, 1)}</strong></div>`).join("");
+  document.getElementById("aud-fuente").innerHTML = L(
+    `<strong>Fuente</strong> · Datos de audiencia de Instagram de la cuenta, exportados en ${mesExp}. Los porcentajes son sobre el total de seguidores; Instagram solo entrega los 10 países y las 10 ciudades principales.`,
+    `<strong>Source</strong> · The account's Instagram audience data, exported in ${mesExp}. Percentages are of total followers; Instagram only provides the top 10 countries and top 10 cities.`);
 })();
 
 // ════════════════════════════════════════════════════════════

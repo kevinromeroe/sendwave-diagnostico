@@ -648,6 +648,14 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
         "channels": channels,
     }
 
+    # Audiencia exportada de Instagram (edad, género, países, ciudades): archivo opcional por cliente
+    aud_path = ROOT / "config" / "clients" / f"{client_id}_audiencia.json"
+    if aud_path.exists():
+        aud = json.loads(aud_path.read_text(encoding="utf-8"))
+        for ch in cfg["channels"]:
+            if aud.get(ch["key"]):
+                channels[ch["key"]]["audiencia"] = {"edades": aud["edades"], **aud[ch["key"]]}
+
     # Hallazgos: los escritos por el analista (hallazgos/<cliente>/<período>.json)
     # tienen prioridad; si no hay, se generan con Gemini.
     manual_path = ROOT / "hallazgos" / client_id / f"{period}.json"
