@@ -111,6 +111,17 @@ channels:
         addParentData: true
 
 # =============================================================
+# Influencer marketing (desde nov-2026)
+# Desde `separar_desde` los KPIs de cada cuenta usan solo publicaciones propias y las
+# colaboraciones de creadores van en la pestaña "Creadores". El diagnóstico (jun–oct) no cambia.
+# En el mes del cambio no se muestran variaciones contra el mes anterior.
+# `emv`: valor por interacción (pendiente: lo define Kevin). Ej.: {moneda: USD, like: 0.0, comentario: 0.0, compartido: 0.0}
+# =============================================================
+influencer_marketing:
+  separar_desde: "2026-11"
+  emv: {}
+
+# =============================================================
 # Reglas analíticas
 # =============================================================
 analytics:

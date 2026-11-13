@@ -382,6 +382,13 @@
     .hm-cell { font-size: 7px !important; min-height: 15px !important; }
     footer { display: none !important; }  /* evita una última página solo con el pie */
   }
+  .cr-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 12px; }
+  .cr-card { border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; background: #fff; }
+  .cr-card h4 { margin: 0 0 6px; font-size: 15px; }
+  .cr-card .cr-nums { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 13px; color: var(--muted); }
+  .cr-card .cr-nums strong { color: var(--ink); }
+  .cr-card .cr-vs { margin-top: 10px; font-size: 13px; }
+  .cr-card blockquote { margin: 8px 0 0; padding: 6px 10px; border-left: 3px solid var(--line); font-size: 12.5px; color: #444; }
 </style>
 </head>
 <body>
@@ -501,7 +508,10 @@
   </div>
   <div class="kpi-grid cols-5" id="cr-kpis"></div>
   <p class="note" id="cr-note" hidden></p>
-  <div class="chart-card" style="padding:0;margin-top:20px"><table id="t-creadores"></table></div>
+  <h3 style="font-size:16px;margin-top:28px" data-en="Creator cards">Fichas por creador</h3>
+  <div class="cr-cards" id="cr-fichas"></div>
+  <h3 style="font-size:16px;margin-top:28px" data-en="All creator posts">Todas las piezas de creadores</h3>
+  <div class="chart-card" style="padding:0;margin-top:12px"><table id="t-creadores"></table></div>
 </section>
 
 <section class="tab" id="tab-categorias">
@@ -1092,12 +1102,27 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
     kpi("Likes", fmt(C.likes), C.con_likes_ocultos ? L(`+ ${C.con_likes_ocultos} con likes ocultos`, `+ ${C.con_likes_ocultos} with hidden likes`) : "", false,
         L("Suma de likes visibles. Algunas cuentas ocultan sus likes.", "Sum of visible likes. Some accounts hide their likes.")) +
     kpi(L("Comentarios", "Comments"), fmt(C.comentarios), "", false, L("Suma de comentarios.", "Sum of comments.")) +
-    kpi(L("Compartidos", "Shares"), fmt(C.compartidos), "", false,
+    kpi(L("Compartidos", "Shares"), fmt(C.compartidos), C.emv_total == null ? L("EMV: pendiente de valores", "EMV: values pending") : `EMV ${fmt(C.emv_total)} ${esc(C.emv_moneda || "")}`, false,
         L("Veces que se compartió. Instagram solo lo muestra con sesión iniciada.", "Times shared. Instagram only shows it when signed in."));
   const n = document.getElementById("cr-note");
   n.hidden = false;
-  n.innerHTML = L("Cifras leídas de Instagram. En creadores grandes la plataforma las muestra redondeadas (p. ej. 1,8 mil).",
-                  "Figures read from Instagram. For large creators the platform shows them rounded (e.g. 1.8K).");
+  n.innerHTML = L("Likes, comentarios y vistas exactos de cada pieza; compartidos leídos de Instagram con sesión iniciada. La comparación frente al contenido habitual usa la mediana de las publicaciones recientes del creador (reels: vistas; fotos: interacciones).",
+                  "Exact likes, comments and views per post; shares read from Instagram while signed in. The comparison with usual content uses the median of the creator's recent posts (reels: views; photos: interactions).");
+  const fmtK = v => v >= 1e6 ? (v / 1e6).toFixed(1).replace(".", EN ? "." : ",") + " M" : v >= 1e4 ? Math.round(v / 1e3) + L(" mil", "K") : fmt(v);
+  document.getElementById("cr-fichas").innerHTML = (C.fichas || []).map(f => {
+    const vs = (f.comparacion || []).map(c => {
+      const up = c.veces >= 1, col = up ? "#2f7d32" : "#c33";
+      const que = c.metodo === "vistas" ? L("vistas", "views") : L("interacciones", "interactions");
+      return `<div class="cr-vs">${L("Frente a su contenido habitual", "Versus their usual content")}: <strong style="color:${col}">${String(c.veces).replace(".", EN ? "." : ",")}×</strong>
+        <span style="color:var(--muted)">(${fmtK(c.valor_pieza)} ${que} ${L("vs mediana de", "vs median of")} ${fmtK(c.mediana_habitual)})</span></div>`;
+    }).join("");
+    const conv = (f.conversacion || []).map(c => `<blockquote>“${esc(c.texto)}”${c.likes ? ` <span style="color:var(--muted)">· ${fmt(c.likes)} ♥</span>` : ""}</blockquote>`).join("");
+    return `<div class="cr-card"><h4><a href="https://www.instagram.com/${esc(f.creador)}/" target="_blank" rel="noopener">@${esc(f.creador)}</a></h4>
+      <div class="cr-nums"><span><strong>${fmt(f.piezas)}</strong> ${L(f.piezas === 1 ? "pieza" : "piezas", f.piezas === 1 ? "post" : "posts")}</span>
+      <span><strong>${fmt(f.likes)}</strong> likes</span><span><strong>${fmt(f.comentarios)}</strong> ${L("coments", "comments")}</span>
+      <span><strong>${fmt(f.compartidos)}</strong> ${L("compartidos", "shares")}</span>${f.vistas ? `<span><strong>${fmtK(f.vistas)}</strong> ${L("vistas", "views")}</span>` : ""}</div>
+      ${vs}${conv ? `<div style="margin-top:10px;font-size:12px;color:var(--muted)">${L("Lo que más se comentó", "Top comments")}</div>${conv}` : ""}</div>`;
+  }).join("");
   const head = `<thead><tr><th>${L("Fecha", "Date")}</th><th>${L("Creador", "Creator")}</th><th>${L("Formato", "Format")}</th><th>Caption</th><th class="num">Likes</th><th class="num">${L("Coments", "Comments")}</th><th class="num">${L("Compartidos", "Shares")}</th><th class="num">${L("Vistas", "Views")}</th><th></th></tr></thead>`;
   document.getElementById("t-creadores").innerHTML = head + "<tbody>" + C.publicaciones.map(x => {
     const c = x.caption || "";

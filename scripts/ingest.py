@@ -141,6 +141,42 @@ def post_rows(client_id: str, key: str, posts: list[dict]) -> list[dict]:
     return rows
 
 
+# Campos que trae el levantamiento por Chrome (skill levantamiento-redes) y que Apify no tiene.
+_RAW_CHROME = ("levantamientos", "fuente", "fuente_vistas", "leido_en", "dueno", "likes_ocultos")
+
+
+def preserve_existing(sb: Supabase, rows: list[dict]) -> list[dict]:
+    """Evita que una ingesta de Apify borre datos buenos que ya están en Supabase.
+
+    - Compartidos: Apify no los trae (llegan en 0). Si ya hay un valor mayor (leído por Chrome), se conserva.
+    - Cuenta (platform): una publicación ya asignada a una cuenta no cambia de cuenta.
+    - raw: se conservan las marcas e historial del levantamiento por Chrome.
+    Likes, comentarios y vistas sí se actualizan con lo que trae Apify (es el dato más reciente).
+    """
+    if not rows:
+        return rows
+    existing: dict[str, dict] = {}
+    ids = [r["id"] for r in rows]
+    for i in range(0, len(ids), 100):
+        chunk = ",".join(ids[i:i + 100])
+        for e in sb.select("posts", filter=f"id=in.({chunk})", columns="id,platform,shares,raw", limit=100):
+            existing[e["id"]] = e
+    kept = 0
+    for r in rows:
+        e = existing.get(r["id"])
+        if not e:
+            continue
+        r["platform"] = e.get("platform") or r["platform"]
+        if not r.get("shares") and (e.get("shares") or 0) > 0:
+            r["shares"] = e["shares"]
+            kept += 1
+        old_raw = e.get("raw") or {}
+        r["raw"] = {**(r.get("raw") or {}), **{k: old_raw[k] for k in _RAW_CHROME if k in old_raw}}
+    if kept:
+        print(f"  ↺ {kept} publicaciones conservan sus compartidos leídos por Chrome")
+    return rows
+
+
 def download_thumb(url: str | None, key: str, post_id: str) -> str | None:
     """Baja y comprime la miniatura (las URLs del CDN expiran en horas)."""
     if not url or not _PIL_OK:
@@ -266,7 +302,7 @@ def ingest_period(cfg: dict, apify: ApifyClient, sb: Supabase, period: str) -> i
                     print(f"  ⚠ no se guardó el historial de seguidores: {exc}")
         posts = block["posts"]
         if posts:
-            sb.upsert("posts", post_rows(client_id, key, posts), on_conflict="id")
+            sb.upsert("posts", preserve_existing(sb, post_rows(client_id, key, posts)), on_conflict="id")
         ok = ko = 0
         for p in posts:
             local = download_thumb(p.get("media_url"), key, p["id"])
