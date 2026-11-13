@@ -493,6 +493,17 @@
 </section>
 
 <!-- ============ CATEGORÍAS ============ -->
+<section class="tab" id="tab-creadores">
+  <div class="section-head">
+    <div class="num" data-en="Creators">Creadores</div>
+    <h2 data-en="Content creators published with the account">Contenido que los creadores publicaron con la cuenta</h2>
+    <div class="desc" data-en="Posts from other accounts made in collaboration with the brand. They are reported separately: they do not count in the account KPIs, charts or outliers.">Publicaciones de otras cuentas hechas en colaboración con la marca. Se reportan aparte: no cuentan en los KPIs, gráficas ni atípicas de la cuenta.</div>
+  </div>
+  <div class="kpi-grid cols-5" id="cr-kpis"></div>
+  <p class="note" id="cr-note" hidden></p>
+  <div class="chart-card" style="padding:0;margin-top:20px"><table id="t-creadores"></table></div>
+</section>
+
 <section class="tab" id="tab-categorias">
   <div class="section-head">
     <div class="num" data-en="Content categories">Categorías de contenido</div>
@@ -718,7 +729,7 @@ document.getElementById("pdf-btn").addEventListener("click", () =>
 const TABS = [
   { id: "resumen", label: L("Resumen", "Summary") }, { id: "desempeno", label: L("Desempeño", "Performance") },
   { id: "publicaciones", label: L("Publicaciones", "Posts") }, { id: "categorias", label: L("Categorías", "Categories") },
-  { id: "audiencia", label: L("Audiencia", "Audience") }, { id: "hallazgos", label: L("Hallazgos", "Findings") },
+  { id: "audiencia", label: L("Audiencia", "Audience") }, { id: "creadores", label: L("Creadores", "Creators") }, { id: "hallazgos", label: L("Hallazgos", "Findings") },
 ];
 (function mountTabs() {
   const nav = document.getElementById("tabs"), drawer = document.getElementById("menu-drawer");
@@ -1062,6 +1073,42 @@ function heatmapHTML(m, rowLabels, colLabels, color, gridCols) {
   document.getElementById("hashtags").innerHTML = (B.top_hashtags || []).length
     ? B.top_hashtags.map(([h, n]) => `<span class="ht">#${esc(h)}<strong>${n}</strong></span>`).join("")
     : `<span style="color:var(--muted)">${L("La cuenta no usa hashtags de forma sistemática en este período.", "The account does not use hashtags consistently in this period.")}</span>`;
+})();
+
+// ════════════════════════════════════════════════════════════
+// Creadores (colaboraciones publicadas por otras cuentas; van aparte de los KPIs)
+// ════════════════════════════════════════════════════════════
+(function creadores() {
+  const C = B.creadores;
+  if (!C || !(C.publicaciones || []).length) {
+    document.querySelectorAll('[data-tab="creadores"]').forEach(b => b.hidden = true);
+    return;
+  }
+  document.getElementById("cr-kpis").innerHTML =
+    kpi(L("Publicaciones", "Posts"), fmt(C.n_publicaciones), L("de creadores", "by creators"), false,
+        L("Publicaciones de otras cuentas en colaboración con la marca en el período.", "Posts by other accounts in collaboration with the brand in the period.")) +
+    kpi(L("Creadores", "Creators"), fmt(C.n_creadores), L("cuentas distintas", "distinct accounts"), false,
+        L("Número de cuentas que publicaron con la marca.", "Number of accounts that posted with the brand.")) +
+    kpi("Likes", fmt(C.likes), C.con_likes_ocultos ? L(`+ ${C.con_likes_ocultos} con likes ocultos`, `+ ${C.con_likes_ocultos} with hidden likes`) : "", false,
+        L("Suma de likes visibles. Algunas cuentas ocultan sus likes.", "Sum of visible likes. Some accounts hide their likes.")) +
+    kpi(L("Comentarios", "Comments"), fmt(C.comentarios), "", false, L("Suma de comentarios.", "Sum of comments.")) +
+    kpi(L("Compartidos", "Shares"), fmt(C.compartidos), "", false,
+        L("Veces que se compartió. Instagram solo lo muestra con sesión iniciada.", "Times shared. Instagram only shows it when signed in."));
+  const n = document.getElementById("cr-note");
+  n.hidden = false;
+  n.innerHTML = L("Cifras leídas de Instagram. En creadores grandes la plataforma las muestra redondeadas (p. ej. 1,8 mil).",
+                  "Figures read from Instagram. For large creators the platform shows them rounded (e.g. 1.8K).");
+  const head = `<thead><tr><th>${L("Fecha", "Date")}</th><th>${L("Creador", "Creator")}</th><th>${L("Formato", "Format")}</th><th>Caption</th><th class="num">Likes</th><th class="num">${L("Coments", "Comments")}</th><th class="num">${L("Compartidos", "Shares")}</th><th class="num">${L("Vistas", "Views")}</th><th></th></tr></thead>`;
+  document.getElementById("t-creadores").innerHTML = head + "<tbody>" + C.publicaciones.map(x => {
+    const c = x.caption || "";
+    const cap = c.length > 160 ? c.slice(0, 160) + "…" : c;
+    const likes = x.likes == null ? `<span style="color:var(--muted)">${L("ocultos", "hidden")}</span>` : fmt(x.likes);
+    const who = x.creador ? `<a href="https://www.instagram.com/${esc(x.creador)}/" target="_blank" rel="noopener">@${esc(x.creador)}</a>` : "—";
+    return `<tr><td style="white-space:nowrap">${x.fecha}</td><td>${who}</td><td><span class="pill">${esc(prettyType(x.tipo))}</span></td>
+      <td class="caption">${esc(cap)}</td><td class="num">${likes}</td><td class="num">${fmt(x.comentarios)}</td>
+      <td class="num">${fmt(x.compartidos)}</td><td class="num">${x.views == null ? "—" : fmt(x.views)}</td>
+      <td><a href="${esc(x.url)}" target="_blank" rel="noopener">${L("ver", "view")} →</a></td></tr>`;
+  }).join("") + "</tbody>";
 })();
 
 // ════════════════════════════════════════════════════════════

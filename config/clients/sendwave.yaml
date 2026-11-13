@@ -90,6 +90,26 @@ channels:
         resultsLimit: 200
         addParentData: true
 
+  - key: ig_rd
+    platform: instagram
+    label: "Instagram República Dominicana"
+    label_en: "Instagram Dominican Republic"
+    short: "RD"
+    idioma: es
+    handle: sendwaveapprd
+    url: https://www.instagram.com/sendwaveapprd/
+    color: "#C8102E"          # PROVISIONAL (rojo bandera RD) hasta definirlo con la marca
+    desde: "2026-11"          # cuenta creada en nov 2026: no tiene diagnóstico
+    apify:
+      actor_id: shu8hvrXbJbY3Eb9W         # apify/instagram-scraper
+      actor_name: apify/instagram-scraper
+      cap_usd: 0.30
+      input:
+        directUrls: ["https://www.instagram.com/sendwaveapprd/"]
+        resultsType: posts
+        resultsLimit: 100
+        addParentData: true
+
 # =============================================================
 # Reglas analíticas
 # =============================================================
