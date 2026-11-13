@@ -302,7 +302,20 @@ def ingest_period(cfg: dict, apify: ApifyClient, sb: Supabase, period: str) -> i
                     print(f"  ⚠ no se guardó el historial de seguidores: {exc}")
         posts = block["posts"]
         if posts:
-            sb.upsert("posts", preserve_existing(sb, post_rows(client_id, key, posts)), on_conflict="id")
+            rows = post_rows(client_id, key, posts)
+            desde = (cfg.get("influencer_marketing") or {}).get("separar_desde")
+            if desde and period != cfg["periods"]["diagnostico"]["id"] and period >= desde:
+                propio = (ch.get("handle") or "").lower()
+                n_cr = 0
+                for r in rows:
+                    dueno = ((r.get("raw") or {}).get("extra") or {}).get("ownerUsername")
+                    if dueno and dueno.lower() != propio:
+                        r["platform"] = f"{key}_creadores"
+                        r["raw"] = {**(r.get("raw") or {}), "dueno": dueno}
+                        n_cr += 1
+                if n_cr:
+                    print(f"  ↳ {n_cr} colaboraciones de creadores van a la pestaña Creadores")
+            sb.upsert("posts", preserve_existing(sb, rows), on_conflict="id")
         ok = ko = 0
         for p in posts:
             local = download_thumb(p.get("media_url"), key, p["id"])

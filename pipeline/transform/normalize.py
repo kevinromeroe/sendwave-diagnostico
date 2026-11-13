@@ -131,6 +131,7 @@ def normalize_instagram(items: list[dict[str, Any]]) -> dict[str, Any]:
                     "playCount": item.get("videoPlayCount") or item.get("videoViewCount"),
                     "productType": item.get("productType"),
                     "isPinned": bool(item.get("isPinned", False)),
+                    "ownerUsername": item.get("ownerUsername"),
                 },
                 media_url=item.get("displayUrl"),
             )
