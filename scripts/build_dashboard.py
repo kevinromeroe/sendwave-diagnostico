@@ -168,7 +168,8 @@ def load_posts(sb: Supabase, client_id: str) -> list[dict]:
     while True:
         chunk = sb.select("posts", filter=f"client_id=eq.{client_id}&order=id.asc&offset={len(rows)}",
                           columns="id,platform,url,type,caption,hashtags,likes,comments,shares,views,"
-                                  "engagement,media_url,media_url_local,tags,tag_primary,posted_at",
+                                  "engagement,media_url,media_url_local,tags,tag_primary,posted_at,"
+                                  "dueno:raw->>dueno,likes_ocultos:raw->>likes_ocultos",
                           limit=page)
         rows += chunk
         if len(chunk) < page:
@@ -186,6 +187,7 @@ def load_posts(sb: Supabase, client_id: str) -> list[dict]:
             "views": r.get("views"), "engagement": r.get("engagement") or 0,
             "media_url": r.get("media_url_local") or r.get("media_url") or "",
             "tags": r.get("tags"), "tag_primary": r.get("tag_primary"), "ts": ts,
+            "dueno": r.get("dueno"), "likes_ocultos": r.get("likes_ocultos") == "true",
         })
     return out
 
@@ -403,6 +405,66 @@ def channel_block(ps: list[dict], an: dict, start, end) -> dict:
 MES_CORTO = ["", "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
 
 
+def _creators_extra(cfg: dict | None) -> dict:
+    """Línea base y conversación de los creadores (config/clients/<cliente>_creadores.json), si existe."""
+    if not cfg:
+        return {}
+    path = ROOT / "config" / "clients" / f"{cfg['client']['id']}_creadores.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+
+
+def creators_block(ps: list[dict], cfg: dict | None = None) -> dict:
+    """Contenido de creadores: publicaciones de otras cuentas en colaboración con la cuenta.
+
+    Va aparte de los KPIs de la cuenta (no se suma ni entra en promedios ni atípicas):
+    una sola pieza de un creador grande movería todas las métricas propias.
+    """
+    rows = sorted(ps, key=lambda p: -(p["likes"] + p["comments"]))
+    extra = _creators_extra(cfg)
+    emv_v = ((cfg or {}).get("influencer_marketing") or {}).get("emv") or {}
+
+    def emv(p):
+        if not emv_v:
+            return None
+        return round(p["likes"] * emv_v.get("like", 0) + p["comments"] * emv_v.get("comentario", 0)
+                     + p["shares"] * emv_v.get("compartido", 0))
+
+    fichas: dict[str, dict] = {}
+    for p in rows:
+        h = p.get("dueno") or "—"
+        f = fichas.setdefault(h, {"creador": h, "piezas": 0, "likes": 0, "comentarios": 0, "compartidos": 0,
+                                  "vistas": 0, "comparacion": [], "conversacion": []})
+        f["piezas"] += 1
+        f["likes"] += p["likes"]
+        f["comentarios"] += p["comments"]
+        f["compartidos"] += p["shares"]
+        f["vistas"] += p.get("views") or 0
+        code = p["url"].rstrip("/").rsplit("/", 1)[-1]
+        for pz in (extra.get("creadores", {}).get(h, {}).get("piezas") or []):
+            if pz["codigo"] == code and pz.get("veces") is not None:
+                f["comparacion"].append({**pz, "url": p["url"]})
+        f["conversacion"] += extra.get("conversacion", {}).get(code, [])
+    for f in fichas.values():
+        f["conversacion"] = sorted(f["conversacion"], key=lambda c: -c["likes"])[:3]
+    total_emv = sum(emv(p) or 0 for p in rows) if emv_v else None
+    return {
+        "emv_total": total_emv,
+        "emv_moneda": emv_v.get("moneda") if emv_v else None,
+        "fichas": sorted(fichas.values(), key=lambda f: -(f["likes"] + f["comentarios"])),
+        "n_publicaciones": len(rows),
+        "n_creadores": len({p.get("dueno") for p in rows if p.get("dueno")}),
+        "likes": sum(p["likes"] for p in rows),
+        "comentarios": sum(p["comments"] for p in rows),
+        "compartidos": sum(p["shares"] for p in rows),
+        "con_likes_ocultos": sum(1 for p in rows if p.get("likes_ocultos")),
+        "publicaciones": [{
+            "creador": p.get("dueno"), "url": p["url"], "fecha": p["ts"].strftime("%Y-%m-%d"),
+            "tipo": p["type"], "caption": p["caption"], "likes": None if p.get("likes_ocultos") else p["likes"],
+            "comentarios": p["comments"], "compartidos": p["shares"], "views": p.get("views"), "emv": emv(p),
+        } for p in rows],
+    }
+
+
 def week_labels(mondays: list, period_start) -> list[str]:
     """'Jun S1', 'Jun S2', …: mes y número de semana dentro del mes (lunes a domingo)."""
     out, seen = [], Counter()
@@ -567,7 +629,15 @@ def render(cfg: dict, data: dict, meta: dict, out: Path) -> None:
     print(f"  ✓ {out.relative_to(ROOT)} ({len(html) // 1024} KB)")
 
 
+def active_channels(cfg: dict, period: str) -> list[dict]:
+    """Canales que existen en el período: una cuenta con `desde: YYYY-MM` no aparece antes (ni en el diagnóstico)."""
+    diag = cfg["periods"]["diagnostico"]["id"]
+    return [ch for ch in cfg["channels"]
+            if not ch.get("desde") or (period != diag and period >= ch["desde"])]
+
+
 def build_period(cfg, sb, all_posts, period, available) -> bool:
+    cfg = {**cfg, "channels": active_channels(cfg, period)}
     client_id = cfg["client"]["id"]
     diag_id = cfg["periods"]["diagnostico"]["id"]
     an = cfg.get("analytics", {})
@@ -579,7 +649,8 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
     for ch in cfg["channels"]:
         print(f"  {ch['label']}: {len(by_ch[ch['key']])} publicaciones en el período")
 
-    tag_posts(posts, cfg, sb)
+    # Solo se etiquetan las publicaciones de las cuentas (no las de creadores)
+    tag_posts([p for p in posts if p["platform"] in by_ch], cfg, sb)
 
     accounts = load_accounts(sb, client_id, period, diag_id)
     # En un mes en curso la cadencia se mide sobre los días transcurridos
@@ -628,8 +699,13 @@ def build_period(cfg, sb, all_posts, period, available) -> bool:
         if prev:
             pb = channel_block([p for p in prev_posts if p["platform"] == key], an, ps, pe)
             b["deltas"] = compute_deltas(b, pb, b["account"], prev_acc.get(key))
+        if (cfg.get("influencer_marketing") or {}).get("separar_desde") == period:
+            # Mes del cambio de método: el mes anterior incluía colaboraciones, la comparación sería ruido
+            b["deltas"] = None
+            b["cambio_metodo"] = True
         b["resumen_html"] = resumen_html(ch, b, b["account"], P.short_label(cfg, period))
         b["resumen_html_en"] = resumen_html_en(ch, b, b["account"], P.short_label_en(cfg, period))
+        b["creadores"] = creators_block([p for p in posts if p["platform"] == f"{key}_creadores"], cfg)
         channels[key] = b
 
     data = {

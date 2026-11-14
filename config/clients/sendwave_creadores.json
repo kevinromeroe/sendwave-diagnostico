@@ -1,0 +1,382 @@
+{
+ "generado": "2026-11-13",
+ "nota": "Línea base = mediana de las publicaciones recientes del creador (sin fijadas ni la pieza de SendWave). Reels: vistas; fotos/carruseles: interacciones (likes + comentarios).",
+ "creadores": {
+  "fernandapontesoficial": {
+   "piezas": [
+    {
+     "codigo": "DfYOCL2nfRp",
+     "metodo": "interacciones",
+     "valor_pieza": 56,
+     "mediana_habitual": 65.5,
+     "n_base": 12,
+     "veces": 0.85,
+     "fuente_base": "apify"
+    },
+    {
+     "codigo": "DfQHIEGHXMc",
+     "metodo": "interacciones",
+     "valor_pieza": 160,
+     "mediana_habitual": 65.5,
+     "n_base": 12,
+     "veces": 2.44,
+     "fuente_base": "apify"
+    }
+   ]
+  },
+  "mabortolanza": {
+   "piezas": [
+    {
+     "codigo": "DfUuEJjFCvW",
+     "metodo": "interacciones",
+     "valor_pieza": 118,
+     "mediana_habitual": 11,
+     "n_base": 11,
+     "veces": 10.73,
+     "fuente_base": "apify"
+    }
+   ]
+  },
+  "nazasoriag": {
+   "piezas": [
+    {
+     "codigo": "DffF7HiRa-7",
+     "metodo": "vistas",
+     "valor_pieza": 21422,
+     "mediana_habitual": 145224.0,
+     "n_base": 8,
+     "veces": 0.15,
+     "fuente_base": "apify"
+    }
+   ]
+  },
+  "heisilg": {
+   "piezas": [
+    {
+     "codigo": "DfdMDG8h17J",
+     "metodo": "vistas",
+     "valor_pieza": 20587,
+     "mediana_habitual": 25338,
+     "n_base": 9,
+     "veces": 0.81,
+     "fuente_base": "apify"
+    }
+   ]
+  },
+  "jenniferfungenzi": {
+   "piezas": [
+    {
+     "codigo": "DfTGBPdvrNG",
+     "metodo": "vistas",
+     "valor_pieza": 249302,
+     "mediana_habitual": 462409.5,
+     "n_base": 6,
+     "veces": 0.54,
+     "fuente_base": "apify"
+    }
+   ]
+  },
+  "mamaoliolaya": {
+   "piezas": [
+    {
+     "codigo": "DfaJGvhuJ8f",
+     "metodo": "vistas",
+     "valor_pieza": 32560,
+     "mediana_habitual": 44751.0,
+     "n_base": 12,
+     "veces": 0.73,
+     "fuente_base": "apify"
+    }
+   ]
+  },
+  "tripa.27": {
+   "piezas": [
+    {
+     "codigo": "DfgNQ1qxAL0",
+     "metodo": "vistas",
+     "valor_pieza": 17748,
+     "mediana_habitual": 24183,
+     "n_base": 11,
+     "veces": 0.73,
+     "fuente_base": "apify"
+    }
+   ]
+  },
+  "laspelotasdeva": {
+   "piezas": [
+    {
+     "codigo": "Dfk-wRVhlUi",
+     "metodo": "vistas",
+     "valor_pieza": 14269,
+     "mediana_habitual": 17948,
+     "n_base": 7,
+     "veces": 0.8,
+     "fuente_base": "apify"
+    }
+   ]
+  },
+  "michaelfrs09": {
+   "piezas": [
+    {
+     "codigo": "DfYIcEORuec",
+     "metodo": "vistas",
+     "valor_pieza": 40578,
+     "mediana_habitual": 97954,
+     "n_base": 11,
+     "veces": 0.41,
+     "fuente_base": "apify"
+    }
+   ]
+  },
+  "franknarra": {
+   "piezas": [
+    {
+     "codigo": "DfiuxtGOxX4",
+     "metodo": "vistas",
+     "valor_pieza": 8016076,
+     "mediana_habitual": 195500.0,
+     "n_base": 10,
+     "veces": 41.0,
+     "fuente_base": "chrome (redondeado)"
+    }
+   ]
+  },
+  "tiagoskolusa": {
+   "piezas": [
+    {
+     "codigo": "DfW1Hovvah5",
+     "metodo": "vistas",
+     "valor_pieza": 19019,
+     "mediana_habitual": 43541.5,
+     "n_base": 12,
+     "veces": 0.44,
+     "fuente_base": "apify"
+    }
+   ]
+  },
+  "bymariusa": {
+   "piezas": [
+    {
+     "codigo": "Dfnf8T7AYiy",
+     "metodo": "vistas",
+     "valor_pieza": 21290,
+     "mediana_habitual": 28975.0,
+     "n_base": 10,
+     "veces": 0.73,
+     "fuente_base": "apify"
+    }
+   ]
+  },
+  "giozamoraser": {
+   "piezas": [
+    {
+     "codigo": "DfiX4KLvr-4",
+     "metodo": "vistas",
+     "valor_pieza": 17965,
+     "mediana_habitual": 11765.5,
+     "n_base": 12,
+     "veces": 1.53,
+     "fuente_base": "apify"
+    }
+   ]
+  }
+ },
+ "conversacion": {
+  "DfYOCL2nfRp": [
+   {
+    "texto": "❤️❤️",
+    "likes": 1
+   },
+   {
+    "texto": "👏👏👏❤️",
+    "likes": 1
+   },
+   {
+    "texto": "❤️❤️",
+    "likes": 1
+   }
+  ],
+  "DfUuEJjFCvW": [
+   {
+    "texto": "😍😍😍",
+    "likes": 3
+   },
+   {
+    "texto": "👏👏👏👏",
+    "likes": 3
+   },
+   {
+    "texto": "👏👏👏👏",
+    "likes": 3
+   }
+  ],
+  "DfQHIEGHXMc": [
+   {
+    "texto": "Foi uma noite muito especial e agradável! Obrigada pelo convite tão Querido❤️",
+    "likes": 1
+   },
+   {
+    "texto": "👏👏👏👏",
+    "likes": 1
+   },
+   {
+    "texto": "Sensational",
+    "likes": 1
+   }
+  ],
+  "DffF7HiRa-7": [
+   {
+    "texto": "Chaaaaamaaaa la navidad es fina vaaaaaleeeee",
+    "likes": 0
+   },
+   {
+    "texto": "Promo code Z4MM9 sendwave",
+    "likes": 0
+   },
+   {
+    "texto": "Los 30 !?!?!? Jajajaja",
+    "likes": 0
+   }
+  ],
+  "DfdMDG8h17J": [
+   {
+    "texto": "❤️‍🩹❤️‍🩹❤️‍🩹",
+    "likes": 1
+   },
+   {
+    "texto": "😍😍😍",
+    "likes": 1
+   },
+   {
+    "texto": "Uy comò yo 🥹🥹🥹 igual igual , cuando llamo a mi mami , ella feliz me ofrece un cafecito 🩷🙏🏼 te entiendo …tu historia la de muchas 😍",
+    "likes": 1
+   }
+  ],
+  "DfTGBPdvrNG": [
+   {
+    "texto": "Para que le envies lo suyo a coscu",
+    "likes": 1
+   },
+   {
+    "texto": "Y pagando las deudas también oyó",
+    "likes": 1
+   },
+   {
+    "texto": "Paga mala paga",
+    "likes": 1
+   }
+  ],
+  "DfaJGvhuJ8f": [
+   {
+    "texto": "😂😂😂😂😂😂😂😂",
+    "likes": 1
+   },
+   {
+    "texto": "😂😂😂😂",
+    "likes": 1
+   },
+   {
+    "texto": "😂😂",
+    "likes": 1
+   }
+  ],
+  "DfgNQ1qxAL0": [
+   {
+    "texto": "❤️❤️ Veo a un amigo orgulloso de lo que ha logrado su amigo. Veo a un padre orgulloso de su hijo (aunque no sean padre he hijo), y veo a un Colombiano orgulloso de todo lo que está logrando otro Colombiano . Muchass bend",
+    "likes": 11
+   },
+   {
+    "texto": "💛💛💙❤️me fascina este dúo dinámico, lo mejor Colombiano a Colombiano, imparables 😘",
+    "likes": 4
+   },
+   {
+    "texto": "Ese man más que cliente es parcero",
+    "likes": 1
+   }
+  ],
+  "Dfk-wRVhlUi": [
+   {
+    "texto": "👍👌",
+    "likes": 1
+   },
+   {
+    "texto": "💛💸",
+    "likes": 0
+   },
+   {
+    "texto": "Estaba lista desde el seg 1 del video",
+    "likes": 0
+   }
+  ],
+  "DfYIcEORuec": [
+   {
+    "texto": "Como acceder a tu servicio info pls",
+    "likes": 2
+   },
+   {
+    "texto": "💛💸",
+    "likes": 0
+   },
+   {
+    "texto": "Cm hacerder ?",
+    "likes": 0
+   }
+  ],
+  "DfiuxtGOxX4": [
+   {
+    "texto": "😂😂😂😂",
+    "likes": 0
+   },
+   {
+    "texto": "la última no es falta y que vean el bar, jamás va a ser flata",
+    "likes": 0
+   },
+   {
+    "texto": "😂😂😂",
+    "likes": 0
+   }
+  ],
+  "DfW1Hovvah5": [
+   {
+    "texto": "I always compare prices, but TapTap always pays more!! 🤔",
+    "likes": 0
+   },
+   {
+    "texto": "Leca o seu dinheiro para o Paraguai.",
+    "likes": 0
+   },
+   {
+    "texto": "🙌🙌🙌Deus abençoe vocês 🙌🙌",
+    "likes": 0
+   }
+  ],
+  "Dfnf8T7AYiy": [
+   {
+    "texto": "Manda pra mim também amiga 😍😂",
+    "likes": 1
+   },
+   {
+    "texto": "😂",
+    "likes": 0
+   },
+   {
+    "texto": "😂👏",
+    "likes": 0
+   }
+  ],
+  "DfiX4KLvr-4": [
+   {
+    "texto": "Muy bonita la camiseta Viva Latam 💛",
+    "likes": 2
+   },
+   {
+    "texto": "Promo code Z4MM9 sendwave",
+    "likes": 1
+   },
+   {
+    "texto": "🙌🙌🙌🙌",
+    "likes": 1
+   }
+  ]
+ }
+}
