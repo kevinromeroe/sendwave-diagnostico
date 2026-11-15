@@ -126,3 +126,6 @@ Thumbs.db
 
 # Herramientas locales de revisión
 /_pdfcheck.html
+
+# Contador de visitas (GoatCounter)
+!/gc.js

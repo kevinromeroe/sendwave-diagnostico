@@ -779,7 +779,7 @@ def write_landing(latest_url: str) -> None:
         '<!doctype html><html lang="es"><head><meta charset="utf-8">'
         f'<meta http-equiv="refresh" content="0; url={latest_url}">'
         '<meta name="robots" content="noindex"><title>Dashboard</title></head>'
-        f'<body><a href="{latest_url}">Ir al reporte</a></body></html>\n',
+        f'<body><a href="{latest_url}">Ir al reporte</a><script async src="/gc.js"></script></body></html>\n',
         encoding="utf-8")
     print(f"  ✓ index.html → {latest_url}")
 
