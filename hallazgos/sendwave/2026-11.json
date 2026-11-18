@@ -1,240 +1,460 @@
 {
- "ig_latam": {
-  "resumen_ejecutivo": "Del 1 al 13 de noviembre, @sendwaveapp_latam publicó 3 piezas propias con 74 interacciones (25 por publicación) sobre 120.378 seguidores. Desde este mes los indicadores de la cuenta cuentan solo el contenido propio; las 10 colaboraciones de creadores del período van en la pestaña Creadores, donde una sola pieza de @franknarra superó los 8 millones de vistas.",
-  "hallazgos_top": [
-   {
-    "categoria": "contexto",
-    "dato": "Desde noviembre los indicadores de la cuenta cuentan solo las publicaciones propias de SendWave; en el diagnóstico (junio a octubre) incluían las colaboraciones, que eran dos de cada tres piezas.",
-    "comparativo": "Por eso este mes no se muestran variaciones contra octubre: el cambio de método, no el desempeño, explicaría casi toda la diferencia.",
-    "interpretacion": "El reporte ahora separa lo que produce la marca de lo que aportan los creadores.",
-    "implicacion": "Desde diciembre las comparaciones mes a mes vuelven a ser válidas, ya con el mismo método.",
-    "recomendacion": {"accion": "Leer los indicadores propios y la pestaña Creadores como dos frentes distintos del plan de contenido.", "prioridad": "alta", "esfuerzo": "bajo"}
-   },
-   {
-    "categoria": "patron",
-    "dato": "Las 3 piezas propias del período promueven el programa de referidos Viva LATAM (camiseta y crédito por invitar a 3 amigos) o una fecha cultural (Día de Muertos).",
-    "comparativo": "El reel del 4 de noviembre sobre la camiseta reunió 18.750 vistas y 42 interacciones; el del 7 de noviembre, con el mismo mensaje, 1.458 vistas y 17 interacciones.",
-    "interpretacion": "El mismo incentivo rindió muy distinto según la pieza: la primera presentación de la camiseta conectó más que su repetición.",
-    "implicacion": "Repetir el mensaje de referidos sin cambiar el ángulo tiende a gastar el interés.",
-    "recomendacion": {"accion": "Alternar el mensaje de referidos con historias de usuarios que ya recibieron la camiseta o el crédito.", "prioridad": "media", "esfuerzo": "medio"}
-   },
-   {
-    "categoria": "brecha",
-    "dato": "La tasa de engagement del contenido propio es de 0,02 % (25 interacciones por publicación sobre 120.378 seguidores).",
-    "comparativo": "Las colaboraciones del mismo período sumaron 2.897 comentarios y 579.113 likes en 10 piezas, la mayoría en una sola pieza de @franknarra.",
-    "interpretacion": "La audiencia de la cuenta reacciona poco al contenido institucional y mucho a caras y voces de creadores, igual que en el diagnóstico.",
-    "implicacion": "Medir solo el contenido propio deja ver con claridad cuánto rinde la marca por sí sola.",
-    "recomendacion": {"accion": "Llevar a las piezas propias recursos que funcionan en creadores: persona en cámara, humor y situaciones de la vida del migrante.", "prioridad": "alta", "esfuerzo": "medio"}
-   },
-   {
-    "categoria": "oportunidad",
-    "dato": "La pieza de @franknarra (9 de noviembre) superó los 8 millones de vistas, unas 41 veces la mediana de sus otros reels recientes (~195 mil).",
-    "comparativo": "De las otras 9 colaboraciones con comparación, solo @giozamoraser (1,5×) y @mabortolanza (10,7× en interacciones, foto) superaron su desempeño habitual; las demás quedaron entre 0,15× y 0,81×.",
-    "interpretacion": "El alcance de una colaboración depende más de la pieza y del creador que del volumen de colaboraciones.",
-    "implicacion": "Pocas piezas muy bien elegidas pueden aportar más que muchas colaboraciones de rendimiento promedio.",
-    "recomendacion": {"accion": "Revisar con la agencia qué tuvo la pieza de @franknarra (formato, humor, tema) y usarlo como guía para los siguientes encargos.", "prioridad": "alta", "esfuerzo": "bajo"}
-   }
-  ],
-  "recomendaciones": [
-   {"title": "Dos frentes, dos lecturas", "body": "Evaluar el contenido propio y las colaboraciones por separado: los indicadores de la cuenta muestran lo que produce la marca; la pestaña Creadores, lo que aporta cada creador.", "tags": ["Esfuerzo bajo", "Prioridad alta"]},
-   {"title": "Renovar el mensaje de referidos", "body": "Después de la primera presentación de la camiseta Viva LATAM, contar historias de quienes ya la recibieron en lugar de repetir la misma convocatoria.", "tags": ["Esfuerzo medio", "Prioridad media"]},
-   {"title": "Aprender del pico de @franknarra", "body": "Identificar qué hizo distinta esa pieza y repetir los elementos en los próximos encargos a creadores.", "tags": ["Esfuerzo bajo", "Prioridad alta"]}
-  ],
-  "insights": [
-   {"titulo": "Nuevo método desde noviembre", "texto": "Los indicadores de @sendwaveapp_latam cuentan solo su contenido propio: 3 piezas y 74 interacciones del 1 al 13 de noviembre. Las colaboraciones van aparte, en la pestaña Creadores."},
-   {"titulo": "Una colaboración excepcional", "texto": "La pieza de @franknarra superó los 8 millones de vistas, unas 41 veces lo que suelen lograr sus reels."},
-   {"titulo": "El referido rinde en su estreno", "texto": "La primera pieza sobre la camiseta Viva LATAM sumó 18.750 vistas; la segunda, con el mismo mensaje, 1.458."}
-  ],
-  "puntos_publicaciones": [
-   {"titulo": "Solo contenido propio", "texto": "Este mes la lista incluye únicamente piezas de @sendwaveapp_latam; las de creadores están en la pestaña Creadores."},
-   {"titulo": "La camiseta abrió fuerte", "texto": "El reel del 4 de noviembre es el de mayor alcance propio del período: 18.750 vistas y 8 compartidos."}
-  ],
-  "puntos_categorias": [
-   {"titulo": "Mes centrado en referidos", "texto": "Dos de las tres piezas propias son de promoción (programa de referidos) y una estacional (Día de Muertos)."}
-  ],
-  "en": {
-   "resumen_ejecutivo": "From November 1 to 13, @sendwaveapp_latam published 3 own posts with 74 interactions (25 per post) on 120,378 followers. From this month on, the account indicators count only the brand's own content; the 10 creator collaborations in the period are in the Creators tab, where a single post by @franknarra passed 8 million views.",
-   "hallazgos_top": [
-    {
-     "categoria": "contexto",
-     "dato": "From November on, the account indicators count only SendWave's own posts; in the baseline (June to October) they included collaborations, which were two out of three posts.",
-     "comparativo": "That is why this month shows no changes versus October: the change of method, not performance, would explain almost all of the difference.",
-     "interpretacion": "The report now separates what the brand produces from what creators contribute.",
-     "implicacion": "From December, month-over-month comparisons are valid again, using the same method.",
-     "recomendacion": {"accion": "Read the own-content indicators and the Creators tab as two separate fronts of the content plan.", "prioridad": "alta", "esfuerzo": "bajo"}
-    },
-    {
-     "categoria": "patron",
-     "dato": "The 3 own posts in the period promote the Viva LATAM referral program (T-shirt and credit for inviting 3 friends) or a cultural date (Day of the Dead).",
-     "comparativo": "The November 4 reel about the T-shirt reached 18,750 views and 42 interactions; the November 7 one, with the same message, 1,458 views and 17 interactions.",
-     "interpretacion": "The same incentive performed very differently: the first presentation of the T-shirt connected more than its repetition.",
-     "implicacion": "Repeating the referral message without a new angle tends to wear out interest.",
-     "recomendacion": {"accion": "Alternate the referral message with stories of users who already received the T-shirt or the credit.", "prioridad": "media", "esfuerzo": "medio"}
-    },
-    {
-     "categoria": "brecha",
-     "dato": "The engagement rate of own content is 0.02% (25 interactions per post on 120,378 followers).",
-     "comparativo": "Collaborations in the same period added up to 2,897 comments and 579,113 likes across 10 posts, most of them on a single post by @franknarra.",
-     "interpretacion": "The audience reacts little to institutional content and strongly to creators' faces and voices, as in the baseline.",
-     "implicacion": "Measuring own content alone makes clear how much the brand delivers by itself.",
-     "recomendacion": {"accion": "Bring into own posts what works for creators: a person on camera, humor and situations from migrant life.", "prioridad": "alta", "esfuerzo": "medio"}
-    },
-    {
-     "categoria": "oportunidad",
-     "dato": "The post by @franknarra (November 9) passed 8 million views, about 41 times the median of his other recent reels (~195K).",
-     "comparativo": "Of the other 9 collaborations with a comparison, only @giozamoraser (1.5×) and @mabortolanza (10.7× in interactions, photo) beat their usual performance; the rest were between 0.15× and 0.81×.",
-     "interpretacion": "A collaboration's reach depends more on the post and the creator than on the number of collaborations.",
-     "implicacion": "A few well-chosen posts can deliver more than many average collaborations.",
-     "recomendacion": {"accion": "Review with the agency what made the @franknarra post work (format, humor, topic) and use it as a guide for the next briefs.", "prioridad": "alta", "esfuerzo": "bajo"}
+  "ig_latam": {
+    "resumen_ejecutivo": "Del 1 al 18 de noviembre, @sendwaveapp_latam publicó 4 piezas propias: 3 típicas con 45 interacciones (15 por publicación) sobre 121.834 seguidores, y una atípica, el reel de la camiseta del 4 de noviembre (42 interacciones). Desde este mes los indicadores de la cuenta cuentan solo el contenido propio; las 21 colaboraciones de 20 creadores del período van en la pestaña Creadores, donde una sola pieza de @franknarra superó los 9,7 millones de vistas.",
+    "hallazgos_top": [
+      {
+        "categoria": "contexto",
+        "dato": "Desde noviembre los indicadores de la cuenta cuentan solo las publicaciones propias de SendWave; en el diagnóstico (junio a octubre) incluían las colaboraciones, que eran dos de cada tres piezas.",
+        "comparativo": "Por eso este mes no se muestran variaciones contra octubre: el cambio de método, no el desempeño, explicaría casi toda la diferencia.",
+        "interpretacion": "El reporte ahora separa lo que produce la marca de lo que aportan los creadores.",
+        "implicacion": "Desde diciembre las comparaciones mes a mes vuelven a ser válidas, ya con el mismo método.",
+        "recomendacion": {
+          "accion": "Leer los indicadores propios y la pestaña Creadores como dos frentes distintos del plan de contenido.",
+          "prioridad": "alta",
+          "esfuerzo": "bajo"
+        }
+      },
+      {
+        "categoria": "patron",
+        "dato": "De las 4 piezas propias del período, dos promueven el programa de referidos Viva LATAM (camiseta y crédito por invitar a 3 amigos), una celebra el Día de Muertos y otra es un GRWM sobre enviar dinero desde casa (16 de noviembre).",
+        "comparativo": "El reel del 4 de noviembre sobre la camiseta reunió 18.831 vistas y 42 interacciones; el del 7 de noviembre, con el mismo mensaje, 1.713 vistas y 18 interacciones.",
+        "interpretacion": "El mismo incentivo rindió muy distinto según la pieza: la primera presentación de la camiseta conectó más que su repetición.",
+        "implicacion": "Repetir el mensaje de referidos sin cambiar el ángulo tiende a gastar el interés.",
+        "recomendacion": {
+          "accion": "Alternar el mensaje de referidos con historias de usuarios que ya recibieron la camiseta o el crédito.",
+          "prioridad": "media",
+          "esfuerzo": "medio"
+        }
+      },
+      {
+        "categoria": "brecha",
+        "dato": "La tasa de engagement del contenido propio es de 0,01 % (15 interacciones por publicación sobre 121.834 seguidores).",
+        "comparativo": "Las colaboraciones del mismo período sumaron 3.643 comentarios y 756.604 likes en 21 piezas, la mayoría en una sola pieza de @franknarra.",
+        "interpretacion": "La audiencia de la cuenta reacciona poco al contenido institucional y mucho a caras y voces de creadores, igual que en el diagnóstico.",
+        "implicacion": "Medir solo el contenido propio deja ver con claridad cuánto rinde la marca por sí sola.",
+        "recomendacion": {
+          "accion": "Llevar a las piezas propias recursos que funcionan en creadores: persona en cámara, humor y situaciones de la vida del migrante.",
+          "prioridad": "alta",
+          "esfuerzo": "medio"
+        }
+      },
+      {
+        "categoria": "oportunidad",
+        "dato": "La pieza de @franknarra (9 de noviembre) superó los 9,7 millones de vistas, más de 40 veces la mediana de sus otros reels recientes (~195 mil).",
+        "comparativo": "De las otras 9 colaboraciones con comparación, solo @giozamoraser (1,5×) y @mabortolanza (10,7× en interacciones, foto) superaron su desempeño habitual; las demás quedaron entre 0,15× y 0,81×.",
+        "interpretacion": "El alcance de una colaboración depende más de la pieza y del creador que del volumen de colaboraciones.",
+        "implicacion": "Pocas piezas muy bien elegidas pueden aportar más que muchas colaboraciones de rendimiento promedio.",
+        "recomendacion": {
+          "accion": "Revisar con la agencia qué tuvo la pieza de @franknarra (formato, humor, tema) y usarlo como guía para los siguientes encargos.",
+          "prioridad": "alta",
+          "esfuerzo": "bajo"
+        }
+      }
+    ],
+    "recomendaciones": [
+      {
+        "title": "Dos frentes, dos lecturas",
+        "body": "Evaluar el contenido propio y las colaboraciones por separado: los indicadores de la cuenta muestran lo que produce la marca; la pestaña Creadores, lo que aporta cada creador.",
+        "tags": [
+          "Esfuerzo bajo",
+          "Prioridad alta"
+        ]
+      },
+      {
+        "title": "Renovar el mensaje de referidos",
+        "body": "Después de la primera presentación de la camiseta Viva LATAM, contar historias de quienes ya la recibieron en lugar de repetir la misma convocatoria.",
+        "tags": [
+          "Esfuerzo medio",
+          "Prioridad media"
+        ]
+      },
+      {
+        "title": "Aprender del pico de @franknarra",
+        "body": "Identificar qué hizo distinta esa pieza y repetir los elementos en los próximos encargos a creadores.",
+        "tags": [
+          "Esfuerzo bajo",
+          "Prioridad alta"
+        ]
+      }
+    ],
+    "insights": [
+      {
+        "titulo": "Nuevo método desde noviembre",
+        "texto": "Los indicadores de @sendwaveapp_latam cuentan solo su contenido propio: 4 piezas del 1 al 18 de noviembre, 3 típicas con 45 interacciones y una atípica. Las colaboraciones van aparte, en la pestaña Creadores."
+      },
+      {
+        "titulo": "Una colaboración excepcional",
+        "texto": "La pieza de @franknarra superó los 9,7 millones de vistas, más de 40 veces lo que suelen lograr sus reels."
+      },
+      {
+        "titulo": "El referido rinde en su estreno",
+        "texto": "La primera pieza sobre la camiseta Viva LATAM sumó 18.831 vistas; la segunda, con el mismo mensaje, 1.713."
+      }
+    ],
+    "puntos_publicaciones": [
+      {
+        "titulo": "Solo contenido propio",
+        "texto": "Este mes la lista incluye únicamente piezas de @sendwaveapp_latam; las de creadores están en la pestaña Creadores."
+      },
+      {
+        "titulo": "La camiseta abrió fuerte",
+        "texto": "El reel del 4 de noviembre es el de mayor alcance propio del período: 18.831 vistas y 8 compartidos."
+      }
+    ],
+    "puntos_categorias": [
+      {
+        "titulo": "Mes centrado en referidos",
+        "texto": "Dos de las cuatro piezas propias promueven el programa de referidos; las otras dos son el Día de Muertos y un GRWM sobre enviar dinero desde casa."
+      }
+    ],
+    "en": {
+      "resumen_ejecutivo": "From November 1 to 18, @sendwaveapp_latam published 4 own posts: 3 regular posts with 45 interactions (15 per post) on 121,834 followers, and one outlier, the November 4 T-shirt reel (42 interactions). From this month on, the account indicators count only the brand's own content; the 21 collaborations by 20 creators in the period are in the Creators tab, where a single post by @franknarra passed 9.7 million views.",
+      "hallazgos_top": [
+        {
+          "categoria": "contexto",
+          "dato": "From November on, the account indicators count only SendWave's own posts; in the baseline (June to October) they included collaborations, which were two out of three posts.",
+          "comparativo": "That is why this month shows no changes versus October: the change of method, not performance, would explain almost all of the difference.",
+          "interpretacion": "The report now separates what the brand produces from what creators contribute.",
+          "implicacion": "From December, month-over-month comparisons are valid again, using the same method.",
+          "recomendacion": {
+            "accion": "Read the own-content indicators and the Creators tab as two separate fronts of the content plan.",
+            "prioridad": "alta",
+            "esfuerzo": "bajo"
+          }
+        },
+        {
+          "categoria": "patron",
+          "dato": "Of the 4 own posts in the period, two promote the Viva LATAM referral program (T-shirt and credit for inviting 3 friends), one celebrates the Day of the Dead and another is a GRWM about sending money from home (November 16).",
+          "comparativo": "The November 4 reel about the T-shirt reached 18,831 views and 42 interactions; the November 7 one, with the same message, 1,713 views and 18 interactions.",
+          "interpretacion": "The same incentive performed very differently: the first presentation of the T-shirt connected more than its repetition.",
+          "implicacion": "Repeating the referral message without a new angle tends to wear out interest.",
+          "recomendacion": {
+            "accion": "Alternate the referral message with stories of users who already received the T-shirt or the credit.",
+            "prioridad": "media",
+            "esfuerzo": "medio"
+          }
+        },
+        {
+          "categoria": "brecha",
+          "dato": "The engagement rate of own content is 0.01% (15 interactions per post on 121,834 followers).",
+          "comparativo": "Collaborations in the same period added up to 3,643 comments and 756,604 likes across 21 posts, most of them on a single post by @franknarra.",
+          "interpretacion": "The audience reacts little to institutional content and strongly to creators' faces and voices, as in the baseline.",
+          "implicacion": "Measuring own content alone makes clear how much the brand delivers by itself.",
+          "recomendacion": {
+            "accion": "Bring into own posts what works for creators: a person on camera, humor and situations from migrant life.",
+            "prioridad": "alta",
+            "esfuerzo": "medio"
+          }
+        },
+        {
+          "categoria": "oportunidad",
+          "dato": "The post by @franknarra (November 9) passed 9.7 million views, more than 40 times the median of his other recent reels (~195K).",
+          "comparativo": "Of the other 9 collaborations with a comparison, only @giozamoraser (1.5×) and @mabortolanza (10.7× in interactions, photo) beat their usual performance; the rest were between 0.15× and 0.81×.",
+          "interpretacion": "A collaboration's reach depends more on the post and the creator than on the number of collaborations.",
+          "implicacion": "A few well-chosen posts can deliver more than many average collaborations.",
+          "recomendacion": {
+            "accion": "Review with the agency what made the @franknarra post work (format, humor, topic) and use it as a guide for the next briefs.",
+            "prioridad": "alta",
+            "esfuerzo": "bajo"
+          }
+        }
+      ],
+      "recomendaciones": [
+        {
+          "title": "Two fronts, two readings",
+          "body": "Evaluate own content and collaborations separately: the account indicators show what the brand produces; the Creators tab, what each creator contributes.",
+          "tags": [
+            "Low effort",
+            "High priority"
+          ]
+        },
+        {
+          "title": "Refresh the referral message",
+          "body": "After the first presentation of the Viva LATAM T-shirt, tell stories of people who already received it instead of repeating the same call.",
+          "tags": [
+            "Medium effort",
+            "Medium priority"
+          ]
+        },
+        {
+          "title": "Learn from the @franknarra peak",
+          "body": "Identify what made that post different and repeat those elements in the next creator briefs.",
+          "tags": [
+            "Low effort",
+            "High priority"
+          ]
+        }
+      ],
+      "insights": [
+        {
+          "titulo": "New method from November",
+          "texto": "@sendwaveapp_latam's indicators count only its own content: 4 posts from November 1 to 18, 3 regular posts with 45 interactions and one outlier. Collaborations are reported separately, in the Creators tab."
+        },
+        {
+          "titulo": "An exceptional collaboration",
+          "texto": "The @franknarra post passed 9.7 million views, more than 40 times what his reels usually get."
+        },
+        {
+          "titulo": "The referral works at launch",
+          "texto": "The first post about the Viva LATAM T-shirt got 18,831 views; the second, with the same message, 1,713."
+        }
+      ],
+      "puntos_publicaciones": [
+        {
+          "titulo": "Own content only",
+          "texto": "This month the list includes only @sendwaveapp_latam posts; creator posts are in the Creators tab."
+        },
+        {
+          "titulo": "The T-shirt opened strong",
+          "texto": "The November 4 reel has the highest own reach in the period: 18,831 views and 8 shares."
+        }
+      ],
+      "puntos_categorias": [
+        {
+          "titulo": "A referral-focused month",
+          "texto": "Two of the four own posts promote the referral program; the other two are the Day of the Dead post and a GRWM about sending money from home."
+        }
+      ]
     }
-   ],
-   "recomendaciones": [
-    {"title": "Two fronts, two readings", "body": "Evaluate own content and collaborations separately: the account indicators show what the brand produces; the Creators tab, what each creator contributes.", "tags": ["Low effort", "High priority"]},
-    {"title": "Refresh the referral message", "body": "After the first presentation of the Viva LATAM T-shirt, tell stories of people who already received it instead of repeating the same call.", "tags": ["Medium effort", "Medium priority"]},
-    {"title": "Learn from the @franknarra peak", "body": "Identify what made that post different and repeat those elements in the next creator briefs.", "tags": ["Low effort", "High priority"]}
-   ],
-   "insights": [
-    {"titulo": "New method from November", "texto": "@sendwaveapp_latam's indicators count only its own content: 3 posts and 74 interactions from November 1 to 13. Collaborations are reported separately, in the Creators tab."},
-    {"titulo": "An exceptional collaboration", "texto": "The @franknarra post passed 8 million views, about 41 times what his reels usually get."},
-    {"titulo": "The referral works at launch", "texto": "The first post about the Viva LATAM T-shirt got 18,750 views; the second, with the same message, 1,458."}
-   ],
-   "puntos_publicaciones": [
-    {"titulo": "Own content only", "texto": "This month the list includes only @sendwaveapp_latam posts; creator posts are in the Creators tab."},
-    {"titulo": "The T-shirt opened strong", "texto": "The November 4 reel has the highest own reach in the period: 18,750 views and 8 shares."}
-   ],
-   "puntos_categorias": [
-    {"titulo": "A referral-focused month", "texto": "Two of the three own posts are promotions (referral program) and one is seasonal (Day of the Dead)."}
-   ]
-  }
- },
- "ig_brasil": {
-  "resumen_ejecutivo": "Del 1 al 13 de noviembre, @sendwaveappbrasil publicó 3 piezas propias con 72 interacciones (24 por publicación) sobre 39.250 seguidores. Desde este mes los indicadores cuentan solo el contenido propio; las 5 colaboraciones de 3 creadores del período van en la pestaña Creadores.",
-  "hallazgos_top": [
-   {
-    "categoria": "contexto",
-    "dato": "Desde noviembre los indicadores de la cuenta cuentan solo las publicaciones propias; en el diagnóstico incluían las colaboraciones.",
-    "comparativo": "Por eso este mes no se muestran variaciones contra octubre.",
-    "interpretacion": "El reporte separa lo que produce la marca de lo que aportan los creadores.",
-    "implicacion": "Desde diciembre las comparaciones mes a mes vuelven a ser válidas.",
-    "recomendacion": {"accion": "Leer los indicadores propios y la pestaña Creadores por separado.", "prioridad": "alta", "esfuerzo": "bajo"}
-   },
-   {
-    "categoria": "patron",
-    "dato": "El reel VIVA LATAM del 11 de noviembre es la pieza propia más vista del período: 3.692 vistas y 45 interacciones.",
-    "comparativo": "Las otras dos piezas propias (6 y 7 de noviembre) sumaron 404 y 372 vistas.",
-    "interpretacion": "El orgullo por las raíces latinas conectó más que el mensaje de referidos por sí solo.",
-    "implicacion": "La identidad cultural es una puerta de entrada más fuerte para el programa de referidos.",
-    "recomendacion": {"accion": "Presentar el programa de referidos desde la identidad latina, como en el reel del 11 de noviembre.", "prioridad": "media", "esfuerzo": "bajo"}
-   },
-   {
-    "categoria": "oportunidad",
-    "dato": "De las colaboraciones con comparación, solo una pieza de @fernandapontesoficial superó su desempeño habitual (2,4× en interacciones).",
-    "comparativo": "@tiagoskolusa quedó en 0,44× y @bymariusa en 0,73× de sus vistas habituales.",
-    "interpretacion": "En Brasil las colaboraciones del período rindieron por debajo de lo que esos creadores suelen lograr.",
-    "implicacion": "Hay margen para mejorar el encargo a creadores en este mercado.",
-    "recomendacion": {"accion": "Revisar con los creadores de Brasil el formato y el mensaje de las piezas; el contenido de evento de Tudo Delas funcionó mejor.", "prioridad": "media", "esfuerzo": "medio"}
-   }
-  ],
-  "recomendaciones": [
-   {"title": "Identidad primero", "body": "Usar el orgullo latino como entrada para el programa de referidos.", "tags": ["Esfuerzo bajo", "Prioridad media"]},
-   {"title": "Afinar el encargo a creadores", "body": "Comparar cada pieza contra el desempeño habitual del creador y ajustar formato y mensaje.", "tags": ["Esfuerzo medio", "Prioridad media"]}
-  ],
-  "insights": [
-   {"titulo": "Nuevo método desde noviembre", "texto": "Los indicadores de @sendwaveappbrasil cuentan solo su contenido propio: 3 piezas y 72 interacciones del 1 al 13 de noviembre."},
-   {"titulo": "VIVA LATAM lidera", "texto": "El reel del 11 de noviembre sumó 3.692 vistas, nueve veces más que las otras piezas propias."},
-   {"titulo": "Creadores por debajo de lo habitual", "texto": "La mayoría de las colaboraciones del período rindió menos que el contenido habitual de cada creador."}
-  ],
-  "puntos_publicaciones": [
-   {"titulo": "Solo contenido propio", "texto": "Este mes la lista incluye únicamente piezas de @sendwaveappbrasil; las de creadores están en la pestaña Creadores."}
-  ],
-  "puntos_categorias": [
-   {"titulo": "Promoción y alianza", "texto": "Dos piezas son de promoción (referidos) y una de alianza (colaboración con una ilustradora colombiana)."}
-  ],
-  "en": {
-   "resumen_ejecutivo": "From November 1 to 13, @sendwaveappbrasil published 3 own posts with 72 interactions (24 per post) on 39,250 followers. From this month on, the indicators count only own content; the 5 collaborations by 3 creators in the period are in the Creators tab.",
-   "hallazgos_top": [
-    {
-     "categoria": "contexto",
-     "dato": "From November on, the account indicators count only own posts; in the baseline they included collaborations.",
-     "comparativo": "That is why this month shows no changes versus October.",
-     "interpretacion": "The report separates what the brand produces from what creators contribute.",
-     "implicacion": "From December, month-over-month comparisons are valid again.",
-     "recomendacion": {"accion": "Read the own-content indicators and the Creators tab separately.", "prioridad": "alta", "esfuerzo": "bajo"}
-    },
-    {
-     "categoria": "patron",
-     "dato": "The VIVA LATAM reel from November 11 is the most viewed own post in the period: 3,692 views and 45 interactions.",
-     "comparativo": "The other two own posts (November 6 and 7) got 404 and 372 views.",
-     "interpretacion": "Pride in Latin roots connected more than the referral message on its own.",
-     "implicacion": "Cultural identity is a stronger entry point for the referral program.",
-     "recomendacion": {"accion": "Present the referral program through Latin identity, as in the November 11 reel.", "prioridad": "media", "esfuerzo": "bajo"}
-    },
-    {
-     "categoria": "oportunidad",
-     "dato": "Among collaborations with a comparison, only one post by @fernandapontesoficial beat its usual performance (2.4× in interactions).",
-     "comparativo": "@tiagoskolusa came in at 0.44× and @bymariusa at 0.73× of their usual views.",
-     "interpretacion": "In Brazil, the period's collaborations performed below what these creators usually achieve.",
-     "implicacion": "There is room to improve creator briefs in this market.",
-     "recomendacion": {"accion": "Review format and message with the Brazil creators; the Tudo Delas event content worked better.", "prioridad": "media", "esfuerzo": "medio"}
+  },
+  "ig_brasil": {
+    "resumen_ejecutivo": "Del 1 al 18 de noviembre, @sendwaveappbrasil publicó 5 piezas propias con 124 interacciones (25 por publicación) sobre 39.274 seguidores. Desde este mes los indicadores cuentan solo el contenido propio; las 6 colaboraciones de 3 creadores del período van en la pestaña Creadores.",
+    "hallazgos_top": [
+      {
+        "categoria": "contexto",
+        "dato": "Desde noviembre los indicadores de la cuenta cuentan solo las publicaciones propias; en el diagnóstico incluían las colaboraciones.",
+        "comparativo": "Por eso este mes no se muestran variaciones contra octubre.",
+        "interpretacion": "El reporte separa lo que produce la marca de lo que aportan los creadores.",
+        "implicacion": "Desde diciembre las comparaciones mes a mes vuelven a ser válidas.",
+        "recomendacion": {
+          "accion": "Leer los indicadores propios y la pestaña Creadores por separado.",
+          "prioridad": "alta",
+          "esfuerzo": "bajo"
+        }
+      },
+      {
+        "categoria": "patron",
+        "dato": "El reel VIVA LATAM del 11 de noviembre es la pieza propia más vista del período: 4.143 vistas y 47 interacciones.",
+        "comparativo": "Las otras cuatro piezas propias del período quedaron entre 435 y 686 vistas.",
+        "interpretacion": "El orgullo por las raíces latinas conectó más que el mensaje de referidos por sí solo.",
+        "implicacion": "La identidad cultural es una puerta de entrada más fuerte para el programa de referidos.",
+        "recomendacion": {
+          "accion": "Presentar el programa de referidos desde la identidad latina, como en el reel del 11 de noviembre.",
+          "prioridad": "media",
+          "esfuerzo": "bajo"
+        }
+      },
+      {
+        "categoria": "oportunidad",
+        "dato": "De las colaboraciones con comparación, solo una pieza de @fernandapontesoficial superó su desempeño habitual (2,4× en interacciones).",
+        "comparativo": "@tiagoskolusa quedó en 0,44× y @bymariusa en 0,73× de sus vistas habituales.",
+        "interpretacion": "En Brasil las colaboraciones del período rindieron por debajo de lo que esos creadores suelen lograr.",
+        "implicacion": "Hay margen para mejorar el encargo a creadores en este mercado.",
+        "recomendacion": {
+          "accion": "Revisar con los creadores de Brasil el formato y el mensaje de las piezas; el contenido de evento de Tudo Delas funcionó mejor.",
+          "prioridad": "media",
+          "esfuerzo": "medio"
+        }
+      }
+    ],
+    "recomendaciones": [
+      {
+        "title": "Identidad primero",
+        "body": "Usar el orgullo latino como entrada para el programa de referidos.",
+        "tags": [
+          "Esfuerzo bajo",
+          "Prioridad media"
+        ]
+      },
+      {
+        "title": "Afinar el encargo a creadores",
+        "body": "Comparar cada pieza contra el desempeño habitual del creador y ajustar formato y mensaje.",
+        "tags": [
+          "Esfuerzo medio",
+          "Prioridad media"
+        ]
+      }
+    ],
+    "insights": [
+      {
+        "titulo": "Nuevo método desde noviembre",
+        "texto": "Los indicadores de @sendwaveappbrasil cuentan solo su contenido propio: 5 piezas y 124 interacciones del 1 al 18 de noviembre."
+      },
+      {
+        "titulo": "VIVA LATAM lidera",
+        "texto": "El reel del 11 de noviembre sumó 4.143 vistas, unas ocho veces el promedio de las otras piezas propias."
+      },
+      {
+        "titulo": "Creadores por debajo de lo habitual",
+        "texto": "La mayoría de las colaboraciones del período rindió menos que el contenido habitual de cada creador."
+      }
+    ],
+    "puntos_publicaciones": [
+      {
+        "titulo": "Solo contenido propio",
+        "texto": "Este mes la lista incluye únicamente piezas de @sendwaveappbrasil; las de creadores están en la pestaña Creadores."
+      }
+    ],
+    "puntos_categorias": [
+      {
+        "titulo": "Promoción, alianza y tendencia",
+        "texto": "Tres de las cinco piezas propias son de promoción (referidos), una de alianza (colaboración con una ilustradora colombiana) y una de tendencia (vivir en modo BR, 16 de noviembre)."
+      }
+    ],
+    "en": {
+      "resumen_ejecutivo": "From November 1 to 18, @sendwaveappbrasil published 5 own posts with 124 interactions (25 per post) on 39,274 followers. From this month on, the indicators count only own content; the 6 collaborations by 3 creators in the period are in the Creators tab.",
+      "hallazgos_top": [
+        {
+          "categoria": "contexto",
+          "dato": "From November on, the account indicators count only own posts; in the baseline they included collaborations.",
+          "comparativo": "That is why this month shows no changes versus October.",
+          "interpretacion": "The report separates what the brand produces from what creators contribute.",
+          "implicacion": "From December, month-over-month comparisons are valid again.",
+          "recomendacion": {
+            "accion": "Read the own-content indicators and the Creators tab separately.",
+            "prioridad": "alta",
+            "esfuerzo": "bajo"
+          }
+        },
+        {
+          "categoria": "patron",
+          "dato": "The VIVA LATAM reel from November 11 is the most viewed own post in the period: 4,143 views and 47 interactions.",
+          "comparativo": "The other four own posts in the period got between 435 and 686 views.",
+          "interpretacion": "Pride in Latin roots connected more than the referral message on its own.",
+          "implicacion": "Cultural identity is a stronger entry point for the referral program.",
+          "recomendacion": {
+            "accion": "Present the referral program through Latin identity, as in the November 11 reel.",
+            "prioridad": "media",
+            "esfuerzo": "bajo"
+          }
+        },
+        {
+          "categoria": "oportunidad",
+          "dato": "Among collaborations with a comparison, only one post by @fernandapontesoficial beat its usual performance (2.4× in interactions).",
+          "comparativo": "@tiagoskolusa came in at 0.44× and @bymariusa at 0.73× of their usual views.",
+          "interpretacion": "In Brazil, the period's collaborations performed below what these creators usually achieve.",
+          "implicacion": "There is room to improve creator briefs in this market.",
+          "recomendacion": {
+            "accion": "Review format and message with the Brazil creators; the Tudo Delas event content worked better.",
+            "prioridad": "media",
+            "esfuerzo": "medio"
+          }
+        }
+      ],
+      "recomendaciones": [
+        {
+          "title": "Identity first",
+          "body": "Use Latin pride as the entry point for the referral program.",
+          "tags": [
+            "Low effort",
+            "Medium priority"
+          ]
+        },
+        {
+          "title": "Sharpen creator briefs",
+          "body": "Compare each post against the creator's usual performance and adjust format and message.",
+          "tags": [
+            "Medium effort",
+            "Medium priority"
+          ]
+        }
+      ],
+      "insights": [
+        {
+          "titulo": "New method from November",
+          "texto": "@sendwaveappbrasil's indicators count only its own content: 5 posts and 124 interactions from November 1 to 18."
+        },
+        {
+          "titulo": "VIVA LATAM leads",
+          "texto": "The November 11 reel got 4,143 views, about eight times the average of the other own posts."
+        },
+        {
+          "titulo": "Creators below their usual",
+          "texto": "Most collaborations in the period performed below each creator's usual content."
+        }
+      ],
+      "puntos_publicaciones": [
+        {
+          "titulo": "Own content only",
+          "texto": "This month the list includes only @sendwaveappbrasil posts; creator posts are in the Creators tab."
+        }
+      ],
+      "puntos_categorias": [
+        {
+          "titulo": "Promotion, partnership and trend",
+          "texto": "Three of the five own posts are promotions (referrals), one is a partnership (collaboration with a Colombian illustrator) and one is a trend post (living \"BR mode\", November 16)."
+        }
+      ]
     }
-   ],
-   "recomendaciones": [
-    {"title": "Identity first", "body": "Use Latin pride as the entry point for the referral program.", "tags": ["Low effort", "Medium priority"]},
-    {"title": "Sharpen creator briefs", "body": "Compare each post against the creator's usual performance and adjust format and message.", "tags": ["Medium effort", "Medium priority"]}
-   ],
-   "insights": [
-    {"titulo": "New method from November", "texto": "@sendwaveappbrasil's indicators count only its own content: 3 posts and 72 interactions from November 1 to 13."},
-    {"titulo": "VIVA LATAM leads", "texto": "The November 11 reel got 3,692 views, nine times the other own posts."},
-    {"titulo": "Creators below their usual", "texto": "Most collaborations in the period performed below each creator's usual content."}
-   ],
-   "puntos_publicaciones": [
-    {"titulo": "Own content only", "texto": "This month the list includes only @sendwaveappbrasil posts; creator posts are in the Creators tab."}
-   ],
-   "puntos_categorias": [
-    {"titulo": "Promotion and partnership", "texto": "Two posts are promotions (referrals) and one is a partnership (collaboration with a Colombian illustrator)."}
-   ]
-  }
- },
- "ig_rd": {
-  "resumen_ejecutivo": "@sendwaveapprd abrió el 12 de noviembre con una pieza de bienvenida a República Dominicana: 12 likes, 2 comentarios y 1 compartido, con 11 seguidores. Es una cuenta recién creada; sus cifras todavía no permiten sacar conclusiones de desempeño.",
-  "hallazgos_top": [
-   {
-    "categoria": "contexto",
-    "dato": "La cuenta de República Dominicana publicó su primera pieza el 12 de noviembre y tiene 11 seguidores.",
-    "comparativo": "Con una sola publicación, la tasa de engagement (127 %) no es comparable con la de LATAM ni Brasil.",
-    "interpretacion": "Es el arranque de un mercado nuevo, no un indicador de rendimiento.",
-    "implicacion": "Los primeros meses sirven para construir audiencia; la medición comparable empieza cuando haya volumen.",
-    "recomendacion": {"accion": "Apoyar el lanzamiento con creadores dominicanos y con las cuentas de LATAM, que ya tienen 120 mil seguidores.", "prioridad": "alta", "esfuerzo": "medio"}
-   }
-  ],
-  "recomendaciones": [
-   {"title": "Impulsar el arranque", "body": "Mencionar la cuenta de RD desde @sendwaveapp_latam y sumar creadores dominicanos en las primeras semanas.", "tags": ["Esfuerzo medio", "Prioridad alta"]}
-  ],
-  "insights": [
-   {"titulo": "Cuenta nueva", "texto": "@sendwaveapprd publicó su primera pieza el 12 de noviembre; con 11 seguidores, sus indicadores todavía no son comparables."}
-  ],
-  "puntos_publicaciones": [],
-  "puntos_categorias": [],
-  "en": {
-   "resumen_ejecutivo": "@sendwaveapprd launched on November 12 with a welcome post to the Dominican Republic: 12 likes, 2 comments and 1 share, with 11 followers. It is a newly created account; its figures do not yet support performance conclusions.",
-   "hallazgos_top": [
-    {
-     "categoria": "contexto",
-     "dato": "The Dominican Republic account published its first post on November 12 and has 11 followers.",
-     "comparativo": "With a single post, its engagement rate (127%) is not comparable with LATAM or Brazil.",
-     "interpretacion": "This is the start of a new market, not a performance indicator.",
-     "implicacion": "The first months are for building an audience; comparable measurement starts once there is volume.",
-     "recomendacion": {"accion": "Support the launch with Dominican creators and with the LATAM account, which already has 120K followers.", "prioridad": "alta", "esfuerzo": "medio"}
+  },
+  "ig_rd": {
+    "resumen_ejecutivo": "@sendwaveapprd abrió el 12 de noviembre con una pieza de bienvenida a República Dominicana: 12 likes, 2 comentarios y 1 compartido, con 20 seguidores. Es una cuenta recién creada; sus cifras todavía no permiten sacar conclusiones de desempeño.",
+    "hallazgos_top": [
+      {
+        "categoria": "contexto",
+        "dato": "La cuenta de República Dominicana publicó su primera pieza el 12 de noviembre y tiene 20 seguidores.",
+        "comparativo": "Con una sola publicación, la tasa de engagement (70 %) no es comparable con la de LATAM ni Brasil.",
+        "interpretacion": "Es el arranque de un mercado nuevo, no un indicador de rendimiento.",
+        "implicacion": "Los primeros meses sirven para construir audiencia; la medición comparable empieza cuando haya volumen.",
+        "recomendacion": {
+          "accion": "Apoyar el lanzamiento con creadores dominicanos y con las cuentas de LATAM, que ya tienen casi 122 mil seguidores.",
+          "prioridad": "alta",
+          "esfuerzo": "medio"
+        }
+      }
+    ],
+    "recomendaciones": [
+      {
+        "title": "Impulsar el arranque",
+        "body": "Mencionar la cuenta de RD desde @sendwaveapp_latam y sumar creadores dominicanos en las primeras semanas.",
+        "tags": [
+          "Esfuerzo medio",
+          "Prioridad alta"
+        ]
+      }
+    ],
+    "insights": [
+      {
+        "titulo": "Cuenta nueva",
+        "texto": "@sendwaveapprd publicó su primera pieza el 12 de noviembre; con 20 seguidores, sus indicadores todavía no son comparables."
+      }
+    ],
+    "puntos_publicaciones": [],
+    "puntos_categorias": [],
+    "en": {
+      "resumen_ejecutivo": "@sendwaveapprd launched on November 12 with a welcome post to the Dominican Republic: 12 likes, 2 comments and 1 share, with 20 followers. It is a newly created account; its figures do not yet support performance conclusions.",
+      "hallazgos_top": [
+        {
+          "categoria": "contexto",
+          "dato": "The Dominican Republic account published its first post on November 12 and has 20 followers.",
+          "comparativo": "With a single post, its engagement rate (70%) is not comparable with LATAM or Brazil.",
+          "interpretacion": "This is the start of a new market, not a performance indicator.",
+          "implicacion": "The first months are for building an audience; comparable measurement starts once there is volume.",
+          "recomendacion": {
+            "accion": "Support the launch with Dominican creators and with the LATAM account, which already has almost 122K followers.",
+            "prioridad": "alta",
+            "esfuerzo": "medio"
+          }
+        }
+      ],
+      "recomendaciones": [
+        {
+          "title": "Boost the launch",
+          "body": "Mention the DR account from @sendwaveapp_latam and add Dominican creators in the first weeks.",
+          "tags": [
+            "Medium effort",
+            "High priority"
+          ]
+        }
+      ],
+      "insights": [
+        {
+          "titulo": "New account",
+          "texto": "@sendwaveapprd published its first post on November 12; with 20 followers, its indicators are not yet comparable."
+        }
+      ],
+      "puntos_publicaciones": [],
+      "puntos_categorias": []
     }
-   ],
-   "recomendaciones": [
-    {"title": "Boost the launch", "body": "Mention the DR account from @sendwaveapp_latam and add Dominican creators in the first weeks.", "tags": ["Medium effort", "High priority"]}
-   ],
-   "insights": [
-    {"titulo": "New account", "texto": "@sendwaveapprd published its first post on November 12; with 11 followers, its indicators are not yet comparable."}
-   ],
-   "puntos_publicaciones": [],
-   "puntos_categorias": []
   }
- }
 }
